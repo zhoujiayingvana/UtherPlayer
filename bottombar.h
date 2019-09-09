@@ -10,6 +10,7 @@
 #include "bottombutton.h"
 #include "widget.h"
 #include"settingwindow.h"
+#include "util/helper.h"
 
 
 
@@ -48,7 +49,7 @@ public slots:
     //拖拽改变音量时用tooltip显示当前音量
     void on_volumeSlider_valueChanged(int);    
     //点击切换音乐/视频模式
-    void on_switchModeButton_clicked();
+    void rcvSwitchModeButton(MediaType& _mediaType);
     //检测鼠标是否移至音量悬浮窗
     void volumeWidgetDetection ();
     //检测鼠标是否移至清晰度悬浮窗

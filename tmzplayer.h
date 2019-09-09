@@ -60,7 +60,7 @@ public:
 signals:
     void maximizeButton_clicked();
     void durationSignal(int);
-
+    void sendMediaType(MediaType&);
 
 private slots:
     void currentPosChanged(int);

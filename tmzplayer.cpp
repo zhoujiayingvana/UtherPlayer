@@ -218,6 +218,10 @@ TMZPlayer::TMZPlayer(QWidget *parent,Media* m) :
             this,SLOT(changeQuickMovePlusShortcut(QString)));
     connect(pTitleBar->settingWindow,SIGNAL(sigSpeedDownScreenShortcut(QString)),//换快退快捷键
             this,SLOT(changeQuickMoveMinusShortcut(QString)));
+
+    // 连接自动切换模式
+    connect(this, SIGNAL(sendMediaType(MediaType&)),
+            pBottomBar, SLOT(rcvSwitchModeButton(MediaType&)));
     
     
     //    connect(settingAction,SIGNAL(triggered()),//托盘模式打开设置窗口
@@ -911,17 +915,24 @@ void TMZPlayer::on_openFile_clicked()
     if ( selectDialog->exec() == QDialog::Accepted )
     {
         filePaths = selectDialog->selectedFiles();
+        QFileInfo info(filePaths.last());
+
+        QString _fileName = info.fileName();
+        QString _filePath = info.filePath();
+
+        media->play(true, _fileName, _filePath);
+        qint64 what = media->getController()->getDuration();
+        emit durationSignal(static_cast<int>(what));
+
+        MediaType currentMediaType = this->media->getCurrentMediaType();
+        if (currentMediaType == MediaType::AUDIO)
+            qDebug() << "音频" << endl;
+        else if (currentMediaType == MediaType::VIDEO)
+            qDebug() << "video" << endl;
+        else
+            qDebug() << "what unknown" << endl;
+        emit sendMediaType(currentMediaType);
     }
-    QFileInfo info(filePaths.last());
-    qDebug() << info.absoluteFilePath() << endl;
-    
-    QString _fileName = info.fileName();
-    QString _filePath = info.filePath();
-    
-    media->play(true, _fileName, _filePath);
-    qint64 what = media->getController()->getDuration();
-    emit durationSignal(static_cast<int>(what));
-    qDebug()<<media->getController()->getStatus();
 }
 
 void TMZPlayer::closeEvent(QCloseEvent* event)
