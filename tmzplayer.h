@@ -118,9 +118,19 @@ private slots:
     void changeQuickMovePlusShortcut(QString);
     //快退快捷键修改
     void changeQuickMoveMinusShortcut(QString);
+
+    //修改截屏快捷键
+    void changeShotScreenShortcut(QString);
+    //修改录屏快捷键
+    void changeRecordShortcut(QString);
+
     //打开文件快捷键修改
     void changeOpenFileShortcut(QString);
 
+    //修改截屏路径
+    void changeShotDir(QString);
+    //修改录屏路径
+    void changeRecordDir(QString);
     /*
      * 修改主界面背景
      * 设置界面三个button分别emit传QString
@@ -133,6 +143,12 @@ private slots:
     //播放
     void playFunction();
 
+    //截屏
+    void shotMyScreen();
+    //录屏
+    void recordMyScreen();
+    //修改截屏格式
+    void changeShotFormat(QString);
 
     void on_openFile_clicked();
 
@@ -203,8 +219,18 @@ private:
 
     QString currentQss;//当前qss
     
+    //截屏快捷键
+    QShortcut *shotScreen;
+    QShortcut *recordScreen;
+
     //播放模块zjy&ml
     Media* media;
+
+    QString picPath;//截图路径
+    QString gifPath;//录屏/gif路径
+    QString shotFormat;//截图格式
+
+    bool recordStatus;//录屏状态
     
     //9.9
     QBoxLayout* historyLayout;
