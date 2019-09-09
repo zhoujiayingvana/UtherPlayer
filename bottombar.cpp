@@ -342,7 +342,7 @@ BottomBar::BottomBar(QWidget *parent) : QWidget(parent)
     connect(playSlider,SIGNAL(valueChanged(int)),this,SLOT(on_playSlider_valueChanged(int)));
     connect(volumeButton,SIGNAL(clicked(bool)),this,SLOT(on_volumeButton_clicked()));
     connect(volumeSlider,SIGNAL(valueChanged(int)),this,SLOT(on_volumeSlider_valueChanged(int)));
-    connect(switchModeButton,SIGNAL(clicked(bool)),this,SLOT(on_switchModeButton_clicked()));
+    connect(switchModeButton,SIGNAL(clicked(bool)),this,SLOT(switchModeButton()));
     connect(volumeButton,SIGNAL(leaveSignal()),this,SLOT(volumeWidgetDetection()));
     connect(definitionButton,SIGNAL(enterSignal(int ,int)),definitionWidget,SLOT(display(int,int)));
     connect(definitionButton,SIGNAL(leaveSignal()),this,SLOT(definitionWidgetDetection()));
@@ -472,15 +472,15 @@ void BottomBar::on_volumeSlider_valueChanged(int vol)//拖拽改变音量时用t
 
 }
 
-void BottomBar::on_switchModeButton_clicked()//点击切换音乐/视频模式
+void BottomBar::rcvSwitchModeButton(MediaType& _mediaType)//点击切换音乐/视频模式
 {
-    if(volumeSlider->orientation()==Qt::Horizontal)
+    if(_mediaType == MediaType::VIDEO)  // 视频模式
     {
         setFixedHeight(70);
 
         volumeButton->setFixedSize(40, 40);
         playModeButton->setFixedSize(40, 40);
-        switchModeButton->setFixedSize(40, 40);
+//        switchModeButton->setFixedSize(40, 40);
         definitionButton->setFixedSize(40, 40);
         settingsButton->setFixedSize(40, 40);
         full_screenButton->setFixedSize(40, 40);
@@ -495,7 +495,7 @@ void BottomBar::on_switchModeButton_clicked()//点击切换音乐/视频模式
 
 
         totalTime->setText("/04:00");//test
-        BmBottomLayout->removeWidget(switchModeButton);
+//        BmBottomLayout->removeWidget(switchModeButton);
         BmBottomLayout->removeWidget(playSlider);
         BmBottomLayout->removeWidget(volumeButton);
         BottomLayout->removeItem(BmBottomLayout);
@@ -505,21 +505,21 @@ void BottomBar::on_switchModeButton_clicked()//点击切换音乐/视频模式
         BmBottomLayout->addWidget(volumeButton);
         BmBottomLayout->addWidget(definitionButton);
         BmBottomLayout->addWidget(settingsButton);
-        BmBottomLayout->addWidget(switchModeButton);
+//        BmBottomLayout->addWidget(switchModeButton);
         BmBottomLayout->addWidget(full_screenButton);
 
         volumeLayout->addWidget(volumeSlider);
         connect(volumeButton,SIGNAL(enterSignal(int ,int)),volumeWidget,SLOT(display(int,int)));
 
     }
-    else if (volumeSlider->orientation()==Qt::Vertical)
+    else if (_mediaType == MediaType::AUDIO)  // 视频模式
     {
         setFixedHeight(50);
 
 
         volumeButton->setFixedSize(30, 30);
         playModeButton->setFixedSize(30, 30);
-        switchModeButton->setFixedSize(30, 30);
+//        switchModeButton->setFixedSize(30, 30);
         definitionButton->setFixedSize(30, 30);
         settingsButton->setFixedSize(30, 30);
         full_screenButton->setFixedSize(30, 30);
@@ -534,7 +534,7 @@ void BottomBar::on_switchModeButton_clicked()//点击切换音乐/视频模式
 
         totalTime->setText("04:00");//test
         BottomLayout->removeWidget(playSlider);
-        BmBottomLayout->removeWidget(switchModeButton);
+//        BmBottomLayout->removeWidget(switchModeButton);
         BmBottomLayout->removeWidget(volumeButton);
         BmBottomLayout->removeWidget(space);
         BmBottomLayout->removeWidget(totalTime);
@@ -543,7 +543,7 @@ void BottomBar::on_switchModeButton_clicked()//点击切换音乐/视频模式
         BmBottomLayout->addWidget(volumeButton);
         BmBottomLayout->addWidget(volumeSlider);
         BmBottomLayout->addWidget(playModeButton);
-        BmBottomLayout->addWidget(switchModeButton);
+//        BmBottomLayout->addWidget(switchModeButton);
 
         disconnect(volumeButton,SIGNAL(enterSignal(int ,int)),volumeWidget,SLOT(display(int,int)));
 
@@ -691,6 +691,28 @@ void BottomBar::quickMovePlaySliderPlus()
 void BottomBar::quickMovePlaySliderMinus()
 {
     playSlider->setValue(playSlider->value()-quickMoveTime);
+}
+
+void BottomBar::setTotalTime(qint64 val)
+{
+    qDebug()<<val<<"a";
+    if(val/60>=10&&val%60>=10)
+    {
+        totalTime->setText(QString::number(val/60) + ":" + QString::number(val%60));
+    }
+    else if (val/60<10&&val%60>=10)
+    {
+        totalTime->setText("0" + QString::number(val/60) + ":" + QString::number(val%60));
+    }
+    else if (val/60>=10&&val%60<10)
+    {
+        totalTime->setText(QString::number(val/60) + ":" + "0" + QString::number(val%60));
+    }
+    else
+    {
+        totalTime->setText("0" + QString::number(val/60) + ":" + "0" + QString::number(val%60));
+    }
+
 }
 /**
 * @method        BottomBar::connectSettingAndBottom

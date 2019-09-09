@@ -20,6 +20,12 @@ TMZPlayer::TMZPlayer(QWidget *parent,Media* m) :
     widget = new QWidget();
     this->setCentralWidget(widget);
     
+    QDir info("./");
+    picPath=info.absolutePath();
+    qDebug()<<picPath;
+    gifPath=info.absolutePath();
+    recordStatus=true;
+    shotFormat="jpg";
     
     pTitleBar = new TitleBar(this);
     //    pTitleBar->setAutoFillBackground(true);//test
@@ -184,6 +190,18 @@ TMZPlayer::TMZPlayer(QWidget *parent,Media* m) :
     quickMoveMinus->setAutoRepeat(true);
     connect(quickMovePlus, SIGNAL(activated()), pBottomBar, SLOT(quickMovePlaySliderPlus()));
     connect(quickMoveMinus, SIGNAL(activated()), pBottomBar, SLOT(quickMovePlaySliderMinus()));
+
+
+    //截屏快捷键
+    shotScreen=new QShortcut(this);
+    shotScreen->setKey(tr("CTRL+9"));
+    shotScreen->setAutoRepeat(true);
+    connect(shotScreen, SIGNAL(activated()), this,SLOT(shotMyScreen()));
+    //录屏快捷键
+    recordScreen=new QShortcut(this);
+    recordScreen->setKey(tr("CTRL+0"));
+    recordScreen->setAutoRepeat(true);
+    connect(recordScreen, SIGNAL(activated()), this,SLOT(recordMyScreen()));
     
     connect(mini,SIGNAL(miniToMaxSignal()),this,SLOT(miniToMaxSlot()));
     connect(mini,SIGNAL(miniToTraySignal()),this,SLOT(miniToTraySlot()));
@@ -227,6 +245,26 @@ TMZPlayer::TMZPlayer(QWidget *parent,Media* m) :
             this,SLOT(changeQuickMovePlusShortcut(QString)));
     connect(pTitleBar->settingWindow,SIGNAL(sigSpeedDownScreenShortcut(QString)),//换快退快捷键
             this,SLOT(changeQuickMoveMinusShortcut(QString)));
+
+    connect(pTitleBar->settingWindow,SIGNAL(sigScreenshotShortcut(QString)),//修改截屏快捷键
+            this,SLOT(changeShotScreenShortcut(QString)));
+    connect(pTitleBar->settingWindow,SIGNAL(sigShotDirChange(QString)),//修改截屏路径
+            this,SLOT(changeShotDir(QString)));
+    connect(pTitleBar->settingWindow,SIGNAL(sigShotFormatChange(QString)),//修改截屏格式
+            this,SLOT(changeShotFormat(QString)));
+    connect(pTitleBar->settingWindow,SIGNAL(sigRecordShotcut(QString)),//修改录屏快捷键
+            this,SLOT(changeRecordShortcut(QString)));
+    connect(pTitleBar->settingWindow,SIGNAL(sigRecordDirChange(QString)),//修改录屏路径
+            this,SLOT(changeRecordDir(QString)));
+
+
+    // 连接自动切换模式
+    connect(this, SIGNAL(sendMediaType(MediaType&)),
+            pBottomBar, SLOT(rcvSwitchModeButton(MediaType&)));
+    //获取视频总时长
+    connect(media->getController(), SIGNAL(media->getController()->returnInitDuration(qint64)),
+            pBottomBar, SLOT(setTotalTime()));
+
     
     
     //    connect(settingAction,SIGNAL(triggered()),//托盘模式打开设置窗口
@@ -542,6 +580,59 @@ void TMZPlayer::changeQuickMoveMinusShortcut(QString str)
 void TMZPlayer::changeOpenFileShortcut(QString str)
 {
     ui->openFile->setShortcut(QKeySequence(str.toLatin1().data()));
+}
+/**
+* @method        TMZPlayer::changeShotScreenShortcut
+* @brief         截屏快捷键修改
+* @param         QSTRING
+* @return        VOID
+* @author        涂晴昊
+* @date          2019-09-09
+*/
+void TMZPlayer::changeShotScreenShortcut(QString str)
+{
+    shotScreen->setKey(str);
+    qDebug()<<"shotChange";
+}
+
+/**
+* @method        TMZPlayer::changeRecordShortcut
+* @brief         录屏快捷键修改
+* @param         QString
+* @return        VOID
+* @author        涂晴昊
+* @date          2019-09-09
+*/
+void TMZPlayer::changeRecordShortcut(QString str)
+{
+    recordScreen->setKey(str);
+    qDebug()<<"recordChange";
+}
+
+/**
+* @method        TMZPlayer::changeShotDir
+* @brief         修改截屏路径
+* @param         QSTRING
+* @return        VOID
+* @author        涂晴昊
+* @date          2019-09-09
+*/
+void TMZPlayer::changeShotDir(QString str)
+{
+    picPath=str;
+}
+
+/**
+* @method        TMZPlayer::changeRecordDir
+* @brief         修改录屏路径
+* @param         QSTRING
+* @return        VOID
+* @author        涂晴昊
+* @date          2019-09-09
+*/
+void TMZPlayer::changeRecordDir(QString str)
+{
+    gifPath=str;
 }
 
 /* Author: zyt
@@ -920,6 +1011,54 @@ void TMZPlayer::changeVolume(int vol)
 
 }
 
+/**
+* @method        TMZPlayer::shotMyScreen
+* @brief         截屏
+* @param         VOID
+* @return        VOID
+* @author        涂晴昊
+* @date          2019-09-09
+*/
+void TMZPlayer::shotMyScreen()
+{
+    media->getController()->cutScreen(space->winId(),"test1",picPath,shotFormat);
+}
+
+/**
+* @method        TMZPlayer::recordMyScreen
+* @brief         录屏
+* @param         VOID
+* @return        VOID
+* @author        涂晴昊
+* @date          2019-09-09
+*/
+void TMZPlayer::recordMyScreen()
+{
+    if(recordStatus){
+        media->startCreateGif(space->winId(),"test",gifPath);
+        recordStatus=false;
+        qDebug()<<gifPath;
+        qDebug()<<"start";
+    }
+    else{
+        media->endCreateGif();
+        recordStatus=true;
+                  qDebug()<<"end";
+    }
+}
+
+/**
+* @method        TMZPlayer::changeShotFormat
+* @brief         修改截屏格式
+* @param         QSTRING
+* @return        VOID
+* @author        涂晴昊
+* @date          2019-09-09
+*/
+void TMZPlayer::changeShotFormat(QString str)
+{
+    shotFormat=str;
+}
 
 
 
@@ -941,16 +1080,29 @@ void TMZPlayer::on_openFile_clicked()
     if ( selectDialog->exec() == QDialog::Accepted )
     {
         filePaths = selectDialog->selectedFiles();
+        QFileInfo info(filePaths.last());
+
+        QString _fileName = info.fileName();
+        QString _filePath = info.filePath();
+
+        media->play(true, _fileName, _filePath);
+
+        MediaType currentMediaType = this->media->getCurrentMediaType();
+        if (currentMediaType == MediaType::AUDIO)
+            qDebug() << "音频" << endl;
+        else if (currentMediaType == MediaType::VIDEO)
+            qDebug() << "video" << endl;
+        else
+            qDebug() << "what unknown" << endl;
+        emit sendMediaType(currentMediaType);
+
+
+        qDebug() << info.absoluteFilePath() << endl;
+
+
     }
-    QFileInfo info(filePaths.last());
-    qDebug() << info.absoluteFilePath() << endl;
-    
-    QString _fileName = info.fileName();
-    QString _filePath = info.filePath();
-    
-    media->play(true, _fileName, _filePath);
-    qDebug()<<media->getController()->getDuration();
-    emit media->getController()->needGetDuration();
+
+
 }
 
 void TMZPlayer::closeEvent(QCloseEvent* event)

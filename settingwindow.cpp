@@ -612,6 +612,18 @@ void SettingWindow::on_screenShotEdit_textChanged(const QString &arg1)
     emit sigScreenshotShortcut(arg1);
 }
 
+/**
+* @method        SettingWindow::on_screenRecordEdit_textChanged
+* @brief         录屏快捷键修改
+* @param         STRING
+* @return        VOID
+* @author        涂晴昊
+* @date          2019-09-05
+*/
+void SettingWindow::on_screenRecordEdit_textChanged(const QString &arg1)
+{
+    emit sigRecordShotcut(arg1);
+}
 
 /**
 * @method        SettingWindow::on_radioButton_clicked
@@ -799,4 +811,43 @@ void SettingWindow::lv3DefinitionChange()
 void SettingWindow::on_quickMoveSpinBox_valueChanged(int arg1)
 {
     emit sigQuickMoveTimeChange(arg1);
+}
+
+
+/**
+* @method        SettingWindow::on_picJpgButton_clicked
+* @brief         修改截屏格式jpg
+* @param         VOID
+* @return        VOID
+* @author        涂晴昊
+* @date          2019-09-09
+*/
+void SettingWindow::on_picJpgButton_clicked()
+{
+    emit sigShotFormatChange("jpg");
+}
+
+/**
+* @method        SettingWindow::on_picPngButton_clicked
+* @brief         修改截屏格式png
+* @param         VOID
+* @return        VOID
+* @author        涂晴昊
+* @date          2019-09-09
+*/
+void SettingWindow::on_picPngButton_clicked()
+{
+    emit sigShotFormatChange("png");
+}
+/**
+* @method        SettingWindow::on_picWebpButton_clicked
+* @brief         修改截屏格式webp
+* @param         VOID
+* @return        VOID
+* @author        涂晴昊
+* @date          2019-09-09
+*/
+void SettingWindow::on_picWebpButton_clicked()
+{
+    emit sigShotFormatChange("webp");
 }

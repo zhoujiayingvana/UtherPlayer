@@ -81,6 +81,8 @@ public slots:
     QStringList getAllPaths() const;
     // 根据指定路径名移动到第一个
     void move2First(const QString& _filePath);
+    // 根据 index 获取到路径
+    int getRankByFilePath(const QString& _filePath) const;
 protected:
     // 用户名
     QString userName;

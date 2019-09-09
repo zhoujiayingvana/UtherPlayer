@@ -129,17 +129,19 @@ const QString getErrorType(const MyErrors& _error)
         return QString("media state error");
     case MyErrors::GET_LAST_AV_ERROR:
         return QString("get last av error, perhaps: empty infos stack or the file has been removed");
+    case MyErrors::ADD_EXISTED_HISTORICAL_CONTENT:
+        return QString("add existed historical content");
     default:
-        return QString("unknown error");
+        return QString("my unknown errors");
     }
 }
 
-const QSet<QString> MediaTypeHelper::audioTypes =
+const QSet<QString> MediaTypeHelper::videoTypes =
                 QSet<QString>() << "mp4" << "m4v" << "3gp" << "mpg"
                                 << "flv" << "f4v" << "swf"
                                 << "avi" << "gif" << "wmv" << "rmvb"
                                 << "mov" << "mts" << "m2t";
-const QSet<QString> MediaTypeHelper::videoTypes =
+const QSet<QString> MediaTypeHelper::audioTypes =
                 QSet<QString>() << "mp3" << "aac" << "m4a" << "ape"
                                 << "flac" << "wav" << "wma" << "amr"
                                 << "mid";
