@@ -26,6 +26,8 @@ TMZPlayer::TMZPlayer(QWidget *parent,Media* m) :
     gifPath=info.absolutePath();
     recordStatus=true;
     shotFormat="jpg";
+    //快捷键初始化
+    ui->openFile->setShortcut(QKeySequence("Ctrl+O"));
     
     pTitleBar = new TitleBar(this);
     //    pTitleBar->setAutoFillBackground(true);//test
@@ -43,6 +45,7 @@ TMZPlayer::TMZPlayer(QWidget *parent,Media* m) :
     palette.setColor(QPalette::Background, Qt::black);
     space->setPalette(palette);
     space->setAutoFillBackground(true);
+    qDebug()<<space->pos();
     
     
     ui->showLeftBarBtn->setVisible(false);
@@ -136,7 +139,7 @@ TMZPlayer::TMZPlayer(QWidget *parent,Media* m) :
     ui->listNameLabel->setFixedHeight(50);
     ui->listNameLabel->setCursor(Qt::ArrowCursor);
     ui->displayList->setCursor(Qt::ArrowCursor);
-
+    
     mMiddleLayout->setContentsMargins(0, 0, 0, 0);
     mMiddleLayout->setSpacing(0);
     mMiddleLayout->addWidget(a);
@@ -171,7 +174,7 @@ TMZPlayer::TMZPlayer(QWidget *parent,Media* m) :
     widget->setLayout(pLayout);
     
     
-    
+    //音量增减快捷键
     volumeAdd = new QShortcut(this);
     volumeAdd->setKey(tr("up"));
     volumeAdd->setAutoRepeat(true);
@@ -194,12 +197,12 @@ TMZPlayer::TMZPlayer(QWidget *parent,Media* m) :
 
     //截屏快捷键
     shotScreen=new QShortcut(this);
-    shotScreen->setKey(tr("CTRL+9"));
+    shotScreen->setKey(tr("CTRL+1"));
     shotScreen->setAutoRepeat(true);
     connect(shotScreen, SIGNAL(activated()), this,SLOT(shotMyScreen()));
     //录屏快捷键
     recordScreen=new QShortcut(this);
-    recordScreen->setKey(tr("CTRL+0"));
+    recordScreen->setKey(tr("CTRL+2"));
     recordScreen->setAutoRepeat(true);
     connect(recordScreen, SIGNAL(activated()), this,SLOT(recordMyScreen()));
     
@@ -209,17 +212,8 @@ TMZPlayer::TMZPlayer(QWidget *parent,Media* m) :
     connect(pBottomBar,SIGNAL(full_screenButton_clicked()),this,SLOT(fullScreenMode()));
     connect(pBottomBar, SIGNAL(volumeChanged(int)), mini, SLOT(changeVolume(int)));
     connect(pBottomBar, SIGNAL(currentPosChanged(int)), this, SLOT(currentPosChanged(int)));
-    connect(pBottomBar, SIGNAL(lastButton_clicked()), this, SLOT(lastFunction()));
-    connect(pBottomBar, SIGNAL(pauseButton_clicked()), this, SLOT(playFunction()));
-    connect(pBottomBar, SIGNAL(nextButton_clicked()), this, SLOT(nextFunction()));
-    connect(pBottomBar, SIGNAL(stopButton_clicked()), this, SLOT(stopFunction()));
-    connect(pBottomBar, SIGNAL(volumeChanged(int)), this, SLOT(changeVolume(int)));
     connect(this, SIGNAL(durationSignal(int)), pBottomBar, SLOT(startPlaying(int)));
     connect(this, SIGNAL(maximizeButton_clicked()), pTitleBar, SLOT(on_maximizeButton_clicked()));
-
-    connect(this, SIGNAL(whetherPlaying(bool)), pBottomBar, SLOT(changePauseButton(bool)));
-    connect(this, SIGNAL(whetherPlaying(bool)), mini, SLOT(on_maximizeButton_clicked()));
-
     connect(space,SIGNAL(full_screenButton_clicked()),this,SLOT(fullScreenMode()));
     connect(space,SIGNAL(wheelMoved(QWheelEvent *)),pBottomBar,SLOT(wheelMoved(QWheelEvent *)));
     connect(space, SIGNAL(bottomBarHide()), pBottomBar, SLOT(hide()));
@@ -228,7 +222,6 @@ TMZPlayer::TMZPlayer(QWidget *parent,Media* m) :
     connect(pTitleBar,SIGNAL(systemTrayMode()),this,SLOT(on_systemTrayModeBtn_clicked()));
     connect(pTitleBar,SIGNAL(miniMode()),this,SLOT(on_miniMode_clicked()));
     connect(sysTrayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)), this, SLOT(on_activatedSysTrayIcon(QSystemTrayIcon::ActivationReason)));
-    connect(mini, SIGNAL(closeSignal()), pTitleBar, SLOT(on_closeButton_clicked()));
     connect(mini, SIGNAL(volumeChanged(int)), pBottomBar, SLOT(changeVolume(int)));
     connect(downloadListBtn, SIGNAL(clicked()), this, SLOT(showDownloadList()));
     connect(ui->displayList, SIGNAL(downloadFilesChangesSignal(int, QList<QString>)),
@@ -261,9 +254,6 @@ TMZPlayer::TMZPlayer(QWidget *parent,Media* m) :
     // 连接自动切换模式
     connect(this, SIGNAL(sendMediaType(MediaType&)),
             pBottomBar, SLOT(rcvSwitchModeButton(MediaType&)));
-    //获取视频总时长
-    connect(media->getController(), SIGNAL(media->getController()->returnInitDuration(qint64)),
-            pBottomBar, SLOT(setTotalTime()));
 
     
     
@@ -620,6 +610,7 @@ void TMZPlayer::changeRecordShortcut(QString str)
 void TMZPlayer::changeShotDir(QString str)
 {
     picPath=str;
+    qDebug()<<picPath;
 }
 
 /**
@@ -633,6 +624,7 @@ void TMZPlayer::changeShotDir(QString str)
 void TMZPlayer::changeRecordDir(QString str)
 {
     gifPath=str;
+    qDebug()<<gifPath;
 }
 
 /* Author: zyt
@@ -694,6 +686,8 @@ void TMZPlayer::on_showRightBarBtn_clicked()
  */
 void TMZPlayer::creatActions()
 {
+    //为了测试，将默认播放状态设为真
+    isPlaying = true;
     //实际情况待对接
     if(isPlaying)
         playOrPauseAction = new QAction(QStringLiteral("暂停"));
@@ -718,7 +712,7 @@ void TMZPlayer::creatActions()
     displayModeMenu = new QMenu(QStringLiteral("显示模式"));
     displayMode_maxAction = new QAction(QStringLiteral("完整模式"));
     displayMode_miniAction = new QAction(QStringLiteral("mini模式"));
-    displayMode_trayAction = new QAction(QStringLiteral("最小化到托盘"));
+    displayMode_trayAction = new QAction(QStringLiteral("最小化"));
     displayModeMenu->addAction(displayMode_maxAction);
     displayModeMenu->addAction(displayMode_miniAction);
     displayModeMenu->addAction(displayMode_trayAction);
@@ -854,16 +848,17 @@ void TMZPlayer::on_showMainAction()
  */
 void TMZPlayer::on_playOrPauseAction()
 {
-    if(!isPlaying)
+    if(isPlaying)
     {
         playOrPauseAction->setText(QStringLiteral("播放"));
         playOrPauseAction->setIcon(QIcon(":/image/image/play.png"));
     }
-    else if(isPlaying)
+    else if(!isPlaying)
     {
         playOrPauseAction->setText(QStringLiteral("暂停"));
         playOrPauseAction->setIcon(QIcon(":/image/image/pause.jpg"));
     }
+    isPlaying = !isPlaying;
 }
 
 /* Author: zyt
@@ -874,7 +869,7 @@ void TMZPlayer::on_displayMode_maxAction()
 {
     changeBackGround(currentQss);
     this->show();
-    mini->hide();
+    sysTrayIcon->hide();
 }
 
 /* Author: zyt
@@ -973,12 +968,7 @@ void TMZPlayer::changePicBackGround(QString back)
     
 }
 
-void TMZPlayer::lastFunction()
-{
-    media->playLast();
-}
-
-void TMZPlayer::playFunction()//播放暂停
+void TMZPlayer::playFunction()
 {
     if(media->getController()->getStatus()==QMediaPlayer::PlayingState)
     {
@@ -990,25 +980,8 @@ void TMZPlayer::playFunction()//播放暂停
     }
     else
     {
-
+        
     }
-    emit whetherPlaying((media->getController()->getStatus()==QMediaPlayer::PlayingState));
-}
-
-void TMZPlayer::nextFunction()//下一个
-{
-    media->playNextByHand();
-}
-
-void TMZPlayer::stopFunction()
-{
-
-}
-
-void TMZPlayer::changeVolume(int vol)
-{
-    media->getController()->setVolume(vol);
-
 }
 
 /**
@@ -1022,6 +995,7 @@ void TMZPlayer::changeVolume(int vol)
 void TMZPlayer::shotMyScreen()
 {
     media->getController()->cutScreen(space->winId(),"test1",picPath,shotFormat);
+    qDebug()<<picPath;
 }
 
 /**
@@ -1043,7 +1017,7 @@ void TMZPlayer::recordMyScreen()
     else{
         media->endCreateGif();
         recordStatus=true;
-                  qDebug()<<"end";
+        qDebug()<<"end";
     }
 }
 
@@ -1059,8 +1033,6 @@ void TMZPlayer::changeShotFormat(QString str)
 {
     shotFormat=str;
 }
-
-
 
 
 /* Author: zyt
@@ -1086,6 +1058,8 @@ void TMZPlayer::on_openFile_clicked()
         QString _filePath = info.filePath();
 
         media->play(true, _fileName, _filePath);
+        qint64 what = media->getController()->getDuration();
+        emit durationSignal(static_cast<int>(what));
 
         MediaType currentMediaType = this->media->getCurrentMediaType();
         if (currentMediaType == MediaType::AUDIO)
@@ -1095,14 +1069,7 @@ void TMZPlayer::on_openFile_clicked()
         else
             qDebug() << "what unknown" << endl;
         emit sendMediaType(currentMediaType);
-
-
-        qDebug() << info.absoluteFilePath() << endl;
-
-
     }
-
-
 }
 
 void TMZPlayer::closeEvent(QCloseEvent* event)
