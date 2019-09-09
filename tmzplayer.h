@@ -136,6 +136,8 @@ private slots:
 
     void on_openFile_clicked();
 
+    void closeEvent(QCloseEvent *event);
+
 private:
     Ui::TMZPlayer *ui;
     QWidget *widget;

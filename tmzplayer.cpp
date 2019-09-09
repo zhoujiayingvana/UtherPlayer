@@ -924,6 +924,11 @@ void TMZPlayer::on_openFile_clicked()
     qDebug()<<media->getController()->getStatus();
 }
 
+void TMZPlayer::closeEvent(QCloseEvent* event)
+{
+    this->media->closeSelf();
+}
+
 
 /* Author: zyt
  * Name: addHistory
