@@ -29,6 +29,8 @@ signals:
     //返回视频信息
     //返回时长
     void returnDuration(qint64 dur);
+    //播放视频时返回时长
+    void returnInitDuration(qint64);
     //返回当前进度时间
     void returnPosition(qint64 pos);
     //返回视频状态
@@ -44,6 +46,8 @@ public slots:
     //获取视频信息
     //获取时长
     void needGetDuration();
+    //播放视频时获取时长
+    void needGetInitDuration();
     //获取当前进度时间
     void needGetPosition();
     //获取视频状态

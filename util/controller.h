@@ -62,6 +62,8 @@ signals:
     void needGetStatus();
     //获取当前播放顺序
     void needGetOrder();
+    //视频播放开始时向主界面返回duration
+    void returnInitDuration(qint64);
     
     //设置视频
     //打开并播放视频
@@ -94,6 +96,8 @@ public slots:
     void receivePosition(qint64);
     //获取Player传递的Duration
     void receiveDuration(qint64);
+    //视频开始时获取player传递的duration
+    void receiveInitDuration(qint64);
     //获取Player传递的State
     void receiveStatus(QMediaPlayer::State);
     //获取截图路径

@@ -20,6 +20,8 @@ Media::Media()
     //获取视频长度
     connect(this->media_Controller,SIGNAL(needGetDuration()),this->media_Player,SLOT(needGetDuration()));
     connect(this->media_Player,SIGNAL(returnDuration(qint64)),this->media_Controller,SLOT(receiveDuration(qint64)));
+    //播放视频时获取视频长度
+    connect(this->media_Player,SIGNAL(returnInitDuration(qint64)),this->media_Controller,SLOT(receiveInitDuration(qint64)));
     //获取视频播放位置
     connect(this->media_Controller,SIGNAL(needGetPosition()),this->media_Player,SLOT(needGetPosition()));
     //获取视频播放状态
@@ -106,16 +108,8 @@ void Media::play(const bool& _isLocal, const QString& _fileName, const QString& 
     this->pushCurrentMediaStateInfo2Stack();
 
     // 加入历史记录
-    try
-    {
-        this->media_Histories.addContent(_fileName,
-                                         _filePath, _isLocal, 0);
-    }
-    catch (const MyErrors& e)  // 若已经有了, 则应该移动到第一个
-    {
-        qDebug() << getErrorType(e) << endl;
-        this->media_Histories.move2First(_filePath);  // 移动到第一个
-    }
+    this->media_Histories.addContent(_fileName,
+                                     _filePath, _isLocal, 0);
 
     // 选中历史记录的第一条
     this->setPlayWhere(PlayArea::HISTORIES);

@@ -117,7 +117,14 @@ void Controller::receivePosition(qint64 pos)
 
 void Controller::receiveDuration(qint64 dur)
 {
-    this->m_CtrlDuration=dur;   
+    this->m_CtrlDuration=dur;
+    
+}
+
+void Controller::receiveInitDuration(qint64 dur)
+{
+    this->m_CtrlDuration=dur;
+    emit returnInitDuration(dur);
 }
 
 void Controller::receiveStatus(QMediaPlayer::State stus)
