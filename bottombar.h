@@ -31,14 +31,26 @@ signals:
     void volumeChanged(int);
     void wheelMoving(int,int);
     void currentPosChanged(int);
+    void lastButton_clicked();
+    void pauseButton_clicked();
+    void nextButton_clicked();
+    void stopButton_clicked();
 
 public slots:
 
     void startPlaying(int);
     //拖拽播放条时改变当前时间
     void on_playSlider_valueChanged(int);
-
+    //上一个
+    void on_lastButton_clicked();
+    //播放暂停
     void on_pauseButton_clicked();
+    //下一个
+    void on_nextButton_clicked();
+    //停止
+    void on_stopButton_clicked();
+    //改变播放暂停键图标
+    void changePauseButton(bool);
 
     //快进快退秒数修改
     void changePlaySliderPlus(int);
@@ -95,6 +107,8 @@ public slots:
     void quickMovePlaySliderPlus();
     //快退
     void quickMovePlaySliderMinus();
+
+
 
 
 private:

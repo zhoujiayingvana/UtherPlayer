@@ -60,6 +60,7 @@ public:
 signals:
     void maximizeButton_clicked();
     void durationSignal(int);
+    void whetherPlaying(bool);
 
 
 private slots:
@@ -129,12 +130,23 @@ private slots:
 
     //修改主界面自定义图片背景
     void changePicBackGround(QString);
-
+    //上一个
+    void lastFunction();
     //播放
     void playFunction();
+    //下一个
+    void nextFunction();
+    //停止
+    void stopFunction();
+    //改变meidia音量
+    void changeVolume(int);
+
+
 
 
     void on_openFile_clicked();
+
+    void closeEvent(QCloseEvent *event);
 
 private:
     Ui::TMZPlayer *ui;

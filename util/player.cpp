@@ -30,16 +30,17 @@ QMediaPlayer *Player::getPlayer()
 void Player::needPlay( QMediaContent *content)
 {
     this->m_Player->setMedia(*content);
+    this->m_Player->play();
     this->needGetDuration();
     this->needGetPosition();
     this->needGetStatus();
-    this->m_Player->play();
 }
 
 void Player::needGetDuration()
 {
     this->m_Duration=this->m_Player->duration();
     emit returnDuration(this->m_Duration);
+
 }
 
 void Player::needGetPosition()

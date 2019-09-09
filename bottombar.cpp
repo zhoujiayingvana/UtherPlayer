@@ -123,7 +123,7 @@ BottomBar::BottomBar(QWidget *parent) : QWidget(parent)
 
     //鼠标悬停在按钮上显示提示条
     lastButton->setToolTip(QStringLiteral("上一个"));
-    pauseButton->setToolTip(QStringLiteral("播放"));
+    pauseButton->setToolTip(QStringLiteral("暂停"));
     nextButton->setToolTip(QStringLiteral("下一个"));
     stopButton->setToolTip(QStringLiteral("停止"));
     volumeButton->setToolTip(QStringLiteral("静音"));
@@ -335,8 +335,10 @@ BottomBar::BottomBar(QWidget *parent) : QWidget(parent)
 
 
 
-
-
+    connect(lastButton,SIGNAL(clicked()),this,SLOT(on_lastButton_clicked()));
+    connect(pauseButton,SIGNAL(clicked()),this,SLOT(on_pauseButton_clicked()));
+    connect(nextButton,SIGNAL(clicked()),this,SLOT(on_nextButton_clicked()));
+    connect(stopButton,SIGNAL(clicked()),this,SLOT(on_stopButton_clicked()));
     connect(playSlider,SIGNAL(valueChanged(int)),this,SLOT(on_playSlider_valueChanged(int)));
     connect(volumeButton,SIGNAL(clicked(bool)),this,SLOT(on_volumeButton_clicked()));
     connect(volumeSlider,SIGNAL(valueChanged(int)),this,SLOT(on_volumeSlider_valueChanged(int)));
@@ -377,9 +379,44 @@ void BottomBar::on_playSlider_valueChanged(int val)
     //    emit currentPosChanged(val);
 }
 
+void BottomBar::on_lastButton_clicked()
+{
+    emit lastButton_clicked();
+}
+
 void BottomBar::on_pauseButton_clicked()
 {
-    
+    qDebug()<<"a";
+    emit pauseButton_clicked();
+
+}
+
+void BottomBar::on_nextButton_clicked()
+{
+    emit nextButton_clicked();
+
+}
+
+void BottomBar::on_stopButton_clicked()
+{
+    emit stopButton_clicked();
+
+}
+
+void BottomBar::changePauseButton(bool isPlaying)
+{
+    if(isPlaying)
+    {
+        pauseButton->setStyleSheet("QPushButton{ border-image: url(:/image/image/bottomBar/pause.png); }");
+        pauseButton->setToolTip(QStringLiteral("暂停"));
+
+    }
+    else
+    {
+        pauseButton->setStyleSheet("QPushButton{ border-image: url(:/image/image/bottomBar/play.png); }");
+        pauseButton->setToolTip(QStringLiteral("播放"));
+
+    }
 }
 
 /**
@@ -431,6 +468,8 @@ void BottomBar::on_volumeSlider_valueChanged(int vol)//拖拽改变音量时用t
         volumeButton->setStyleSheet("QPushButton{ border-image: url(:/image/image/bottomBar/volume.png); }");
 
     }
+    emit volumeChanged(vol);
+
 }
 
 void BottomBar::on_switchModeButton_clicked()//点击切换音乐/视频模式

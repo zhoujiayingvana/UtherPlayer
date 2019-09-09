@@ -100,6 +100,8 @@ QMediaContent* FolderContent::getMediaContent() const
 
 MediaType FolderContent::getMediaType() const
 {
+    if (!this->isLocal)
+        return MediaType::AUDIO;
     QFileInfo fileInfo(this->filePath);
     return MediaTypeHelper::getType(fileInfo.suffix());
 }

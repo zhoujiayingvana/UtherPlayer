@@ -66,6 +66,8 @@ public:
     bool getHasAVPlaying() const;
     // 测试函数
     void mock();
+    // 获取当前正在播放内容的类型
+    MediaType getCurrentMediaType() const;
 signals:
     void returnOrder(PlayOrder);
 public slots:
@@ -121,6 +123,8 @@ private:
     QStack<MediaStateInfo> mediaStateInfos;
     // 记录是否有正在播放的视频
     bool hasAVPlaying;
+    // 记录当前正在播放 AV 的类型
+    MediaType currentMediaType;
 };
 
 
