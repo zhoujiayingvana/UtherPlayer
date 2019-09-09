@@ -4,7 +4,8 @@ Media::Media()
     : media_Histories(nullptr, "Retina", 12),
       media_Folders(nullptr, "Retina"),
       pyPath(QFileInfo("../util/get_urls.py").absoluteFilePath()),
-      username("Retina"), mediaStateInfos(), hasAVPlaying(false)
+      username("Retina"), mediaStateInfos(), hasAVPlaying(false),
+      currentMediaType(MediaType::UNKNOWN)
 {
     // 初始化私有成员
     this->media_StartThread = false;
@@ -27,7 +28,7 @@ Media::Media()
 
     //获取播放顺序
     connect(this->media_Controller,SIGNAL(needGetOrder()),this,SLOT(needGetOrder()));
-    
+
     //控制视频
     //恢复播放
     connect(this->media_Controller,SIGNAL(needRestorePlay()),this->media_Player,SLOT(needRestorePlay()));
@@ -45,7 +46,7 @@ Media::Media()
     connect(this->media_Controller,SIGNAL(needSetPlaybackRate(qreal)),this->media_Player,SLOT(needSetPlaybackRate(qreal)));
     //快进快退
     connect(this->media_Controller,SIGNAL(needJump(int)),this->media_Player,SLOT(needJump(int)));
-    
+
     //高级功能
     //截屏
     connect(this->media_Controller,SIGNAL(needCutScreen(WId ,QString,QString,QString,int)),this->media_Player,SLOT(needCutScreen(WId,QString,QString,QString,int)));
@@ -97,6 +98,10 @@ Folders& Media::getFolders()
  */
 void Media::play(const bool& _isLocal, const QString& _fileName, const QString& _filePath)
 {
+    // 如果当前有东西正在播放, 要记录历史播放记录
+    if (this->hasAVPlaying)
+        this->terminateAndSaveCurrentAV();
+
     // 加入当前的媒体状态
     this->pushCurrentMediaStateInfo2Stack();
 
@@ -115,8 +120,8 @@ void Media::play(const bool& _isLocal, const QString& _fileName, const QString& 
     // 设置播放状态
     this->hasAVPlaying = true;
 
-//    // 尝试跳转
-//    this->back2Last();
+    // 设置当前正在播放内容的类型
+    this->currentMediaType = this->media_Histories.getPointedHistoricalContent().getMediaType();
 }
 
 
@@ -166,9 +171,17 @@ void Media::play(const PlayArea& _playArea, const int& _firstRank, const int& _s
 
     // 请求播放视频
     if (this->media_playWhere == PlayArea::FOLDERS)
+    {
+        this->currentMediaType =
+            this->media_Folders.getPointedFolderContent().getMediaType();
         this->media_Player->needPlay(this->media_Folders.getPointedMediaContent());
+    }
     else if (this->media_playWhere == PlayArea::HISTORIES)
+    {
+        this->currentMediaType =
+            this->media_Histories.getPointedHistoricalContent().getMediaType();
         this->media_Player->needPlay(this->media_Histories.getPointedMediaContent());
+    }
     else
         throw MyErrors::UNKNOWN_PLAY_AREA_ERROR;
 
@@ -619,6 +632,11 @@ void Media::run()
     }
     //退出线程
     this->quit();
+}
+
+MediaType Media::getCurrentMediaType() const
+{
+    return currentMediaType;
 }
 
 bool Media::getHasAVPlaying() const

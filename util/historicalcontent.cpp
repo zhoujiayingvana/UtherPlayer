@@ -110,6 +110,8 @@ void HistoricalContent::setProgressMilliSecond(const int64_t& value)
 
 MediaType HistoricalContent::getMediaType() const
 {
+    if (!this->isLocal)
+        return MediaType::AUDIO;
     QFileInfo fileInfo(this->filePath);
     return MediaTypeHelper::getType(fileInfo.suffix());
 }
