@@ -131,7 +131,7 @@ TMZPlayer::TMZPlayer(QWidget *parent,Media* m) :
     ui->listNameLabel->setFixedHeight(50);
     ui->listNameLabel->setCursor(Qt::ArrowCursor);
     ui->displayList->setCursor(Qt::ArrowCursor);
-    
+
     mMiddleLayout->setContentsMargins(0, 0, 0, 0);
     mMiddleLayout->setSpacing(0);
     mMiddleLayout->addWidget(a);

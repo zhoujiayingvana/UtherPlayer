@@ -422,7 +422,7 @@ void Media::back2Last()
     else  // 在历史记录中播放
         this->media_Controller->seekPosition(
             this->media_Histories.getPointedHistoricalContent().getProgressMilliSecond()
-        );
+                );
 }
 
 void Media::closeSelf()

@@ -27,7 +27,8 @@ void MediaWidget::hideBottomBar()
 
 void MediaWidget::mouseDoubleClickEvent(QMouseEvent *event)
 {
-
+    
+    this->se
     Q_UNUSED(event);
     emit full_screenButton_clicked();
 }
