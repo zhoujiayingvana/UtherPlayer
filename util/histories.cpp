@@ -56,11 +56,22 @@ bool Histories::hasRemainedPlace() const
     return this->pNext < this->maxSize;
 }
 
+/**
+ * @brief Histories::addContent
+ * @param _fileName
+ * @param _filePath
+ * @param _isLocal
+ * @param _progressMillisecond
+ * 注意历史记录的添加, 永远是添加到第0项
+ */
 void Histories::addContent(const QString& _fileName,
                            const QString& _filePath,
                            const bool& _isLocal,
                            const int64_t& _progressMillisecond)
 {
+    int x = this->getRankByFilePath(_filePath);
+    if (x != -1)
+        throw MyErrors::ADD_EXISTED_HISTORICAL_CONTENT;
     HistoricalContent temp(nullptr, _fileName, _filePath, _isLocal, 0, _progressMillisecond);
     int maxIndex = -1;
     if (this->hasRemainedPlace())
@@ -144,9 +155,10 @@ void Histories::startClose()
 
 void Histories::moveContent(const int& _toContentIndex, const int& _fromContentIndex)
 {
+    if (_toContentIndex == _fromContentIndex)
+        return;
     if (_toContentIndex < 0 || _toContentIndex >= this->pNext ||
-        _fromContentIndex < 0 || _fromContentIndex >= this->pNext ||
-        _fromContentIndex == _toContentIndex)
+        _fromContentIndex < 0 || _fromContentIndex >= this->pNext)
         throw MyErrors::CONTENT_INDEX_ERROR;
     if (_fromContentIndex > _toContentIndex)
     {
@@ -263,11 +275,16 @@ QStringList Histories::getAllPaths() const
 
 void Histories::move2First(const QString& _filePath)
 {
-    int wdWhere = -1;
-    for (int i = 0; i < this->pNext; ++i)
-        if (_filePath.compare((*this->rank2content)[i].getFilePath()) == 0)
-            wdWhere = i;
+    int wdWhere = this->getRankByFilePath(_filePath);
     this->moveContent(0, wdWhere);
+}
+
+int Histories::getRankByFilePath(const QString& _filePath) const
+{
+    for (int i = 0; i < this->pNext; ++i)
+        if ((*this->rank2content)[i].getFilePath().compare(_filePath) == 0)
+            return i;
+    return -1;
 }
 
 QMap<int, HistoricalContent>* Histories::getRank2content() const

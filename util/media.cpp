@@ -106,8 +106,16 @@ void Media::play(const bool& _isLocal, const QString& _fileName, const QString& 
     this->pushCurrentMediaStateInfo2Stack();
 
     // 加入历史记录
-    this->media_Histories.addContent(_fileName,
-                                     _filePath, _isLocal, 0);
+    try
+    {
+        this->media_Histories.addContent(_fileName,
+                                         _filePath, _isLocal, 0);
+    }
+    catch (const MyErrors& e)  // 若已经有了, 则应该移动到第一个
+    {
+        qDebug() << getErrorType(e) << endl;
+        this->media_Histories.move2First(_filePath);  // 移动到第一个
+    }
 
     // 选中历史记录的第一条
     this->setPlayWhere(PlayArea::HISTORIES);
