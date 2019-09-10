@@ -763,4 +763,6 @@ MediaStateInfo& MediaStateInfo::operator=(const MediaStateInfo& other)
     this->firstRank = other.firstRank;
     this->secondRank = other.secondRank;
     this->filePath = other.filePath;
+    return *this;
+
 }
