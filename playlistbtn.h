@@ -24,6 +24,7 @@ public:
   int getSN();
   bool getIsClicked();
   void setIsClicked(bool);
+  QString getFolderName();
 
 signals:
   void showOrHideListContentSignal(bool);
@@ -33,6 +34,7 @@ signals:
   void doubleClickedSignal();
   void givingSN(int);
   void wantingName(QString);
+  void sendChangedFolderName(int,QString);
 
 public slots:
   void renameSlot();
@@ -47,7 +49,9 @@ public slots:
 private:
   bool isClicked;
   QLabel* statusPix;
+
   newLineEdit* listName;
+
   int btn_SN;
 
   bool doubleClicked;

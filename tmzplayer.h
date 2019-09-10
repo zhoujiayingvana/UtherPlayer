@@ -61,6 +61,7 @@ signals:
     void maximizeButton_clicked();
     void durationSignal(int);
     void sendMediaType(MediaType&);
+    void sendNewFolderName(QString);
 
 private slots:
     void currentPosChanged(int);

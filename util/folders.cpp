@@ -152,7 +152,7 @@ bool Folders::hasFolderName(const QString& _folderName)
     return this->folderName2Rank->keys().contains(_folderName);
 }
 
-void Folders::addNewFolder(const QString& _folderName)
+void Folders::addNewFolder(QString _folderName)
 {
     if (!Helper::isLegalName(_folderName) ||
         this->hasFolderName(_folderName))
@@ -196,7 +196,7 @@ void Folders::removeFolder(const int& _index)
     --this->pNext;
 }
 
-void Folders::renameFolder(const int& _index, const QString& _newFolderName)
+void Folders::renameFolder(int _index, QString _newFolderName)
 {
     if (!Helper::isLegalName(_newFolderName))
         throw MyErrors::NAME_ERROR;

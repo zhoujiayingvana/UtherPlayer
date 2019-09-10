@@ -5,6 +5,7 @@
 
 #include <QDir>
 #include <QWidget>
+#include <util/helper.h>
 #include <QPushButton>
 #include <QListWidget>
 #include <QTableWidget>
@@ -38,6 +39,8 @@ signals:
   void downloadFilesChangesSignal(int,QList<QString>);
 
   void sendFileAddress(QString);
+
+  void sendPlayInfo(PlayArea,int,int);
 
 public slots:
 

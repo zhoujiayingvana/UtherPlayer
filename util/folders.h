@@ -43,7 +43,7 @@ public slots:
     // 判断收藏夹名是否存在
     bool hasFolderName(const QString&);
     // 添加一个新的收藏夹
-    void addNewFolder(const QString& _folderName);
+    void addNewFolder(QString _folderName);
     // 添加新的content到一个收藏夹中
     QList<QString> getFolderNames() const;
     // 根据索引获取folder
@@ -53,7 +53,7 @@ public slots:
     // 删除指定的位置的收藏夹
     void removeFolder(const int&);
     // 重命名folder
-    void renameFolder(const int& _index, const QString& _newFolderName);
+    void renameFolder(int _index, QString _newFolderName);
     // 向指定位置的 folder 中添加一个新的 content
     // 使用index
     void addContent2Folder(const int& _index, const QString& _fileName,

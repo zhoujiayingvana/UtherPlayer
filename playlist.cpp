@@ -130,7 +130,7 @@ void playList::setRowColor(int row, QColor color)
 
 /* Author: zyt
  * Name: getFileAddress
- * Function: 双击单元行时获取该行文件地址
+ * Function: 双击单元行时获取该行文件地址/索引
  */
 void playList::getFileAddress(int row, int column)
 {
@@ -139,9 +139,7 @@ void playList::getFileAddress(int row, int column)
   fileAddressItem = this->item(row,2);
   QString fileAddress = fileAddressItem->text();
 
-  emit sendFileAddress(fileAddress);
-
-  qDebug() << fileAddress;
+  emit sendPlayInfo(PlayArea::FOLDERS,currentSN,row);
 }
 
 /* Author: zyt
@@ -230,6 +228,8 @@ void playList::addFiles()
       this->setItem(row, 1, item);
     }
   emit changeFilesInListSignal(currentSN,temp_filesInList);
+
+
 }
 
 /* Author: zyt
@@ -452,29 +452,40 @@ void playList::dropEvent(QDropEvent *event)
 
   if (!toBeAddedFiles.empty())
     {
-      for (int i = 0;i < toBeAddedFiles.length();i++)
+      if(toBeAddedFiles.length() > 1)
         {
-          int row = this->rowCount();
-          this->insertRow(row);
+          for (int i = 0;i < toBeAddedFiles.length();i++)
+            {
+              int row = this->rowCount();
+              this->insertRow(row);
 
-          //以private：QList<QString>存储该列表的文件地址
-          temp_filesInList.append(toBeAddedFiles.at(i));
+              //以private：QList<QString>存储该列表的文件地址
+              temp_filesInList.append(toBeAddedFiles.at(i));
 
-          //第2列存放地址QString
-          QTableWidgetItem *item = new QTableWidgetItem(toBeAddedFiles.at(i));
-          this->setItem(row, 2, item);
-          this->item(row, 2)->setFont(QFont("宋体",-1,-1,true));
-          this->item(row, 2)->setForeground(QBrush(QColor(105, 105, 105)));
+              //第2列存放地址QString
+              QTableWidgetItem *item = new QTableWidgetItem(toBeAddedFiles.at(i));
+              this->setItem(row, 2, item);
+              this->item(row, 2)->setFont(QFont("宋体",-1,-1,true));
+              this->item(row, 2)->setForeground(QBrush(QColor(105, 105, 105)));
 
-          //第0列存放行数
-          int temp = this->rowCount();
-          QString tempStr = QString::number(temp);
-          item = new QTableWidgetItem(tempStr);//第几行
-          this->setItem(row, 0, item);
+              //第0列存放行数
+              int temp = this->rowCount();
+              QString tempStr = QString::number(temp);
+              item = new QTableWidgetItem(tempStr);//第几行
+              this->setItem(row, 0, item);
 
-          //第1列存放名字
-          item = new QTableWidgetItem(getFileName(toBeAddedFiles.at(i)));
-          this->setItem(row, 1, item);
+              //第1列存放名字
+              item = new QTableWidgetItem(getFileName(toBeAddedFiles.at(i)));
+              this->setItem(row, 1, item);
+
+
+            }
+        }
+      else if (toBeAddedFiles.length() == 1)
+        {
+
+
+
         }
 
     }

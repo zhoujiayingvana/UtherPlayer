@@ -221,8 +221,12 @@ TMZPlayer::TMZPlayer(QWidget *parent,Media* m) :
 
     // 连接自动切换模式
     connect(this, SIGNAL(sendMediaType(MediaType&)),
-            pBottomBar, SLOT(rcvSwitchModeButton(MediaType&)));
-    
+            pBottomBar, SLOT(rcvSwitchModeButton(MediaType&)));    
+
+    // 新建收藏夹
+    connect(this, SIGNAL(sendNewFolderName(QString)),
+            &this->media->getFolders(), SLOT(addNewFolder(QString))
+            );
     
     //    connect(settingAction,SIGNAL(triggered()),//托盘模式打开设置窗口
     //            pTitleBar->settingWindow,SLOT(setVisible(true)));
@@ -369,6 +373,9 @@ bool TMZPlayer::whetherInitializeListButton()
 void TMZPlayer::addListSlot()
 {
     playlistsContainer.append(new mergedPlaylist);
+
+    emit sendNewFolderName(playlistsContainer.last()->getListName());
+
     listBoxLayout->addWidget(playlistsContainer.at(playlistsContainer.length() - 1));
     connect(playlistsContainer.at(playlistsContainer.length() - 1),
             SIGNAL(givingTempSNAndFiles(int, QList<QString>)),
@@ -399,6 +406,15 @@ void TMZPlayer::addListSlot()
             SIGNAL(allowDragAndMenuSignal()),
             this,
             SLOT(allowDragAndMenuSlot()));
+
+    // 收藏夹改名
+    connect(
+        playlistsContainer.at(playlistsContainer.length() - 1),
+        SIGNAL(sendFolderName(int,QString)),
+        &this->media->getFolders(),
+        SLOT(renameFolder(int, QString))
+    );
+
 }
 
 /* Author: zyt

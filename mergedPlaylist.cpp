@@ -51,6 +51,8 @@ mergedPlaylist::mergedPlaylist(QWidget *parent) : QWidget(parent)
   connect(listBtn,SIGNAL(hideOtherContentsSignal(int)),this,SLOT(hideOtherContentsSlot(int)));
 
   connect(this,SIGNAL(hideContentSignal()),this,SLOT(hideContentSlot()));
+
+  connect(listBtn,SIGNAL(sendChangedFolderName(int,QString)),this,SLOT(sendTempFolderName(int,QString)));
 }
 
 /* Author: zyt
@@ -60,6 +62,12 @@ mergedPlaylist::mergedPlaylist(QWidget *parent) : QWidget(parent)
 int mergedPlaylist::getSN()
 {
   return SN;
+}
+
+//获取mergerdPlaylist的列表名字
+QString mergedPlaylist::getListName()
+{
+  return listBtn->getFolderName();
 }
 
 /* Author: zyt
@@ -182,5 +190,11 @@ void mergedPlaylist::hideContentSlot()
  */
 void mergedPlaylist::deleteListRequestAnswering()
 {
+  emit deleteList(SN);
   delete this;
+}
+
+void mergedPlaylist::sendTempFolderName(int sn, QString name)
+{
+  emit sendFolderName(sn,name);
 }

@@ -13,6 +13,7 @@ class mergedPlaylist : public QWidget
 public:
   explicit mergedPlaylist(QWidget *parent = nullptr);
   int getSN();
+  QString getListName();
 
 signals:
   void sendDirSignal(QDir);
@@ -23,6 +24,11 @@ signals:
   void hideContentSignal();
   void allowDragAndMenuSignal();
 
+  void deleteList(int);
+
+  //发送修改了那个收藏夹的那个名字
+  void sendFolderName(int,QString);
+
 public slots:
   void showOrHideListContentSlot(bool);
   void hideOtherContentsSlot(int);
@@ -32,6 +38,8 @@ public slots:
   void wantingNameSlot(QString);
   void hideContentSlot();
   void deleteListRequestAnswering();
+  void sendTempFolderName(int,QString);
+
 
 private:
   playlistBtn* listBtn;
