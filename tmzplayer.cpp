@@ -37,8 +37,7 @@ TMZPlayer::TMZPlayer(QWidget *parent,Media* m) :
     connect(recordTimer,SIGNAL(timeout()),this,SLOT(recordMyScreen()));
     userEnd=0;
 
-    //快捷键初始化
-    ui->openFile->setShortcut(QKeySequence("Ctrl+O"));
+
     
     pTitleBar = new TitleBar(this);
     //    pTitleBar->setAutoFillBackground(true);//test
@@ -65,8 +64,8 @@ TMZPlayer::TMZPlayer(QWidget *parent,Media* m) :
     mini = new Mini(this);
     sysTrayIcon = new QSystemTrayIcon(this);
     
-    
-    
+
+
     downloadListBtn = new QPushButton(this);
     downloadListBtn->setFlat(true);
     downloadListBtn->setText(QStringLiteral(" 我的下载"));
@@ -263,8 +262,7 @@ TMZPlayer::TMZPlayer(QWidget *parent,Media* m) :
             this, SLOT(downloadFilesChangesSlot(int, QList<QString>)));
     
     //9.9
-    connect(pTitleBar->settingWindow,SIGNAL(sigOpenFileShortcut(QString)),//打开文件快捷键修改
-            this,SLOT(changeOpenFileShortcut(QString)));
+
     connect(pTitleBar->settingWindow,SIGNAL(sigLouderShortcut(QString)),//换音量增快捷键
             this,SLOT(changeLouderShortcut(QString)));
     connect(pTitleBar->settingWindow,SIGNAL(sigLowerShortcut(QString)),//换音量减快捷键
@@ -308,6 +306,10 @@ TMZPlayer::TMZPlayer(QWidget *parent,Media* m) :
     //获取视频总时长
     connect(media->getController(), SIGNAL(returnInitDuration(qint64)),
             pBottomBar, SLOT(setTotalTime(qint64)));
+    //得到信号打开文件
+    connect(pTitleBar,SIGNAL(openFile_clicked()),this,SLOT(on_openFile_clicked()));
+
+
 
 
 
@@ -338,8 +340,7 @@ TMZPlayer::TMZPlayer(QWidget *parent,Media* m) :
     qDebug()<<this;
     
     
-    
-    ui->openFile->setParent(widget);
+
     
     
     // 建立
@@ -651,18 +652,7 @@ void TMZPlayer::changeQuickMoveMinusShortcut(QString str)
     quickMoveMinus->setKey(str);
 }
 
-/**
-* @method        TMZPlayer::changeOpenFileShortcut
-* @brief         打开文件快捷键修改
-* @param         QSTRING
-* @return        VOID
-* @author        涂晴昊
-* @date          2019-09-09
-*/
-void TMZPlayer::changeOpenFileShortcut(QString str)
-{
-    ui->openFile->setShortcut(QKeySequence(str.toLatin1().data()));
-}
+
 
 /**
 * @method        TMZPlayer::changeLuminAddShortcut

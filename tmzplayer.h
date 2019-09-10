@@ -134,8 +134,6 @@ private slots:
     //修改录屏快捷键
     void changeRecordShortcut(QString);
 
-    //打开文件快捷键修改
-    void changeOpenFileShortcut(QString);
 
     //亮度增快捷键修改
     void changeLuminAddShortcut(QString);

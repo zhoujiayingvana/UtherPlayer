@@ -1,4 +1,4 @@
-#include "folders.h"
+﻿#include "folders.h"
 
 Folders::Folders(QObject *parent, const QString& _userName)
     : QObject(parent), rank2Folder(nullptr), folderName2Rank(nullptr), pNext(0),
@@ -24,6 +24,7 @@ Folders& Folders::operator=(const Folders& other)
     this->pChosen = other.pChosen;
     this->rank2Folder = new QMap<int, Folder>(*other.rank2Folder);
     this->folderName2Rank = new QMap<QString, int>(*other.folderName2Rank);
+    return *this;
 }
 
 Folders::~Folders()
