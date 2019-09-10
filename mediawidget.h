@@ -19,7 +19,8 @@ signals:
     void wheelMoved(QWheelEvent *);
 public slots:
     void hideBottomBar();
-
+    void mediaLuminAdd();//亮度增
+    void mediaLuminSub();//亮度减
 
 protected:
     virtual void mouseDoubleClickEvent(QMouseEvent *event);
