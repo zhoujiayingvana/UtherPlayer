@@ -23,9 +23,11 @@ public:
 signals:
     void systemTrayMode();
     void miniMode();
+    void openFile_clicked();
 
 public slots:
     void on_miniButton_clicked();//mini
+    void on_fileButton_clicked();//发射信号打开文件
     void on_minimizeButton_clicked();//最小化
     void on_maximizeButton_clicked();//最大化/还原
     void on_closeButton_clicked();//关闭
@@ -36,6 +38,8 @@ public slots:
      * */
     void changeFontType(QFont * font);
 
+    //打开文件快捷键修改
+    void changeOpenFileShortcut(QString str);
     void changeCloseStatus(int);
 protected:
     //双击标题栏进行界面的最大化/还原
@@ -46,6 +50,7 @@ protected:
 private:
     QLabel *iconLabel; //标题栏图标
     QLabel *titleLabel; //标题栏标题
+    QPushButton *fileButton; //文件按钮
     QPushButton *SettingsButton; //设置按钮
     MySkinMenuButton *SkinButton; //换肤按钮
     QPushButton *skinButton; //换肤按钮

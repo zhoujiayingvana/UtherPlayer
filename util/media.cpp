@@ -59,6 +59,10 @@ Media::Media()
     //设置播放顺序
     connect(this->media_Controller,SIGNAL(needSetOrder(PlayOrder)),this,SLOT(needSetOrder(PlayOrder)));
     connect(this,SIGNAL(returnOrder(PlayOrder)),this->media_Controller,SLOT(receiveOrder(PlayOrder)));
+
+    // 跳转
+    connect(this->media_Player->getPlayer(), SIGNAL(durationChanged(qint64)),
+            this, SLOT(back2Last()));
 }
 
 Media::~Media()
@@ -175,6 +179,9 @@ void Media::play(const PlayArea& _playArea, const int& _firstRank, const int& _s
     // 将之前的内容加入信息栈
     this->pushCurrentMediaStateInfo2Stack();
 
+    // 尝试关闭当前的视频
+    this->terminateAndSaveCurrentAV();
+
     // 选定新的要播放的视频
     this->setPlayWhere(_playArea);
     this->setFirstRank(_firstRank);
@@ -203,10 +210,16 @@ void Media::play(const PlayArea& _playArea, const int& _firstRank, const int& _s
         this->media_Histories.setPChosen(0);  // 同时非显示设置当前历史记录的选中为 0
     }
     this->hasAVPlaying = true;
+}
 
-    // 指定位置的播放, 需要判断跳转
-    this->back2Last();
+PlayOrder Media::getMedia_Order() const
+{
+    return media_Order;
+}
 
+void Media::setMedia_Order(const PlayOrder& value)
+{
+    media_Order = value;
 }
 
 void Media::makeContainerEmpty()
@@ -269,7 +282,7 @@ bool Media::playNextByHand()
     this->hasAVPlaying = true;  // 再补一手
 
     // 尝试跳转
-    this->back2Last();
+//    this->back2Last();
     return true;
 }
 
@@ -400,8 +413,8 @@ bool Media::playLast()
     }
     if (this->lastAVAccessible(lmsi))  // 上一个可以访问且正确路径
     {
-//        if (this->hasAVPlaying)  // 有 AV 占用窗口, 应该终止并保存历史记录
-//            this->terminateAndSaveCurrentAV();
+        if (this->hasAVPlaying)  // 有 AV 占用窗口, 应该终止并保存历史记录
+            this->terminateAndSaveCurrentAV();
 
         PlayArea _playArea = lmsi.getWhere();
         int _firstRank = lmsi.getFirstRank();
@@ -437,7 +450,7 @@ bool Media::playLast()
         this->hasAVPlaying = true;
 
         // 尝试跳转
-        this->back2Last();
+//        this->back2Last();
         return true;
     }
     else
@@ -455,7 +468,7 @@ void Media::back2Last()
     else  // 在历史记录中播放
         this->media_Controller->seekPosition(
             this->media_Histories.getPointedHistoricalContent().getProgressMilliSecond()
-                );
+        );
 }
 
 void Media::closeSelf()
@@ -750,4 +763,6 @@ MediaStateInfo& MediaStateInfo::operator=(const MediaStateInfo& other)
     this->firstRank = other.firstRank;
     this->secondRank = other.secondRank;
     this->filePath = other.filePath;
+    return *this;
+
 }

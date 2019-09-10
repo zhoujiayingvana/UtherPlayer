@@ -118,5 +118,6 @@
         <file>image/titleBar/skin.png</file>
         <file>image/bottomBar/full_mute.png</file>
         <file>image/bottomBar/full_volume.png</file>
+        <file>image/titleBar/file.png</file>
     </qresource>
 </RCC>

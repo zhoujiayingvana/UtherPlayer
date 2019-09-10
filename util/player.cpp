@@ -154,4 +154,9 @@ void Player::needCutScreen(WId wId, QString fileName, QString filePath, QString 
     QString fullPath=filePath+"/"+fileName+"."+fmt;
     screen->grabWindow(wId).save(fullPath,Debug::QString2Char(fmt),quality);
     emit this->returnScreenCut(fullPath);
+}
+
+QMediaPlayer* Player::getPlayer() const
+{
+    return this->m_Player;
 };
