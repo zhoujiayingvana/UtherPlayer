@@ -28,8 +28,8 @@ signals:
   void sendLastSignal();
   void sendNextSignal();
   void volumeChanged(int);
-  void sendPlayOrPauseSignal(bool);
-  void sendLikeSignal(bool);
+  void sendPlayOrPauseSignal();
+
 
 
 
@@ -52,15 +52,19 @@ public slots:
 
   void on_playOrPauseBtn_clicked();
 
-  void on_likeBtn_clicked();
 
   void changeVolume(int);//改变音量
+
+  void changePlayOrPauseBtn(bool);
+
+private slots:
+  void on_lastSongBtn_clicked();
+
+  void on_nextSongBtn_clicked();
 
 private:
   Ui::Mini *ui;
   bool drag;
-  bool like;
-  bool isPlaying;
   MySlider *volumeSlider;
   QPoint mouseStartPos;
   QPoint windowStartPos;

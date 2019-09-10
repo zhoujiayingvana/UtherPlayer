@@ -24,6 +24,7 @@ Media::Media()
     connect(this->media_Player,SIGNAL(returnInitDuration(qint64)),this->media_Controller,SLOT(receiveInitDuration(qint64)));
     //获取视频播放位置
     connect(this->media_Controller,SIGNAL(needGetPosition()),this->media_Player,SLOT(needGetPosition()));
+    connect(this->media_Player,SIGNAL(returnPosition(qint64)),this->media_Controller,SLOT(receivePosition(qint64)));
     //获取视频播放状态
     connect(this->media_Controller,SIGNAL(needGetStatus()),this->media_Player,SLOT(needGetStatus()));
     connect(this->media_Player,SIGNAL(returnStatus(QMediaPlayer::State)),this->media_Controller,SLOT(receiveStatus(QMediaPlayer::State)));
@@ -467,7 +468,7 @@ void Media::startCreateGif(WId wid, QString fileName, QString filePath)
         qDebug()<<"Media StartCreateGif() "<<Debug::getDebugErrorType(Debug::MyErrors::FILE_PATH_ERROR);
         return;
     }
-    this->media_GifFullPath=filePath+fileName+".gif";
+    this->media_GifFullPath=filePath+"/"+fileName+".gif";
     //开始gif录制线程
     this->media_WId=wid;
     this->start();

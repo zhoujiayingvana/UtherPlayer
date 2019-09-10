@@ -66,8 +66,12 @@ signals:
     void sendMediaType(MediaType&);
     void sendNewFolderName(QString);
     void whetherPlaying(bool);
+<<<<<<< HEAD
     void givingHistoryAddress(QString);
     void sendFolderNames(QStringList);
+=======
+    void getPosition(int);
+>>>>>>> cb6dd988f10b4a2a44765b30474a17275fdb0eb8
 
 private slots:
     void currentPosChanged(int);
@@ -158,6 +162,8 @@ private slots:
     void stopFunction();
     //改变meidia音量
     void changeVolume(int);
+    //返回现在时间
+    void returnPosition();
 
 
     //截屏
@@ -187,7 +193,8 @@ private:
     QHBoxLayout *rightLayout;
     QWidget *middleWidget;
     QVBoxLayout *middleLayout;
-    QVBoxLayout * mMiddleLayout;
+    QWidget *fileWidget;
+    QVBoxLayout * fileLayout;
 
     QVBoxLayout *pLayout;
 

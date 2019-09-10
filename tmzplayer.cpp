@@ -131,37 +131,20 @@ TMZPlayer::TMZPlayer(QWidget *parent,Media* m) :
     rightLayout->addWidget(ui->historyList);
     rightLayout->addWidget(ui->showRightBarBtn);
 
-//    mMiddleLayout = new QVBoxLayout(space);
-//    QWidget * a = new QWidget(space);//test
-//    a->setAutoFillBackground(true);//test
-//    QHBoxLayout *b = new QHBoxLayout(a);//test
-//    b->addWidget(ui->listNameLabel);//test
-//    b->setContentsMargins(0, 0, 0, 0);//test
-//    ui->listNameLabel->setFixedHeight(50);
-//    ui->listNameLabel->setCursor(Qt::ArrowCursor);
-//    ui->displayList->setCursor(Qt::ArrowCursor);
 
-//    mMiddleLayout->setContentsMargins(0, 0, 0, 0);
-//    mMiddleLayout->setSpacing(0);
-//    mMiddleLayout->addWidget(a);
-//    mMiddleLayout->addWidget(ui->displayList);
 
-    mMiddleLayout = new QVBoxLayout(space);
-    QWidget * a = new QWidget(space);//test
-    a->setAutoFillBackground(true);//test
-    QHBoxLayout *b = new QHBoxLayout(a);//test
-    b->addWidget(ui->listNameLabel);//test
-    b->setContentsMargins(0, 0, 0, 0);//test
-    ui->listNameLabel->setFixedHeight(50);
-    ui->listNameLabel->setCursor(Qt::ArrowCursor);
-    ui->displayList->setCursor(Qt::ArrowCursor);
-    
-    mMiddleLayout->setContentsMargins(0, 0, 0, 0);
-    mMiddleLayout->setSpacing(0);
-    mMiddleLayout->addWidget(a);
-    mMiddleLayout->addWidget(ui->displayList);
+    fileWidget = new QWidget(this);
+    fileLayout = new QVBoxLayout(fileWidget);
+    fileLayout->addWidget(ui->listNameLabel);
+    fileLayout->addWidget(ui->displayList);
+    fileLayout->setSpacing(0);
+    fileLayout->setContentsMargins(0, 0, 0, 0);
+
+    fileWidget->hide();
     space->show();
     middleLayout->addWidget(space);
+    middleLayout->addWidget(fileWidget);
+
     
     
     
@@ -224,6 +207,12 @@ TMZPlayer::TMZPlayer(QWidget *parent,Media* m) :
     
     connect(mini,SIGNAL(miniToMaxSignal()),this,SLOT(miniToMaxSlot()));
     connect(mini,SIGNAL(miniToTraySignal()),this,SLOT(miniToTraySlot()));
+    connect(mini,SIGNAL(closeSignal()),pTitleBar,SLOT(on_closeButton_clicked()));
+    connect(mini,SIGNAL(sendLastSignal()),pBottomBar,SLOT(on_lastButton_clicked()));
+    connect(mini,SIGNAL(sendNextSignal()),pBottomBar,SLOT(on_nextButton_clicked()));
+
+
+    connect(mini,SIGNAL(sendPlayOrPauseSignal()),pBottomBar,SLOT(on_pauseButton_clicked()));
     connect(addListBtn,SIGNAL(clicked()),this,SLOT(addListSlot()));
     connect(pBottomBar,SIGNAL(full_screenButton_clicked()),this,SLOT(fullScreenMode()));
     connect(pBottomBar, SIGNAL(volumeChanged(int)), mini, SLOT(changeVolume(int)));
@@ -233,8 +222,10 @@ TMZPlayer::TMZPlayer(QWidget *parent,Media* m) :
     connect(pBottomBar, SIGNAL(nextButton_clicked()), this, SLOT(nextFunction()));
     connect(pBottomBar, SIGNAL(stopButton_clicked()), this, SLOT(stopFunction()));
     connect(pBottomBar, SIGNAL(volumeChanged(int)), this, SLOT(changeVolume(int)));
+    connect(pBottomBar, SIGNAL(needPosition()), this, SLOT(returnPosition()));
+    connect(this, SIGNAL(getPosition(int)), pBottomBar, SLOT(setPlaySliderValue(int)));
     connect(this, SIGNAL(whetherPlaying(bool)), pBottomBar, SLOT(changePauseButton(bool)));
-    connect(this, SIGNAL(whetherPlaying(bool)), mini, SLOT(on_maximizeButton_clicked()));
+    connect(this, SIGNAL(whetherPlaying(bool)), mini, SLOT(changePlayOrPauseBtn(bool)));
     connect(this, SIGNAL(durationSignal(int)), pBottomBar, SLOT(startPlaying(int)));
     connect(this, SIGNAL(maximizeButton_clicked()), pTitleBar, SLOT(on_maximizeButton_clicked()));
     connect(space,SIGNAL(full_screenButton_clicked()),this,SLOT(fullScreenMode()));
@@ -334,7 +325,6 @@ bool TMZPlayer::nativeEvent(const QByteArray &eventType, void *message, long *re
 
 
 
-    qDebug()<<msg->message<<WM_NCHITTEST;
     if(msg->message == WM_NCHITTEST)
     {
         int xPos = GET_X_LPARAM(msg->lParam) - this->geometry().x();
@@ -752,9 +742,7 @@ void TMZPlayer::on_showRightBarBtn_clicked()
  * Function: 创建右键托盘菜单及图标的功能，并进行信号与槽的连接
  */
 void TMZPlayer::creatActions()
-{
-    //为了测试，将默认播放状态设为真
-    isPlaying = true;
+{  
     //实际情况待对接
     if(isPlaying)
         playOrPauseAction = new QAction(QStringLiteral("暂停"));
@@ -855,7 +843,14 @@ void TMZPlayer::creatMenu()
 
 void TMZPlayer::currentPosChanged(int time)
 {
-    media->getController()->seekPosition(time*1000);
+    if((media->getController()->getPosition()-time)>=500)
+    {
+        media->getController()->seekPosition(time+200);
+    }
+    else if((media->getController()->getPosition()-time)<-500){
+        media->getController()->seekPosition(time-100);
+    }
+
 }
 
 
@@ -1073,6 +1068,12 @@ void TMZPlayer::changeVolume(int vol)
 
 }
 
+void TMZPlayer::returnPosition()
+{
+    qDebug()<<media->getController()->getPosition();
+    emit getPosition(media->getController()->getPosition());
+}
+
 /**
 * @method        TMZPlayer::shotMyScreen
 * @brief         截屏
@@ -1158,6 +1159,8 @@ void TMZPlayer::on_openFile_clicked()
         else
             qDebug() << "what unknown" << endl;
         emit sendMediaType(currentMediaType);
+        emit whetherPlaying(true);
+
     }
 }
 
