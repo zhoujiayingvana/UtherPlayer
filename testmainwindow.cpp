@@ -14,12 +14,25 @@ TestMainWindow::TestMainWindow(QWidget *parent) :
     myVideoWidget->resize(291,151);
     myVideoWidget->move(80,25);
     media->getPlayWindow()->setVideoOutput(myVideoWidget);
+    myVideoWidget->setWindowFlags(Qt::WindowStaysOnTopHint);
+    label=new QLabel(this->myVideoWidget);
+    label->setPixmap((QPixmap("E:/QT/UtherPlayer/image/backgroundPicture/uther1.png")));
+    label->setScaledContents(true);
+    label->resize(291,151);
     //设置播放窗口背景色
-    QPalette palette(myVideoWidget->palette());
-    palette.setColor(QPalette::Background, Qt::black);
-    myVideoWidget->setPalette(palette);
+    //设置自动刷新
+//    myVideoWidget->setObjectName("mv");//设置对象名称
+//    myVideoWidget->setStyleSheet("#mv{color-image:url(E:/QT/UtherPlayer/image/backgroundPicture/uther1.png);}");
+    QPalette palette=myVideoWidget->palette();
+    palette.setBrush(QPalette::Background,QBrush(QPixmap("E:/QT/UtherPlayer/image/backgroundPicture/uther1.png")));
+    this->myVideoWidget->setPalette(palette);
+    myVideoWidget->setAutoFillBackground(true);
+//    myVideoWidget->setStyleSheet("border-image:url(../image/backgroundPicture/uther1.png);");
+    
+    
     QString str("CTRL+A");
     ui->pauseButton->setShortcut(QKeySequence(str.toLatin1().data()));
+    
     
     
     //测试收藏夹功能
@@ -29,8 +42,8 @@ TestMainWindow::TestMainWindow(QWidget *parent) :
     //this->media->play(PlayArea::FOLDERS, 0, 0);
     
     //播放本地视频
-    QFileInfo info("../vid/t3.avi");
-    this->media->play(true,info.fileName(),info.filePath());
+//    QFileInfo info("../vid/t3.avi");
+//    this->media->play(true,info.fileName(),info.filePath());
     
     
     
@@ -41,6 +54,7 @@ TestMainWindow::TestMainWindow(QWidget *parent) :
 //    //测试播放速度功能
 
 }
+
 
 TestMainWindow::~TestMainWindow()
 {

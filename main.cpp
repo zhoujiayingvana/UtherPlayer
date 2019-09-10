@@ -3,6 +3,7 @@
 #include "util/networkmodel.h"
 #include <QFileInfo>
 #include "util/media.h"
+#include "testmainwindow.h"
 
 int main(int argc, char *argv[])
 {
@@ -18,5 +19,7 @@ int main(int argc, char *argv[])
 //    Media media;
 //    qDebug() << media.songWebSearch("小幸运");
 //    qDebug() << "****************************************" << endl;
+    TestMainWindow test;
+    test.show();
     return a.exec();
 }

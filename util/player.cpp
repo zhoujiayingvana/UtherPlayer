@@ -1,5 +1,13 @@
 ﻿#include "util/player.h"
 
+/**
+* @method        Player::Player
+* @brief         构造函数
+* @param         QWIDGET
+* @return        VOID
+* @author        周嘉莹
+* @date          2019.09.11 
+*/
 Player::Player(QWidget *parent) : QWidget(parent)
 {
     //初始化
@@ -12,24 +20,68 @@ Player::Player(QWidget *parent) : QWidget(parent)
     connect(this->m_Player,SIGNAL(durationChanged(qint64)),this,SLOT(needGetInitDuration()));
 }
 
-Player::~Player(){}
+/**
+* @method        Player::~Player
+* @brief         析构函数
+* @param         VOID
+* @return        VOID
+* @author        周嘉莹
+* @date          2019.09.11 
+*/
+Player::~Player(){
+    if(this->m_Player){
+        delete this->m_Player;
+    }
+}
 
-QMediaPlayer *Player::getPlayWindow()
+/**
+* @method        Player::getPlayWindow
+* @brief         获取视频播放窗口
+* @param         VOID
+* @return        QMediaPlayer*
+* @author        周嘉莹
+* @date          2019.09.11 
+*/
+QMediaPlayer* Player::getPlayWindow()
 {
     return this->m_Player;
 }
 
+/**
+* @method        Player::getDuration
+* @brief         获取当前视频总时长，打开视频时duration为0，请不要使用
+* @param         VOID
+* @return        QINT64
+* @author        周嘉莹
+* @date          2019.09.11 
+*/
 qint64 Player::getDuration()
 {
     return this->m_Duration;
 }
 
-QMediaPlayer *Player::getPlayer()
+/**
+* @method        Player::getPlayer
+* @brief         获取QMediaPlayer
+* @param         VOID
+* @return        QMediaPlayer*
+* @author        周嘉莹
+* @date          2019.09.11 
+*/
+QMediaPlayer* Player::getPlayer()
 {
     return this->m_Player;
 }
 
-void Player::needPlay( QMediaContent *content)
+/**
+* @method        Player::needPlay
+* @brief         播放视频
+* @param         QMediaContent *
+* @return        VOID
+* @author        周嘉莹
+* @date          2019.09.11 
+*/
+void Player::needPlay(QMediaContent *content)
 {
     this->m_Player->setMedia(*content);
 
@@ -48,6 +100,14 @@ void Player::needPlay( QMediaContent *content)
     this->needGetDuration();
 }
 
+/**
+* @method        Player::needGetDuration
+* @brief         获取当前视频总时长，打开视频时duration为0，请不要使用
+* @param         VOID
+* @return        VOID
+* @author        周嘉莹
+* @date          2019.09.11 
+*/
 void Player::needGetDuration()
 {
     //等待播放视频前duration change
@@ -58,6 +118,14 @@ void Player::needGetDuration()
     qDebug()<<"needGetDuration() "<<this->m_Duration;
 }
 
+/**
+* @method        Player::needGetInitDuration
+* @brief         打开视频时获取当前视频总时长，打开视频时请使用此函数
+* @param         VOID
+* @return        VOID
+* @author        周嘉莹
+* @date          2019.09.11 
+*/
 void Player::needGetInitDuration()
 {
     this->m_Duration=this->m_Player->duration();
@@ -65,29 +133,69 @@ void Player::needGetInitDuration()
 
 }
 
+/**
+* @method        Player::needGetPosition
+* @brief         获取视频当前位置
+* @param         VOID
+* @return        VOID
+* @author        周嘉莹
+* @date          2019.09.11 
+*/
 void Player::needGetPosition()
 {
     this->m_CurrentPosition=this->m_Player->position();
     emit returnPosition(this->m_CurrentPosition);
 }
 
+/**
+* @method        Player::needGetStatus
+* @brief         获取视频状态
+* @param         VOID
+* @return        VOID
+* @author        周嘉莹
+* @date          2019.09.11 
+*/
 void Player::needGetStatus()
 {
     this->m_PlayState=this->m_Player->state();
     emit returnStatus(this->m_PlayState);
 }
 
+/**
+* @method        Player::needRestorePlay
+* @brief         恢复播放
+* @param         VOID
+* @return        VOID
+* @author        周嘉莹
+* @date          2019.09.11 
+*/
 void Player::needRestorePlay()
 {
     this->m_Player->play();
 }
 
+/**
+* @method        Player::needPauseVideo
+* @brief         暂停播放
+* @param         VOID
+* @return        VOID
+* @author        周嘉莹
+* @date          2019.09.11 
+*/
 void Player::needPauseVideo()
 {
     this->m_Player->pause();
 }
 
 
+/**
+* @method        Player::needTerminateVideo
+* @brief         停止播放，并记录当前位置
+* @param         VOID
+* @return        QINT64
+* @author        周嘉莹
+* @date          2019.09.11 
+*/
 qint64 Player::needTerminateVideo()
 {
     // 记录当前播放的位置
@@ -103,33 +211,81 @@ qint64 Player::needTerminateVideo()
 }
 
 
+/**
+* @method        Player::needJump
+* @brief         快进
+* @param         INT
+* @return        VOID
+* @author        周嘉莹
+* @date          2019.09.11 
+*/
 void Player::needJump(int second)
 {
     qint64 currentPosition=this->m_Player->position();
     this->m_Player->setPosition(currentPosition+second*1000);
 }
 
+/**
+* @method        Player::needSetPosition
+* @brief         跳转播放
+* @param         QINT64
+* @return        VOID
+* @author        周嘉莹
+* @date          2019.09.11 
+*/
 void Player::needSetPosition(qint64 pos)
 {
-    //判断是否超过视频开头或结尾
+    //controller中判断是否超过视频开头或结尾
     this->m_Player->setPosition(pos);
 }
 
+/**
+* @method        Player::needSetMuted
+* @brief         设置静音
+* @param         BOOL
+* @return        VOID
+* @author        周嘉莹
+* @date          2019.09.11 
+*/
 void Player::needSetMuted(bool m)
 {
     this->m_Player->setMuted(m);
 }
 
+/**
+* @method        Player::needSetVolume
+* @brief         设置音量
+* @param         INT
+* @return        VOID
+* @author        周嘉莹
+* @date          2019.09.11 
+*/
 void Player::needSetVolume(int vol)
 {
     this->m_Player->setVolume(vol);
 }
 
+/**
+* @method        Player::needSetPlaybackRate
+* @brief         设置播放速率
+* @param         QREAL
+* @return        VOID
+* @author        周嘉莹
+* @date          2019.09.11 
+*/
 void Player::needSetPlaybackRate(qreal rate)
 {
     this->m_Player->setPlaybackRate(rate);
 }
 
+/**
+* @method        Player::needCutScreen
+* @brief         截图
+* @param         WId，QSTRING，QSITRING，INT
+* @return        VOID
+* @author        周嘉莹
+* @date          2019.09.11 
+*/
 void Player::needCutScreen(WId wId, QString fileName, QString filePath, QString fmt, int qua)
 {
     QScreen *screen = QGuiApplication::primaryScreen();
@@ -156,6 +312,14 @@ void Player::needCutScreen(WId wId, QString fileName, QString filePath, QString 
     emit this->returnScreenCut(fullPath);
 }
 
+/**
+* @method        Player::getPlayer
+* @brief         获取播放模块
+* @param         VOID
+* @return        QMediaPlayer*
+* @author        周嘉莹
+* @date          2019.09.11 
+*/
 QMediaPlayer* Player::getPlayer() const
 {
     return this->m_Player;

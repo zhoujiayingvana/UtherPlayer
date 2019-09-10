@@ -52,10 +52,13 @@ TMZPlayer::TMZPlayer(QWidget *parent,Media* m) :
     space->hide();
     //设置播放窗口匹配
     media->getPlayWindow()->setVideoOutput(space);
-    QPalette palette(this->palette());
-    palette.setColor(QPalette::Background, Qt::black);
-    space->setPalette(palette);
+    //设置播放窗口背景色
     space->setAutoFillBackground(true);
+    QPalette palette;
+    //palette.setColor(QPalette::Background, Qt::black);
+    //设置播放窗口背景图像
+    palette.setBrush(QPalette::Background,QBrush(QPixmap("../image/backgroundPicture/uther1.png")));
+    space->setPalette(palette);
     qDebug()<<space->pos();
 
     ui->showLeftBarBtn->setVisible(false);
@@ -1296,6 +1299,7 @@ void TMZPlayer::sltResendPlayInfo(const PlayArea& playArea,
     emit durationSignal(static_cast<int>(what));
     MediaType currentMediaType = this->media->getCurrentMediaType();
     emit sendMediaType(currentMediaType);
+    emit whetherPlaying(true);
     this->flushHisUI();
 }
 
