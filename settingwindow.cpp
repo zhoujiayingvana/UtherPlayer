@@ -177,6 +177,22 @@ SettingWindow::SettingWindow(QWidget *parent,Media * m) :
     ui->buttonBox->setFocusPolicy(Qt::NoFocus);
     ui->quickMoveSpinBox->setFocusPolicy(Qt::NoFocus);
 
+    //初始化快捷键
+    ui->actionShortcutEdit->setText("Space");
+    ui->lastShortcutEdit->setText("Ctrl+Left");
+    ui->nextShortcutEdit->setText("Ctrl+Right");
+    ui->louderShortcutEdit->setText("Up");
+    ui->lowerShortcutEdit->setText("Down");
+    ui->volumeOnOffEdit->setText("Ctrl+`");
+    ui->speedDownScreenEdit->setText("Left");
+    ui->speedUpScreenEdit->setText("Right");
+    ui->luminUpEdit->setText("Ctrl+Up");
+    ui->luminDownEdit->setText("Ctrl+Down");
+    ui->openFileEdit->setText("Ctrl+O");
+    ui->closeFileEdit->setText("Ctrl+X");
+    ui->screenShotEdit->setText("Ctrl+1");
+    ui->screenRecordEdit->setText("Ctrl+2");
+
     QString back1Str=":/new/prefix1/myQss/style2.qss";
     QFile qssfile(":/new/prefix1/myQss/style2.qss");
     qssfile.open(QFile::ReadOnly);

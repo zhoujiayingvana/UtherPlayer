@@ -42,9 +42,11 @@ public slots:
     void startPlaying(int);
     //拖拽播放条时改变当前时间
     void on_playSlider_valueChanged(int);
+
     //上一个
     void on_lastButton_clicked();
     //播放暂停
+
     void on_pauseButton_clicked();
     //下一个
     void on_nextButton_clicked();
@@ -59,7 +61,7 @@ public slots:
     //静音/恢复音量
     void on_volumeButton_clicked();
     //拖拽改变音量时用tooltip显示当前音量
-    void on_volumeSlider_valueChanged(int);    
+    void on_volumeSlider_valueChanged(int);
     //点击切换音乐/视频模式
     void rcvSwitchModeButton(MediaType& _mediaType);
     //检测鼠标是否移至音量悬浮窗
@@ -110,7 +112,6 @@ public slots:
     void quickMovePlaySliderMinus();
     //改变totalTime
     void setTotalTime(qint64);
-
 
 
 private:

@@ -33,6 +33,12 @@ BottomBar::BottomBar(QWidget *parent) : QWidget(parent)
     settingsButton = new BottomButton();//视频设置按钮
     full_screenButton = new QPushButton();//全屏/恢复按钮
 
+    //初始化快捷键
+    pauseButton->setShortcut(QKeySequence("Space"));
+    lastButton->setShortcut(QKeySequence("Ctrl+Left"));
+    nextButton->setShortcut(QKeySequence("Ctrl+Right"));
+    stopButton->setShortcut(QKeySequence("Ctrl+X"));
+    volumeButton->setShortcut(QKeySequence("Ctrl+`"));
 
     //使Button、Slider不接受由Tab、鼠标中键产生焦点
     lastButton->setFocusPolicy(Qt::NoFocus);
@@ -335,6 +341,8 @@ BottomBar::BottomBar(QWidget *parent) : QWidget(parent)
 
 
 
+
+
     connect(lastButton,SIGNAL(clicked()),this,SLOT(on_lastButton_clicked()));
     connect(pauseButton,SIGNAL(clicked()),this,SLOT(on_pauseButton_clicked()));
     connect(nextButton,SIGNAL(clicked()),this,SLOT(on_nextButton_clicked()));
@@ -386,7 +394,6 @@ void BottomBar::on_lastButton_clicked()
 
 void BottomBar::on_pauseButton_clicked()
 {
-    qDebug()<<"a";
     emit pauseButton_clicked();
 
 }
@@ -715,6 +722,7 @@ void BottomBar::setTotalTime(qint64 value)
     playSlider->setMaximum(val);
 
 }
+
 /**
 * @method        BottomBar::connectSettingAndBottom
 * @brief         连接设置界面
