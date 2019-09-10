@@ -27,8 +27,10 @@ BottomBar::BottomBar(QWidget *parent) : QWidget(parent)
     volumeSlider = new MySlider(this);//音量条
     volumeSlider->setValue(10);
     playModeButton = new QPushButton(this);//播放模式按钮
-    switchModeButton = new QPushButton(this);//切换音乐/视频模式按钮
     space = new QLabel ();//底部空白
+    slashLabel = new QLabel ();//视频模式“/”
+    slashLabel->setText("/");
+    anotherSpace = new QLabel ();//另一片空白
     definitionButton = new BottomButton();//清晰度按钮
     settingsButton = new BottomButton();//视频设置按钮
     full_screenButton = new QPushButton();//全屏/恢复按钮
@@ -49,7 +51,6 @@ BottomBar::BottomBar(QWidget *parent) : QWidget(parent)
     volumeButton->setFocusPolicy(Qt::NoFocus);
     volumeSlider->setFocusPolicy(Qt::NoFocus);
     playModeButton->setFocusPolicy(Qt::NoFocus);
-    switchModeButton->setFocusPolicy(Qt::NoFocus);
     definitionButton->setFocusPolicy(Qt::NoFocus);
     settingsButton->setFocusPolicy(Qt::NoFocus);
     full_screenButton->setFocusPolicy(Qt::NoFocus);
@@ -75,7 +76,6 @@ BottomBar::BottomBar(QWidget *parent) : QWidget(parent)
     volumeButton->setObjectName("volumeButton");
     volumeSlider->setObjectName("volumeScrollBar");
     playModeButton->setObjectName("playModeButton");
-    switchModeButton->setObjectName("switchModeButton");
     definitionButton->setObjectName("definitionButton");
     settingsButton->setObjectName("settingsButton");
     full_screenButton->setObjectName("full_screenButton");
@@ -89,13 +89,13 @@ BottomBar::BottomBar(QWidget *parent) : QWidget(parent)
     currentPos->setFixedSize(36, 30);
     playSlider->setFixedHeight(20);
     totalTime->setFixedSize(42, 30);
-    volumeButton->setFixedSize(30, 30);
+    volumeButton->setFixedSize(40, 40);
     volumeSlider->setFixedSize(60, 20);
-    playModeButton->setFixedSize(30, 30);
-    switchModeButton->setFixedSize(30, 30);
-    definitionButton->setFixedSize(30, 30);
-    settingsButton->setFixedSize(30, 30);
-    full_screenButton->setFixedSize(30, 30);
+    playModeButton->setFixedSize(40, 40);
+    definitionButton->setFixedSize(40, 40);
+    settingsButton->setFixedSize(40, 40);
+    full_screenButton->setFixedSize(40, 40);
+    slashLabel->setFixedWidth(7);
 
 
     lastButton->setFlat(true);
@@ -104,7 +104,6 @@ BottomBar::BottomBar(QWidget *parent) : QWidget(parent)
     stopButton->setFlat(true);
     volumeButton->setFlat(true);
     playModeButton->setFlat(true);
-    switchModeButton->setFlat(true);
     definitionButton->setFlat(true);
     settingsButton->setFlat(true);
     full_screenButton->setFlat(true);
@@ -119,7 +118,6 @@ BottomBar::BottomBar(QWidget *parent) : QWidget(parent)
     totalTime->setText(QStringLiteral("4:00"));
     volumeButton->setStyleSheet("QPushButton{ border-image: url(:/image/image/bottomBar/volume.png); }");
     playModeButton->setStyleSheet("QPushButton{ border-image: url(:/image/image/bottomBar/order.png); }");
-    switchModeButton->setText(QStringLiteral("切换"));
     definitionButton->setText(QStringLiteral("清晰度"));
     settingsButton->setStyleSheet("QPushButton{ border-image: url(:/image/image/bottomBar/settings.png); }");
     full_screenButton->setStyleSheet("QPushButton{ border-image: url(:/image/image/bottomBar/fullScreen.png); }");
@@ -134,7 +132,6 @@ BottomBar::BottomBar(QWidget *parent) : QWidget(parent)
     volumeButton->setToolTip(QStringLiteral("静音"));
     volumeSlider->setToolTip(QStringLiteral("音量调节(Up/Down)"));
     playModeButton->setToolTip(QStringLiteral("播放模式"));
-    switchModeButton->setToolTip(QStringLiteral("全屏"));
     definitionButton->setToolTip(QStringLiteral("清晰度"));
     settingsButton->setToolTip(QStringLiteral("设置"));
     full_screenButton->setToolTip(QStringLiteral("全屏"));
@@ -149,7 +146,6 @@ BottomBar::BottomBar(QWidget *parent) : QWidget(parent)
     volumeButton->setCursor(Qt::PointingHandCursor);
     volumeSlider->setCursor(Qt::PointingHandCursor);
     playModeButton->setCursor(Qt::PointingHandCursor);
-    switchModeButton->setCursor(Qt::PointingHandCursor);
     definitionButton->setCursor(Qt::PointingHandCursor);
     settingsButton->setCursor(Qt::PointingHandCursor);
     full_screenButton->setCursor(Qt::PointingHandCursor);
@@ -167,7 +163,6 @@ BottomBar::BottomBar(QWidget *parent) : QWidget(parent)
     BmBottomLayout->addWidget(volumeButton);
     BmBottomLayout->addWidget(volumeSlider);
     BmBottomLayout->addWidget(playModeButton);
-    BmBottomLayout->addWidget(switchModeButton);
     BmBottomLayout->setContentsMargins(0, 5, 0, 5);
     BmBottomLayout->setSpacing(0);
     BottomLayout->addLayout(BmBottomLayout);
@@ -179,7 +174,7 @@ BottomBar::BottomBar(QWidget *parent) : QWidget(parent)
     volumeWidget->setObjectName(QString::fromUtf8("volumeWidget"));
     volumeWidget->setAutoFillBackground(true);//test
     volumeWidget->setPalette(QPalette(Qt::black));//test
-    volumeWidget->setGeometry(200, 200, 30, 70);//test
+    volumeWidget->setGeometry(200, 200, 40, 80);//test
     volumeWidget->hide();
     volumeLayout =new QVBoxLayout(volumeWidget);//视频模式音量窗口的布局
     volumeLayout->setContentsMargins(5, 5, 5, 5);
@@ -350,7 +345,6 @@ BottomBar::BottomBar(QWidget *parent) : QWidget(parent)
     connect(playSlider,SIGNAL(valueChanged(int)),this,SLOT(on_playSlider_valueChanged(int)));
     connect(volumeButton,SIGNAL(clicked(bool)),this,SLOT(on_volumeButton_clicked()));
     connect(volumeSlider,SIGNAL(valueChanged(int)),this,SLOT(on_volumeSlider_valueChanged(int)));
-    connect(switchModeButton,SIGNAL(clicked(bool)),this,SLOT(switchModeButton()));
     connect(volumeButton,SIGNAL(leaveSignal()),this,SLOT(volumeWidgetDetection()));
     connect(definitionButton,SIGNAL(enterSignal(int ,int)),definitionWidget,SLOT(display(int,int)));
     connect(definitionButton,SIGNAL(leaveSignal()),this,SLOT(definitionWidgetDetection()));
@@ -460,7 +454,15 @@ void BottomBar::on_volumeButton_clicked()//点击按钮实现静音与恢复音�
     if(volumeSlider->value() == 0)
     {
         volumeSlider->setValue(10);
-        volumeButton->setStyleSheet("QPushButton{ border-image: url(:/image/image/bottomBar/volume.png); }");
+        if(volumeSlider->orientation()==Qt::Vertical)
+        {
+            volumeButton->setStyleSheet("QPushButton{ border-image: url(:/image/image/bottomBar/full_volume.png); }");
+        }
+        else
+        {
+            volumeButton->setStyleSheet("QPushButton{ border-image: url(:/image/image/bottomBar/volume.png); }");
+
+        }
         volumeButton->setToolTip(QStringLiteral("静音"));
 
     }
@@ -468,7 +470,15 @@ void BottomBar::on_volumeButton_clicked()//点击按钮实现静音与恢复音�
     else
     {
         volumeSlider->setValue(0);
-        volumeButton->setStyleSheet("QPushButton{ border-image: url(:/image/image/bottomBar/mute.png); }");
+        if(volumeSlider->orientation()==Qt::Vertical)
+        {
+            volumeButton->setStyleSheet("QPushButton{ border-image: url(:/image/image/bottomBar/full_mute.png); }");
+        }
+        else
+        {
+            volumeButton->setStyleSheet("QPushButton{ border-image: url(:/image/image/bottomBar/mute.png); }");
+
+        }
         volumeButton->setToolTip(QStringLiteral("恢复音量"));
     }
     emit volumeSlider->valueChanged(volumeSlider->value());
@@ -479,11 +489,27 @@ void BottomBar::on_volumeSlider_valueChanged(int vol)//拖拽改变音量时用t
     QToolTip::showText(QCursor::pos(), "音量:" + QString::number(vol), this);
     if (vol == 0)
     {
-        volumeButton->setStyleSheet("QPushButton{ border-image: url(:/image/image/bottomBar/mute.png); }");
+        if(volumeSlider->orientation()==Qt::Vertical)
+        {
+            volumeButton->setStyleSheet("QPushButton{ border-image: url(:/image/image/bottomBar/full_mute.png); }");
+        }
+        else
+        {
+            volumeButton->setStyleSheet("QPushButton{ border-image: url(:/image/image/bottomBar/mute.png); }");
+
+        }
     }
     else
     {
-        volumeButton->setStyleSheet("QPushButton{ border-image: url(:/image/image/bottomBar/volume.png); }");
+        if(volumeSlider->orientation()==Qt::Vertical)
+        {
+            volumeButton->setStyleSheet("QPushButton{ border-image: url(:/image/image/bottomBar/full_volume.png); }");
+        }
+        else
+        {
+            volumeButton->setStyleSheet("QPushButton{ border-image: url(:/image/image/bottomBar/volume.png); }");
+
+        }
 
     }
     emit volumeChanged(vol);
@@ -493,76 +519,97 @@ void BottomBar::on_volumeSlider_valueChanged(int vol)//拖拽改变音量时用t
 void BottomBar::rcvSwitchModeButton(MediaType& _mediaType)//点击切换音乐/视频模式
 {
     timer->start(100);
-    if(_mediaType == MediaType::VIDEO)  // 视频模式
+    if(_mediaType == MediaType::VIDEO)  // 变为视频模式
     {
-        setFixedHeight(70);
-
-        volumeButton->setFixedSize(40, 40);
-        playModeButton->setFixedSize(40, 40);
-//        switchModeButton->setFixedSize(40, 40);
-        definitionButton->setFixedSize(40, 40);
-        settingsButton->setFixedSize(40, 40);
-        full_screenButton->setFixedSize(40, 40);
-
-
+        setFixedHeight(80);
         definitionButton->show();
         settingsButton->show();
         full_screenButton->show();
-        playModeButton->hide();
+        space->show();
+        anotherSpace->show();
+        slashLabel->show();
         volumeSlider->setOrientation(Qt::Vertical);
-        volumeSlider->setFixedSize(20,50);
+        volumeSlider->setFixedSize(30,70);
 
 
-        totalTime->setText("/04:00");//test
-//        BmBottomLayout->removeWidget(switchModeButton);
+        BmBottomLayout->removeWidget(lastButton);
+        BmBottomLayout->removeWidget(pauseButton);
+        BmBottomLayout->removeWidget(nextButton);
+        BmBottomLayout->removeWidget(stopButton);
         BmBottomLayout->removeWidget(playSlider);
+        BmBottomLayout->removeWidget(volumeSlider);
         BmBottomLayout->removeWidget(volumeButton);
+        BmBottomLayout->removeWidget(playModeButton);
+        BmBottomLayout->removeWidget(totalTime);
         BottomLayout->removeItem(BmBottomLayout);
         BottomLayout->addWidget(playSlider);
         BottomLayout->addLayout(BmBottomLayout);
+        BmBottomLayout->addWidget(slashLabel);
+        BmBottomLayout->addWidget(totalTime);
         BmBottomLayout->addWidget(space);
+        BmBottomLayout->addWidget(stopButton);
+        BmBottomLayout->addWidget(lastButton);
+        BmBottomLayout->addWidget(pauseButton);
+        BmBottomLayout->addWidget(nextButton);
         BmBottomLayout->addWidget(volumeButton);
+        BmBottomLayout->addWidget(anotherSpace);
         BmBottomLayout->addWidget(definitionButton);
         BmBottomLayout->addWidget(settingsButton);
-//        BmBottomLayout->addWidget(switchModeButton);
+        BmBottomLayout->addWidget(playModeButton);
         BmBottomLayout->addWidget(full_screenButton);
+        if(volumeSlider->value()==0)
+        {
+            volumeButton->setStyleSheet("QPushButton{ border-image: url(:/image/image/bottomBar/full_mute.png); }");
+        }
+        else
+        {
+            volumeButton->setStyleSheet("QPushButton{ border-image: url(:/image/image/bottomBar/full_volume.png); }");
+
+        }
 
         volumeLayout->addWidget(volumeSlider);
         connect(volumeButton,SIGNAL(enterSignal(int ,int)),volumeWidget,SLOT(display(int,int)));
 
     }
-    else if (_mediaType == MediaType::AUDIO)  // 视频模式
+    else if (_mediaType == MediaType::AUDIO)  // 变为音乐模式
     {
         setFixedHeight(50);
 
 
-        volumeButton->setFixedSize(30, 30);
-        playModeButton->setFixedSize(30, 30);
-//        switchModeButton->setFixedSize(30, 30);
-        definitionButton->setFixedSize(30, 30);
-        settingsButton->setFixedSize(30, 30);
-        full_screenButton->setFixedSize(30, 30);
 
         playModeButton->show();
         definitionButton->hide();
         settingsButton->hide();
         full_screenButton->hide();
+        space->hide();
+        anotherSpace->hide();
+        slashLabel->hide();
         volumeSlider->setOrientation(Qt::Horizontal);
         volumeSlider->setFixedSize(60,20);
 
 
-        totalTime->setText("04:00");//test
         BottomLayout->removeWidget(playSlider);
-//        BmBottomLayout->removeWidget(switchModeButton);
         BmBottomLayout->removeWidget(volumeButton);
         BmBottomLayout->removeWidget(space);
+        BmBottomLayout->removeWidget(slashLabel);
+        BmBottomLayout->removeWidget(anotherSpace);
+        BmBottomLayout->removeWidget(currentPos);
         BmBottomLayout->removeWidget(totalTime);
+        BmBottomLayout->addWidget(currentPos);
         BmBottomLayout->addWidget(playSlider);
         BmBottomLayout->addWidget(totalTime);
         BmBottomLayout->addWidget(volumeButton);
         BmBottomLayout->addWidget(volumeSlider);
         BmBottomLayout->addWidget(playModeButton);
-//        BmBottomLayout->addWidget(switchModeButton);
+        if(volumeSlider->value()==0)
+        {
+            volumeButton->setStyleSheet("QPushButton{ border-image: url(:/image/image/bottomBar/mute.png); }");
+        }
+        else
+        {
+            volumeButton->setStyleSheet("QPushButton{ border-image: url(:/image/image/bottomBar/volume.png); }");
+
+        }
 
         disconnect(volumeButton,SIGNAL(enterSignal(int ,int)),volumeWidget,SLOT(display(int,int)));
 

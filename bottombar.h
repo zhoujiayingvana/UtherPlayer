@@ -131,9 +131,10 @@ private:
     BottomButton *  volumeButton;//静音/恢复音量按钮
     MySlider * volumeSlider;//音量条
     QPushButton *  playModeButton;//播放模式按钮
-    QPushButton * switchModeButton;//切换模式按钮
 
     QLabel * space ;//底部空白
+    QLabel * slashLabel;//视频模式“/”
+    QLabel * anotherSpace;//底部另一片空白
     BottomButton * definitionButton;//清晰度按钮
     BottomButton * settingsButton;//视频设置按钮
 
