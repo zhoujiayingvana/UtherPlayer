@@ -54,7 +54,7 @@ Mini::Mini(QWidget *parent,Media* m) :
     ui->maxModeBtn->setFocusPolicy(Qt::NoFocus);
     ui->albumPic->setFocusPolicy(Qt::NoFocus);
 
-    ui->playOrPauseBtn->setStyleSheet("QPushButton{ border-image: url(:/image/image/mini_pause.png); }");
+    ui->playOrPauseBtn->setStyleSheet("QPushButton{ border-image: url(:/image/image/icon_play.png); }");
 
     ui->lastSongBtn->setStyleSheet("QPushButton{ border-image: url(:/image/image/mini_last.jpg); }");
     ui->nextSongBtn->setStyleSheet("QPushButton{ border-image: url(:/image/image/mini_next.jpg); }");

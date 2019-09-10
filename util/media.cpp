@@ -414,9 +414,17 @@ bool Media::playLast()
 
         // 请求播放视频
         if (this->media_playWhere == PlayArea::FOLDERS)
+        {
+            this->currentMediaType =
+                this->media_Folders.getPointedFolderContent().getMediaType();
             this->media_Player->needPlay(this->media_Folders.getPointedMediaContent());
+        }
         else if (this->media_playWhere == PlayArea::HISTORIES)
+        {
+            this->currentMediaType =
+                this->media_Histories.getPointedHistoricalContent().getMediaType();
             this->media_Player->needPlay(this->media_Histories.getPointedMediaContent());
+        }
         else
             throw MyErrors::UNKNOWN_PLAY_AREA_ERROR;
 

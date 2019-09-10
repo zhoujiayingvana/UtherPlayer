@@ -39,7 +39,7 @@ playlistBtn::playlistBtn(int sn,QWidget *parent) : QPushButton(parent)
   statusPix->move(0,0);
 
   listName = new newLineEdit(this);
-  QString name = QString("新建列表%1").arg(sn);
+  QString name = QString("收藏夹%1").arg(sn + 1);
   listName->setText(name);
   listName->setFixedHeight(17);
   listName->move(17,0);
