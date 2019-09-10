@@ -66,12 +66,9 @@ signals:
     void sendMediaType(MediaType&);
     void sendNewFolderName(QString);
     void whetherPlaying(bool);
-<<<<<<< HEAD
     void givingHistoryAddress(QString);
     void sendFolderNames(QStringList);
-=======
     void getPosition(int);
->>>>>>> cb6dd988f10b4a2a44765b30474a17275fdb0eb8
 
 private slots:
     void currentPosChanged(int);
