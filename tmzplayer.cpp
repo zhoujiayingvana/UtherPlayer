@@ -1092,7 +1092,14 @@ void TMZPlayer::changePicBackGround(QString back)
 }
 void TMZPlayer::lastFunction()
 {
-    media->playLast();
+    bool temp = this->media->playLast();
+    if (temp)
+    {
+        MediaType currentMediaType = this->media->getCurrentMediaType();
+        emit sendMediaType(currentMediaType);
+    }
+    else
+        return;
 }
 
 void TMZPlayer::playFunction()//播放暂停
@@ -1115,6 +1122,8 @@ void TMZPlayer::playFunction()//播放暂停
 void TMZPlayer::nextFunction()//下一个
 {
     media->playNextByHand();
+    MediaType currentMediaType = this->media->getCurrentMediaType();
+    emit sendMediaType(currentMediaType);
 }
 
 void TMZPlayer::stopFunction()
