@@ -57,7 +57,7 @@ public:
     void creatActions();
     void creatMenu();
     QString getFileName(QString);
-    void addHistory(QString _name, QString _address);
+    void addHistory(QString, QString, int=-1);
 
     void zinit();
     void moveZHisText2First(const int& fromIndex);
@@ -68,9 +68,13 @@ signals:
     void sendMediaType(MediaType&);
     void sendNewFolderName(QString);
     void whetherPlaying(bool);
-    void givingHistoryAddress(QString);
     void sendFolderNames(QStringList);
     void getPosition(int);
+
+    // 我加了这些
+    // 双击历史记录，删除历史记录会传你操作的历史记录的地址出来
+    void playFileAddress(QString);
+    void deleteFileAddress(QString);
 
 private slots:
     void currentPosChanged(int);
@@ -190,8 +194,16 @@ private slots:
 
     void sltResendPlayInfo(const PlayArea&, const int&, const int&);
 
+    void flushHisUI();
+
+
     // zyt
-//    void temp_givingHistoryAddress();
+    void givingHistoryAddressToPlay();
+    void givingHistoryAddressToDelete(QString);
+
+
+    // 删除历史记录
+    void sltDelHistoricalContent(const int&);
 
 private:
     Ui::TMZPlayer *ui;
@@ -284,6 +296,8 @@ private:
     //9.9
     QBoxLayout* historyLayout;
     
+    // 最后一个历史记录的地址
+    int lastPos;
 
 
 };

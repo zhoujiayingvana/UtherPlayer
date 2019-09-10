@@ -74,6 +74,8 @@ public slots:
     //高级功能
     //截图
     void needCutScreen(WId wId,QString fileName,QString filePath,QString fmt,int qua);
+
+    QMediaPlayer* getPlayer()const;
 private:
     QMediaPlayer *m_Player;//播放窗口主体
     QMediaPlayer::State m_PlayState;//播放状态，默认为StoppedState

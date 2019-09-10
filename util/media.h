@@ -62,6 +62,9 @@ public:
     void mock();
     // 获取当前正在播放内容的类型
     MediaType getCurrentMediaType() const;
+    PlayOrder getMedia_Order() const;
+    void setMedia_Order(const PlayOrder& value);
+
 signals:
     void returnOrder(PlayOrder);
 public slots:

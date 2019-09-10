@@ -1,6 +1,7 @@
 #include "history.h"
 
-history::history(QWidget *parent) : QWidget(parent)
+history::history(QWidget *parent, const int& _firstRank)
+    : QWidget(parent), firstRank(_firstRank)
 {
     this->setAttribute(Qt::WA_StyledBackground);
     this->setFixedSize(221, 57);
@@ -43,8 +44,7 @@ history::history(QWidget *parent) : QWidget(parent)
     doubleClicked = false;
     singleClickedTimer = new QTimer(this);
 
-    connect(deleteBtn,SIGNAL(clicked()),this,SLOT(deleteHistory()));
-    connect(this,SIGNAL(doubleClickedSignal()),this,SLOT(playHistory()));
+    connect(deleteBtn,SIGNAL(clicked()),this,SLOT(sltDelHistoricalContent()));
 }
 
 
@@ -54,39 +54,20 @@ history::history(QWidget *parent) : QWidget(parent)
  */
 void history::setNameAndAddress(QString _name, QString _address)
 {
-    name = _name;
-    address = _address;
-    this->NameLabel->setText(name);
-    this->AddressLabel->setText(address);
+    this->NameLabel->setText(_name);
+    this->AddressLabel->setText(_address);
 }
 
 QString history::getName()
 {
-    return name;
+    return this->NameLabel->text();
 }
 
 QString history::getAddress()
 {
-    return address;
+    return this->AddressLabel->text();
 }
 
-/* Author: zyt
- * Name: deleteHistory
- * Function: 槽：删除该历史纪录
- */
-void history::deleteHistory()
-{
-    delete this;
-}
-
-/* Author: zyt
- * Name: playHistory
- * Function: 播放当前历史纪录
- */
-void history::playHistory()
-{
-    emit historyDoubleClicked();  // 传递给TMZPlayer
-}
 
 /* Author: zyt
  * Name: enterEvent
@@ -117,8 +98,27 @@ void history::leaveEvent(QEvent *event)
  */
 void history::mouseDoubleClickEvent(QMouseEvent *event)
 {
-    if(event->button() == Qt::LeftButton) {
-        emit doubleClickedSignal();
-    }
+    if (this->NameLabel->text().compare("") == 0 ||
+        this->AddressLabel->text().compare("") == 0)
+        return;
+    emit sigPlayHistoricalContent(PlayArea::HISTORIES, this->firstRank, 0);
+}
+
+int history::getFirstRank() const
+{
+    return firstRank;
+}
+
+void history::setFirstRank(int value)
+{
+    firstRank = value;
+}
+
+void history::sltDelHistoricalContent()
+{
+    if (this->NameLabel->text().compare("") == 0 ||
+        this->AddressLabel->text().compare("") == 0)
+        return;
+    emit this->sigDeleteHistoricalContent(this->firstRank);
 }
 
