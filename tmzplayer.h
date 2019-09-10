@@ -57,15 +57,17 @@ public:
     QString getFileName(QString);
     void addHistory(QString _name, QString _address);
 
+    void zinit();
+    void moveZHisText2First(const int& fromIndex);
+
 signals:
     void maximizeButton_clicked();
     void durationSignal(int);
     void sendMediaType(MediaType&);
-<<<<<<< HEAD
     void sendNewFolderName(QString);
-=======
     void whetherPlaying(bool);
->>>>>>> 54c4eb72aac15550250826831ee62f10a66c6ec0
+    void givingHistoryAddress(QString);
+    void sendFolderNames(QStringList);
 
 private slots:
     void currentPosChanged(int);
@@ -168,6 +170,9 @@ private slots:
     void on_openFile_clicked();
 
     void closeEvent(QCloseEvent *event);
+
+    // zyt
+//    void temp_givingHistoryAddress();
 
 private:
     Ui::TMZPlayer *ui;

@@ -88,6 +88,12 @@ QString playlistBtn::getFolderName()
   return listName->text();
 }
 
+//改变文件名
+void playlistBtn::setFolderName(QString name)
+{
+  listName->setText(name);
+}
+
 /* Author: zyt
  * Name: contextMenuEvent
  * Function: 实现右键播放列表表头进行改名

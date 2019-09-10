@@ -287,6 +287,19 @@ int Histories::getRankByFilePath(const QString& _filePath) const
     return -1;
 }
 
+QList<QStringList> Histories::get4Client() const
+{
+    QList<QStringList> ans;
+    for (int i = 0; i < this->pNext; ++i)
+    {
+        QStringList temp;
+        temp.append((*this->rank2content)[i].getFileName());
+        temp.append((*this->rank2content)[i].getFilePath());
+        ans.append(temp);
+    }
+    return ans;
+}
+
 QMap<int, HistoricalContent>* Histories::getRank2content() const
 {
     return rank2content;

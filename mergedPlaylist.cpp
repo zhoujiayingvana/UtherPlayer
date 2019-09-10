@@ -11,8 +11,9 @@ int mergedPlaylist::serialNumber = 0;
 
 mergedPlaylist::mergedPlaylist(QWidget *parent) : QWidget(parent)
 {
-  serialNumber++;
   SN = serialNumber;
+  serialNumber++;
+
 
   listBtn = new playlistBtn(SN,this);
   listBtn->setFixedWidth(240);
@@ -53,6 +54,23 @@ mergedPlaylist::mergedPlaylist(QWidget *parent) : QWidget(parent)
   connect(this,SIGNAL(hideContentSignal()),this,SLOT(hideContentSlot()));
 
   connect(listBtn,SIGNAL(sendChangedFolderName(int,QString)),this,SLOT(sendTempFolderName(int,QString)));
+
+
+  // 9.10 凌晨
+
+  connect(listContent,SIGNAL(temp_addFileToFolderSignal(const int&, const QString&, const QString&, const bool&)),
+          this,SLOT(temp_addFileToFolderSlot(const int&, const QString&, const QString&, const bool&)));
+
+  connect(listContent,SIGNAL(sendTempPlayInfo(const PlayArea&,const int&, const int&)),
+          this,SLOT(getTempPlayInfo(const PlayArea&,const int&, const int&)));
+
+
+  connect(listContent,SIGNAL(temp_removeContentSignal(int,int)),
+          this,SLOT(temp_removeContentSlot(int,int)));
+
+
+  connect(listContent,SIGNAL(deleteFilesInListSignal(int,QList<QString>)),
+          this,SLOT(deleteFilesInListSlot(int,QList<QString>)));
 }
 
 /* Author: zyt
@@ -68,6 +86,41 @@ int mergedPlaylist::getSN()
 QString mergedPlaylist::getListName()
 {
   return listBtn->getFolderName();
+}
+
+//改变列表名字
+void mergedPlaylist::setListName(QString name)
+{
+  listBtn->setFolderName(name);
+}
+
+// 向收藏夹添加文件
+void mergedPlaylist::setFileInList(QList<QString> files)
+{
+  filesInList = files;
+}
+// 显示用户上次的文件
+void mergedPlaylist::showOldContents()
+{
+  for (int i = 0;i < filesInList.length(); i++)
+    {
+      int row = listContent->rowCount();
+      listContent->insertRow(row);
+
+      //第2列存放地址QString
+      QTableWidgetItem *item = new QTableWidgetItem(filesInList.at(i));
+      listContent->setItem(row, 2, item);
+
+      //第0列存放行数
+      int temp = listContent->rowCount();
+      QString tempStr = QString::number(temp);
+      item = new QTableWidgetItem(tempStr);//第几行
+      listContent->setItem(row, 0, item);
+
+      //第1列存放名字
+      item = new QTableWidgetItem(listContent->getFileName(filesInList.at(i)));
+      listContent->setItem(row, 1, item);
+    }
 }
 
 /* Author: zyt
@@ -116,7 +169,7 @@ void mergedPlaylist::changeFilesInListSlot(int currentSN, QList<QString> temp_fi
 {
   if(currentSN == SN)
     {
-      filesInList = temp_filesInList;
+      filesInList += temp_filesInList;
 
       for(int i = 0; i < filesInList.length(); i++)
         {
@@ -197,4 +250,66 @@ void mergedPlaylist::deleteListRequestAnswering()
 void mergedPlaylist::sendTempFolderName(int sn, QString name)
 {
   emit sendFolderName(sn,name);
+}
+
+// 发送添加文件信号
+void mergedPlaylist::temp_addFileToFolderSlot(const int& sn,const QString& filename,
+                                              const QString& fileAddress, const bool& isLocal)
+{
+  emit sendAddFileToFolder(sn,filename,fileAddress,isLocal);
+}
+
+// 发送播放信号
+void mergedPlaylist::getTempPlayInfo(const PlayArea & folders, const int &index, const int &row)
+{
+  emit sendPlayInfo(folders,index,row);
+}
+
+//  发送删除文件
+void mergedPlaylist::temp_removeContentSlot(int sn, int row)
+{
+  emit removeContent(sn,row);
+}
+
+// 删除文件之后的显示
+void mergedPlaylist::deleteFilesInListSlot(int currentSN, QList<QString>temp_filesInList)
+{
+  if(currentSN == SN)
+    {
+      filesInList = temp_filesInList;
+
+      for(int i = 0; i < filesInList.length(); i++)
+        {
+          QDir dir = QDir(filesInList.at(i));
+          emit sendDirSignal(dir);
+        }
+
+      //清空列表显示内容
+      int row = listContent->rowCount();
+      for(int i = 0; i < row; i++)
+        {
+          listContent->removeRow(0);
+        }
+
+      for (int i = 0;i < filesInList.length(); i++)
+        {
+          int row = listContent->rowCount();
+          listContent->insertRow(row);
+
+          //第2列存放地址QString
+          QTableWidgetItem *item = new QTableWidgetItem(filesInList.at(i));
+          listContent->setItem(row, 2, item);
+
+          //第0列存放行数
+          int temp = listContent->rowCount();
+          QString tempStr = QString::number(temp);
+          item = new QTableWidgetItem(tempStr);//第几行
+          listContent->setItem(row, 0, item);
+
+          //第1列存放名字
+          item = new QTableWidgetItem(listContent->getFileName(filesInList.at(i)));
+          listContent->setItem(row, 1, item);
+        }
+
+    }
 }

@@ -14,6 +14,9 @@ public:
   explicit mergedPlaylist(QWidget *parent = nullptr);
   int getSN();
   QString getListName();
+  void setListName(QString);
+  void setFileInList(QList<QString>);
+  void showOldContents();
 
 signals:
   void sendDirSignal(QDir);
@@ -29,6 +32,15 @@ signals:
   //发送修改了那个收藏夹的那个名字
   void sendFolderName(int,QString);
 
+  //发送在哪个文件夹添加了哪个文件
+  void sendAddFileToFolder(const int&, const QString& ,const QString&, const bool&);
+
+  //发送播放信号
+  void sendPlayInfo(const PlayArea&,const int&, const int&);
+
+  //发送删除信号
+  void removeContent(int,int);
+
 public slots:
   void showOrHideListContentSlot(bool);
   void hideOtherContentsSlot(int);
@@ -40,6 +52,12 @@ public slots:
   void deleteListRequestAnswering();
   void sendTempFolderName(int,QString);
 
+  void temp_addFileToFolderSlot(const int&, const QString&, const QString&, const bool&);
+  void getTempPlayInfo(const PlayArea&,const int&, const int&);
+
+  void temp_removeContentSlot(int,int);
+
+  void deleteFilesInListSlot(int,QList<QString>);
 
 private:
   playlistBtn* listBtn;

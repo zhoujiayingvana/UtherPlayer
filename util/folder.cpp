@@ -278,3 +278,11 @@ int Folder::getNextRankByPlayOrder(const PlayOrder& playOrder) const
     else
         throw MyErrors::PLAY_ORDER_ERROR;
 }
+
+QStringList Folder::getRankedFilePaths() const
+{
+    QStringList ans;
+    for (int i = 0; i < this->pNext; ++i)
+        ans.append((*this->container)[i].getFilePath());
+    return ans;
+}

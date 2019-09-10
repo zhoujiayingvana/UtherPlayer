@@ -45,7 +45,7 @@ public slots:
     // 添加一个新的收藏夹
     void addNewFolder(QString _folderName);
     // 添加新的content到一个收藏夹中
-    QList<QString> getFolderNames() const;
+    QStringList getFolderNames() const;
     // 根据索引获取folder
     // 根据收藏夹名字获取folder
     Folder& getFolder(const int&);
@@ -70,7 +70,7 @@ public slots:
     // 开始关闭的存储工作
     void startClose();
     // 删除指定收藏夹中的content
-    void removeContentFromFolder(const int& _folderIndex, const int& _contentIndex);
+    void removeContentFromFolder(int _folderIndex, int _contentIndex);
     // 移动指定收藏夹中的内容
     void moveFolderContent(const int& _folderIndex,
                            const int& _toFolderContentIndex,
@@ -100,6 +100,8 @@ public slots:
     int getNextRankOfPointedFolder(const PlayOrder& playOrder) const;
     // move chosen to histories
     void addChosenFolderContent2Histories(Histories& _histories);
+    // 获取索引对应的文件名
+    QList<QStringList> getFolderFilePaths() const;
 protected:
     // 实现存储映射表
     QMap<int, Folder>* rank2Folder;

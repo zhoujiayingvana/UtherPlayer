@@ -24,7 +24,11 @@ public:
   int getSN();
   bool getIsClicked();
   void setIsClicked(bool);
+
+  //名字在playlistBtn里，playlistBtn在mergedPlaylist里
   QString getFolderName();
+
+  void setFolderName(QString);
 
 signals:
   void showOrHideListContentSignal(bool);

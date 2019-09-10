@@ -278,19 +278,16 @@ TMZPlayer::TMZPlayer(QWidget *parent,Media* m) :
     connect(this, SIGNAL(sendMediaType(MediaType&)),
             pBottomBar, SLOT(rcvSwitchModeButton(MediaType&)));    
 
-<<<<<<< HEAD
     // 新建收藏夹
     connect(this, SIGNAL(sendNewFolderName(QString)),
             &this->media->getFolders(), SLOT(addNewFolder(QString))
             );
-=======
     //获取视频总时长
     connect(media->getController(), SIGNAL(returnInitDuration(qint64)),
             pBottomBar, SLOT(setTotalTime(qint64)));
 
 
     
->>>>>>> 54c4eb72aac15550250826831ee62f10a66c6ec0
     
     //    connect(settingAction,SIGNAL(triggered()),//托盘模式打开设置窗口
     //            pTitleBar->settingWindow,SLOT(setVisible(true)));
@@ -319,6 +316,8 @@ TMZPlayer::TMZPlayer(QWidget *parent,Media* m) :
     ui->openFile->setParent(widget);
     
     
+    // 建立
+    this->zinit();
 }
 
 TMZPlayer::~TMZPlayer()
@@ -441,7 +440,8 @@ void TMZPlayer::addListSlot()
 {
     playlistsContainer.append(new mergedPlaylist);
 
-    emit sendNewFolderName(playlistsContainer.last()->getListName());
+    QString temp = playlistsContainer.last()->getListName();
+    emit sendNewFolderName(temp);
 
     listBoxLayout->addWidget(playlistsContainer.at(playlistsContainer.length() - 1));
     connect(playlistsContainer.at(playlistsContainer.length() - 1),
@@ -482,6 +482,23 @@ void TMZPlayer::addListSlot()
         SLOT(renameFolder(int, QString))
     );
 
+    // 向收藏夹中添加内容
+    connect(playlistsContainer.at(playlistsContainer.length() - 1),
+            SIGNAL(sendAddFileToFolder(const int&, const QString& ,const QString&, const bool&)),
+            &this->media->getFolders(),
+            SLOT(addContent2Folder(const int&, const QString&,
+                                   const QString&, const bool&)));
+
+    // 在左边的连接
+    connect(playlistsContainer.at(playlistsContainer.length() - 1),
+            SIGNAL(sendPlayInfo(const PlayArea&,const int&, const int&)),
+            this->media,
+            SLOT(play(const PlayArea&, const int&, const int&)));
+
+    connect(playlistsContainer.at(playlistsContainer.length() - 1),
+            SIGNAL(removeContent(int,int)),
+            &this->media->getFolders(),
+            SLOT(removeContentFromFolder(int, int)));
 }
 
 /* Author: zyt
@@ -1165,6 +1182,109 @@ void TMZPlayer::addHistory(QString _name, QString _address)
     
     connect(historyContainer.last(),SIGNAL(historyDoubleClicked()),
             this,SLOT(givingHistoryAddress()));
+}
+
+void TMZPlayer::zinit()
+{
+    //
+//    history* his = new history;
+//    his->setNameAndAddress("123","123123");
+//    historyLayout->addWidget(his);
+
+    historyLayout = new QBoxLayout(QBoxLayout::BottomToTop);
+    historyLayout->setAlignment(Qt::AlignTop | Qt::AlignVCenter);
+
+    ui->rightsideBar->setLayout(historyLayout);
+    ui->historyList->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+
+    connect(ui->displayList,
+           SIGNAL(sendTempPlayInfo(const PlayArea&,const int&, const int&)),
+           this->media,
+           SLOT(play(const PlayArea&, const int&, const int&)));
+
+
+    QStringList oldFolders = this->media->getFolders().getFolderNames();
+    QList<QStringList> oldFiles = this->media->getFolders().getFolderFilePaths();
+
+    for(int i = 0; i< oldFolders.length(); i++)
+    {
+        playlistsContainer.append(new mergedPlaylist);
+        playlistsContainer.last()->setListName(oldFolders.at(i));
+        playlistsContainer.last()->setFileInList(oldFiles.at(i));
+        playlistsContainer.last()->showOldContents();
+
+        listBoxLayout->addWidget(playlistsContainer.at(playlistsContainer.length() - 1));
+
+        connect(playlistsContainer.at(playlistsContainer.length() - 1),
+        SIGNAL(givingTempSNAndFiles(int, QList<QString>)),
+        ui->displayList,
+        SLOT(recevingSNAndFiles(int, QList<QString>)));
+
+        connect(ui->displayList,
+        SIGNAL(changeFilesInListSignal(int, QList<QString>)),
+        playlistsContainer.at(playlistsContainer.length() - 1),
+        SLOT(changeFilesInListSlot(int, QList<QString>)));
+
+        connect(playlistsContainer.at(playlistsContainer.length() - 1),
+        SIGNAL(showChangedListSignal(int, QList<QString>)),
+        ui->displayList,
+        SLOT(showChangedListSlot(int, QList<QString>)));
+
+        connect(playlistsContainer.at(playlistsContainer.length() - 1),
+        SIGNAL(givingListName(QString)),
+        this,
+        SLOT(receivingListName(QString)));
+
+        connect(playlistsContainer.at(playlistsContainer.length() - 1),
+        SIGNAL(hideContentsExceptThisSignal(int)),
+        this,
+        SLOT(hideContentsExceptThisSlot(int)));
+
+        connect(playlistsContainer.at(playlistsContainer.length() - 1),
+        SIGNAL(allowDragAndMenuSignal()),
+        this,
+        SLOT(allowDragAndMenuSlot()));
+
+        // 收藏夹改名
+        connect(
+        playlistsContainer.at(playlistsContainer.length() - 1),
+        SIGNAL(sendFolderName(int,QString)),
+        &this->media->getFolders(),
+        SLOT(renameFolder(int, QString))
+        );
+
+    // 向收藏夹中添加内容
+        connect(playlistsContainer.at(playlistsContainer.length() - 1),
+        SIGNAL(sendAddFileToFolder(const int&, const QString& ,const QString&, const bool&)),
+        &this->media->getFolders(),
+        SLOT(addContent2Folder(const int&, const QString&,
+                         const QString&, const bool&)));
+
+        // 在左边的连接
+        connect(playlistsContainer.at(playlistsContainer.length() - 1),
+        SIGNAL(sendPlayInfo(const PlayArea&,const int&, const int&)),
+        this->media,
+        SLOT(play(const PlayArea&, const int&, const int&)));
+
+        connect(playlistsContainer.at(playlistsContainer.length() - 1),
+                SIGNAL(removeContent(int,int)),
+                &this->media->getFolders(),
+                SLOT(removeContentFromFolder(int, int)));
+    }
+
+
+    QList<QStringList> what = this->media->getHistories().get4Client();
+    for (QStringList stringList: what)
+        this->addHistory(stringList[0], stringList[1]);
+
+}
+
+void TMZPlayer::moveZHisText2First(const int& fromIndex)
+{
+    history* tHistory = this->historyContainer.at(fromIndex);
+    for (int i = this->historyContainer.length() - 1; i > 0; --i)
+        this->historyContainer[i] = this->historyContainer[i - 1];
+    this->historyContainer[0] = tHistory;
 }
 
 

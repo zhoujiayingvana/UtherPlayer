@@ -83,6 +83,8 @@ public slots:
     void move2First(const QString& _filePath);
     // 根据 index 获取到路径
     int getRankByFilePath(const QString& _filePath) const;
+    // 获取所要的东西给ui
+    QList<QStringList> get4Client() const;
 protected:
     // 用户名
     QString userName;

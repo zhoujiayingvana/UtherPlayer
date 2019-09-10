@@ -90,6 +90,8 @@ public slots:
     // 注意使用 error 来表示, 出现异常错误
     // 使用 -1 表示没有下一首了
     int getNextRankByPlayOrder(const PlayOrder& playOrder) const;
+    // 获取所有的收藏夹的名字
+    QStringList getRankedFilePaths() const;
 protected:
     // 收藏夹名字
     QString folderName;

@@ -130,7 +130,7 @@ void playList::setRowColor(int row, QColor color)
 
 /* Author: zyt
  * Name: getFileAddress
- * Function: 双击单元行时获取该行文件地址/索引
+ * Function: 双击单元行时获取该行文件索引
  */
 void playList::getFileAddress(int row, int column)
 {
@@ -139,7 +139,10 @@ void playList::getFileAddress(int row, int column)
   fileAddressItem = this->item(row,2);
   QString fileAddress = fileAddressItem->text();
 
-  emit sendPlayInfo(PlayArea::FOLDERS,currentSN,row);
+
+
+  //播放文件了
+  emit sendTempPlayInfo(PlayArea::FOLDERS,currentSN,row);
 }
 
 /* Author: zyt
@@ -192,9 +195,9 @@ void playList::addFiles()
 {
   QFileDialog* selectDialog = new QFileDialog(this);
   selectDialog->setFileMode(QFileDialog::ExistingFiles);
-  selectDialog->setNameFilter("所有(*.mp3 *.flac *.wav *.wma *.m4a *.avi *.mov *.rmvb *.mp4);;"
+  selectDialog->setNameFilter("所有(*.mp3 *.flac *.wav *.wma *.m4a *.avi *.mov *.rmvb *.mp4 *.flv);;"
                               "音乐文件(*.mp3 *.flac *.wav *.wma *.m4a);;"
-                              "视频文件(*.avi *.mov *.rmvb *.mp4);;");
+                              "视频文件(*.avi *.mov *.rmvb *.mp4 *.flv);;");
   selectDialog->setViewMode(QFileDialog::Detail);
 
   QStringList fileNames;
@@ -202,32 +205,40 @@ void playList::addFiles()
     {
       fileNames = selectDialog->selectedFiles();
     }
-
-  for (int i = 0;i < fileNames.length(); i++)
+  if(fileNames.length() > 0)
     {
-      int row = this->rowCount();
-      this->insertRow(row);
+      for (int i = 0;i < fileNames.length(); i++)
+        {
+          int row = this->rowCount();
+          this->insertRow(row);
 
-      //以private：QList<QString>存储该列表的文件地址
-      temp_filesInList.append(fileNames.at(i));
+          //以private：QList<QString>存储该列表的文件地址
+          temp_filesInList.append(fileNames.at(i));
 
-      //第2列存放地址QString
-      QTableWidgetItem *item = new QTableWidgetItem(fileNames.at(i));
-      this->setItem(row, 2, item);
-      this->item(row, 2)->setFont(QFont("宋体",-1,-1,true));
-      this->item(row, 2)->setForeground(QBrush(QColor(105, 105, 105)));
+          //第2列存放地址QString
+          QTableWidgetItem *item = new QTableWidgetItem(fileNames.at(i));
+          this->setItem(row, 2, item);
+          this->item(row, 2)->setFont(QFont("宋体",-1,-1,true));
+          this->item(row, 2)->setForeground(QBrush(QColor(105, 105, 105)));
 
-      //第0列存放行数
-      int temp = this->rowCount();
-      QString tempStr = QString::number(temp);
-      item = new QTableWidgetItem(tempStr);//第几行
-      this->setItem(row, 0, item);
+          //第0列存放行数
+          int temp = this->rowCount();
+          QString tempStr = QString::number(temp);
+          item = new QTableWidgetItem(tempStr);//第几行
+          this->setItem(row, 0, item);
 
-      //第1列存放名字
-      item = new QTableWidgetItem(getFileName(fileNames.at(i)));
-      this->setItem(row, 1, item);
+          //第1列存放名字
+          item = new QTableWidgetItem(getFileName(fileNames.at(i)));
+          this->setItem(row, 1, item);
+
+          emit temp_addFileToFolderSignal(currentSN,
+                                          getFileName(fileNames.at(i)),
+                                          fileNames.at(i),
+                                          true);
+        }
     }
-  emit changeFilesInListSignal(currentSN,temp_filesInList);
+
+  emit changeFilesInListSignal(currentSN,fileNames);
 
 
 }
@@ -240,7 +251,8 @@ void playList::deleteFileFromList()
 {  
   int row = this->currentRow();
   QTableWidgetItem *itemToBeDeleted = this->item(row,2);
-  temp_filesInList.removeOne(itemToBeDeleted->text());
+//  temp_filesInList.removeOne(itemToBeDeleted->text());
+  temp_filesInList.removeAt(row);
   this->removeRow(row);
 
   //对序号重新排序
@@ -252,9 +264,13 @@ void playList::deleteFileFromList()
       this->setItem(i, 0, item);
     }
 
-  emit changeFilesInListSignal(currentSN,temp_filesInList);
+  emit deleteFilesInListSignal(currentSN,temp_filesInList);
   emit leftBarListFilesChangeSignal(currentSN,temp_filesInList);
   emit downloadFilesChangesSignal(currentSN,temp_filesInList);
+
+  //9.10
+
+  emit temp_removeContentSignal(currentSN,row);
 }
 
 /* Author: zyt
@@ -303,7 +319,7 @@ void playList::deleteFileFromDisk()
       this->setItem(i, 0, item);
     }
 
-  emit changeFilesInListSignal(currentSN,temp_filesInList);
+  emit deleteFilesInListSignal(currentSN,temp_filesInList);
   emit leftBarListFilesChangeSignal(currentSN,temp_filesInList);
 }
 
@@ -412,7 +428,7 @@ void playList::dragEnterEvent(QDragEnterEvent *event)
 {
   QStringList acceptedTypes;
   acceptedTypes << "mp3" << "flac" << "wav" << "wma" << "m4a"
-                << "avi" << "mov" << "rmvb" << "mp4";
+                << "avi" << "mov" << "rmvb" << "mp4" << "flv";
   if (event->mimeData()->hasUrls())
     {
       QList<QUrl> fileUrls = event->mimeData()->urls();
@@ -422,7 +438,7 @@ void playList::dragEnterEvent(QDragEnterEvent *event)
           QFileInfo file(event->mimeData()->urls().at(i).toLocalFile());
           if(acceptedTypes.contains(file.suffix().toLower()))
             {
-              if(!temp_filesInList.contains(fileUrls.at(i).toLocalFile()))
+              if(!temp_filesInList.contains(fileUrls.at(i).toLocalFile())) // 判断是否有相同地址的文件
                 {
                   toBeAddedFiles.append(fileUrls.at(i).toLocalFile());
                 }
@@ -452,7 +468,7 @@ void playList::dropEvent(QDropEvent *event)
 
   if (!toBeAddedFiles.empty())
     {
-      if(toBeAddedFiles.length() > 1)
+      if(toBeAddedFiles.length() > 0)
         {
           for (int i = 0;i < toBeAddedFiles.length();i++)
             {
@@ -478,15 +494,22 @@ void playList::dropEvent(QDropEvent *event)
               item = new QTableWidgetItem(getFileName(toBeAddedFiles.at(i)));
               this->setItem(row, 1, item);
 
+              emit temp_addFileToFolderSignal(currentSN,
+                                              getFileName(toBeAddedFiles.at(i)),
+                                              toBeAddedFiles.at(i),
+                                              true);
 
             }
         }
-      else if (toBeAddedFiles.length() == 1)
-        {
+      //      else if (toBeAddedFiles.length() == 1)
+      //        {
+      //          emit temp_addFileToFolderSignal(currentSN,
+      //                                          getFileName(toBeAddedFiles.at(0)),
+      //                                          toBeAddedFiles.at(0),
+      //                                          true);
 
 
-
-        }
+      //        }
 
     }
   else if (toBeAddedFiles.empty())
