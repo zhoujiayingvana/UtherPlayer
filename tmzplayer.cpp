@@ -20,12 +20,23 @@ TMZPlayer::TMZPlayer(QWidget *parent,Media* m) :
     widget = new QWidget();
     this->setCentralWidget(widget);
     
-    QDir info("./");
+    //截屏录屏路径
+    QDir info("../");
     picPath=info.absolutePath();
     qDebug()<<picPath;
     gifPath=info.absolutePath();
     recordStatus=true;
+    splitOrNot=false;
     shotFormat="jpg";
+
+    //录屏计时器
+    picTime=new QDateTime();
+    recordTimer=new QTimer(this);
+    //recordTimer->setSingleShot(true);
+    timeLimit=5000;
+    connect(recordTimer,SIGNAL(timeout()),this,SLOT(recordMyScreen()));
+    userEnd=0;
+
     //快捷键初始化
     ui->openFile->setShortcut(QKeySequence("Ctrl+O"));
     
@@ -46,8 +57,7 @@ TMZPlayer::TMZPlayer(QWidget *parent,Media* m) :
     space->setPalette(palette);
     space->setAutoFillBackground(true);
     qDebug()<<space->pos();
-    
-    
+
     ui->showLeftBarBtn->setVisible(false);
     ui->showRightBarBtn->setVisible(false);
     
@@ -203,7 +213,18 @@ TMZPlayer::TMZPlayer(QWidget *parent,Media* m) :
     recordScreen=new QShortcut(this);
     recordScreen->setKey(tr("CTRL+2"));
     recordScreen->setAutoRepeat(true);
+    connect(recordScreen, SIGNAL(activated()), this,SLOT(userEndRecord()));
     connect(recordScreen, SIGNAL(activated()), this,SLOT(recordMyScreen()));
+
+    //亮度快捷键
+    luminAdd=new QShortcut(this);
+    luminAdd->setKey(tr("ctrl+up"));
+    luminAdd->setAutoRepeat(true);
+    luminSub=new QShortcut(this);
+    luminSub->setKey(tr("ctrl+down"));
+    luminSub->setAutoRepeat(true);
+    connect(luminAdd, SIGNAL(activated()), space, SLOT(mediaLuminAdd()));
+    connect(luminSub, SIGNAL(activated()), space, SLOT(mediaLuminSub()));
     
     connect(mini,SIGNAL(miniToMaxSignal()),this,SLOT(miniToMaxSlot()));
     connect(mini,SIGNAL(miniToTraySignal()),this,SLOT(miniToTraySlot()));
@@ -263,12 +284,27 @@ TMZPlayer::TMZPlayer(QWidget *parent,Media* m) :
             this,SLOT(changeRecordShortcut(QString)));
     connect(pTitleBar->settingWindow,SIGNAL(sigRecordDirChange(QString)),//修改录屏路径
             this,SLOT(changeRecordDir(QString)));
-
+    connect(pTitleBar->settingWindow,SIGNAL(sigLuminChange(int)),//修改主界面亮度
+            this,SLOT(changeLumin(int)));
+    connect(this->space,SIGNAL(brightnessChanged(int)),//主界面修改设置界面亮度
+            pTitleBar->settingWindow,SLOT(changeSetLumin(int)));
+    connect(pTitleBar->settingWindow,SIGNAL(sigLuminUpShortcut(QString)),//亮度增快捷键修改
+            this,SLOT(changeLuminAddShortcut(QString)));
+    connect(pTitleBar->settingWindow,SIGNAL(sigLuminDownShortcut(QString)),//亮度减快捷键修改
+            this,SLOT(changeLuminSubShortcut(QString)));
+    connect(pTitleBar->settingWindow,SIGNAL(sigTimeLimitChange(int)),//修改录屏最大时长
+            this,SLOT(changeRecordSize(int)));
+    connect(pTitleBar->settingWindow,SIGNAL(sigAutoSplitRecord()),//自动分割录屏
+            this,SLOT(changeSplitStatus()));
 
     // 连接自动切换模式
     connect(this, SIGNAL(sendMediaType(MediaType&)),
-            pBottomBar, SLOT(rcvSwitchModeButton(MediaType&)));
+            pBottomBar, SLOT(rcvSwitchModeButton(MediaType&)));    
 
+    // 新建收藏夹
+    connect(this, SIGNAL(sendNewFolderName(QString)),
+            &this->media->getFolders(), SLOT(addNewFolder(QString))
+            );
     //获取视频总时长
     connect(media->getController(), SIGNAL(returnInitDuration(qint64)),
             pBottomBar, SLOT(setTotalTime(qint64)));
@@ -303,6 +339,8 @@ TMZPlayer::TMZPlayer(QWidget *parent,Media* m) :
     ui->openFile->setParent(widget);
     
     
+    // 建立
+    this->zinit();
 }
 
 TMZPlayer::~TMZPlayer()
@@ -423,6 +461,10 @@ bool TMZPlayer::whetherInitializeListButton()
 void TMZPlayer::addListSlot()
 {
     playlistsContainer.append(new mergedPlaylist);
+
+    QString temp = playlistsContainer.last()->getListName();
+    emit sendNewFolderName(temp);
+
     listBoxLayout->addWidget(playlistsContainer.at(playlistsContainer.length() - 1));
     connect(playlistsContainer.at(playlistsContainer.length() - 1),
             SIGNAL(givingTempSNAndFiles(int, QList<QString>)),
@@ -453,6 +495,32 @@ void TMZPlayer::addListSlot()
             SIGNAL(allowDragAndMenuSignal()),
             this,
             SLOT(allowDragAndMenuSlot()));
+
+    // 收藏夹改名
+    connect(
+        playlistsContainer.at(playlistsContainer.length() - 1),
+        SIGNAL(sendFolderName(int,QString)),
+        &this->media->getFolders(),
+        SLOT(renameFolder(int, QString))
+    );
+
+    // 向收藏夹中添加内容
+    connect(playlistsContainer.at(playlistsContainer.length() - 1),
+            SIGNAL(sendAddFileToFolder(const int&, const QString& ,const QString&, const bool&)),
+            &this->media->getFolders(),
+            SLOT(addContent2Folder(const int&, const QString&,
+                                   const QString&, const bool&)));
+
+    // 在左边的连接
+    connect(playlistsContainer.at(playlistsContainer.length() - 1),
+            SIGNAL(sendPlayInfo(const PlayArea&,const int&, const int&)),
+            this->media,
+            SLOT(play(const PlayArea&, const int&, const int&)));
+
+    connect(playlistsContainer.at(playlistsContainer.length() - 1),
+            SIGNAL(removeContent(int,int)),
+            &this->media->getFolders(),
+            SLOT(removeContentFromFolder(int, int)));
 }
 
 /* Author: zyt
@@ -592,6 +660,33 @@ void TMZPlayer::changeOpenFileShortcut(QString str)
 {
     ui->openFile->setShortcut(QKeySequence(str.toLatin1().data()));
 }
+
+/**
+* @method        TMZPlayer::changeLuminAddShortcut
+* @brief         亮度增快捷键修改
+* @param         QSTRING
+* @return        VOID
+* @author        涂晴昊
+* @date          2019-09-10
+*/
+void TMZPlayer::changeLuminAddShortcut(QString str)
+{
+    luminAdd->setKey(str);
+}
+
+/**
+* @method        TMZPlayer::changeLuminSubShortcut
+* @brief         亮度减快捷键修改
+* @param         QSTRING
+* @return        VOID
+* @author        涂晴昊
+* @date          2019-09-10
+*/
+void TMZPlayer::changeLuminSubShortcut(QString str)
+{
+    luminSub->setKey(str);
+}
+
 /**
 * @method        TMZPlayer::changeShotScreenShortcut
 * @brief         截屏快捷键修改
@@ -603,7 +698,6 @@ void TMZPlayer::changeOpenFileShortcut(QString str)
 void TMZPlayer::changeShotScreenShortcut(QString str)
 {
     shotScreen->setKey(str);
-    qDebug()<<"shotChange";
 }
 
 /**
@@ -617,7 +711,6 @@ void TMZPlayer::changeShotScreenShortcut(QString str)
 void TMZPlayer::changeRecordShortcut(QString str)
 {
     recordScreen->setKey(str);
-    qDebug()<<"recordChange";
 }
 
 /**
@@ -1048,7 +1141,10 @@ void TMZPlayer::returnPosition()
 */
 void TMZPlayer::shotMyScreen()
 {
-    media->getController()->cutScreen(space->winId(),"test1",picPath,shotFormat);
+
+    QString picName="ShotByUther"+picTime->currentDateTime().toString("yyMMddhhmmss");
+    media->getController()->cutScreen(space->winId(),picName,
+                                      picPath,shotFormat);
     qDebug()<<picPath;
 }
 
@@ -1063,17 +1159,37 @@ void TMZPlayer::shotMyScreen()
 void TMZPlayer::recordMyScreen()
 {
     if(recordStatus){
-        media->startCreateGif(space->winId(),"test",gifPath);
         recordStatus=false;
+        QString gifName="RecordByUther"+picTime->currentDateTime().toString("yyMMddhhmmss");
+        media->startCreateGif(space->winId(),gifName,gifPath);
+        recordTimer->start(timeLimit);
         qDebug()<<gifPath;
         qDebug()<<"start";
     }
-    else{
+    else if(!recordStatus&&!splitOrNot){
         media->endCreateGif();
         recordStatus=true;
+        userEnd+=1;
+        recordTimer->stop();
         qDebug()<<"end";
     }
+    else if(!recordStatus&&userEnd%2==0)
+    {
+        media->endCreateGif();
+        recordStatus=true;
+        recordTimer->stop();
+        qDebug()<<"User end";
+    }
+    else if(!recordStatus&&splitOrNot){
+        media->endCreateGif();
+        recordTimer->stop();
+        QString gifName="RecordByUther"+picTime->currentDateTime().toString("yyMMddhhmmss");
+        media->startCreateGif(space->winId(),gifName,gifPath);
+        recordTimer->start(timeLimit);
+        qDebug()<<"split";
+    }
 }
+
 
 /**
 * @method        TMZPlayer::changeShotFormat
@@ -1086,6 +1202,59 @@ void TMZPlayer::recordMyScreen()
 void TMZPlayer::changeShotFormat(QString str)
 {
     shotFormat=str;
+}
+
+/**
+* @method        TMZPlayer::changeRecordSize
+* @brief         修改录屏时长
+* @param         INT
+* @return        VOID
+* @author        涂晴昊
+* @date          2019-09-10
+*/
+void TMZPlayer::changeRecordSize(int i)
+{
+    timeLimit=i*1000;
+}
+
+/**
+* @method        TMZPlayer::changeSplitStatus
+* @brief         修改是否自动分割录屏状态
+* @param         VOID
+* @return        VOID
+* @author        涂晴昊
+* @date          2019-09-10
+*/
+void TMZPlayer::changeSplitStatus()
+{
+    splitOrNot=!splitOrNot;
+    qDebug()<<splitOrNot;
+}
+
+/**
+* @method        TMZPlayer::userEndRecord
+* @brief         用户停止录屏
+* @param         VOID
+* @return        VOID
+* @author        涂晴昊
+* @date          2019-09-10
+*/
+void TMZPlayer::userEndRecord()
+{
+    userEnd+=1;
+}
+
+/**
+* @method        TMZPlayer::changeLumin
+* @brief         修改主界面亮度
+* @param         INT
+* @return        VOID
+* @author        涂晴昊
+* @date          2019-09-10
+*/
+void TMZPlayer::changeLumin(int i)
+{
+    space->setBrightness(i);
 }
 
 
@@ -1116,15 +1285,8 @@ void TMZPlayer::on_openFile_clicked()
         emit durationSignal(static_cast<int>(what));
 
         MediaType currentMediaType = this->media->getCurrentMediaType();
-        if (currentMediaType == MediaType::AUDIO)
-            qDebug() << "音频" << endl;
-        else if (currentMediaType == MediaType::VIDEO)
-            qDebug() << "video" << endl;
-        else
-            qDebug() << "what unknown" << endl;
         emit sendMediaType(currentMediaType);
         emit whetherPlaying(true);
-
     }
 }
 
@@ -1133,6 +1295,14 @@ void TMZPlayer::closeEvent(QCloseEvent* event)
     this->media->closeSelf();
 }
 
+void TMZPlayer::sltResendPlayInfo(const PlayArea& playArea,
+                                  const int& firstRank,
+                                  const int& secondRank)
+{
+    this->media->play(playArea, firstRank, secondRank);
+    MediaType currentMediaType = this->media->getCurrentMediaType();
+    emit sendMediaType(currentMediaType);
+}
 
 /* Author: zyt
  * Name: addHistory
@@ -1149,6 +1319,109 @@ void TMZPlayer::addHistory(QString _name, QString _address)
     
     connect(historyContainer.last(),SIGNAL(historyDoubleClicked()),
             this,SLOT(givingHistoryAddress()));
+}
+
+void TMZPlayer::zinit()
+{
+    //
+//    history* his = new history;
+//    his->setNameAndAddress("123","123123");
+//    historyLayout->addWidget(his);
+
+    historyLayout = new QBoxLayout(QBoxLayout::BottomToTop);
+    historyLayout->setAlignment(Qt::AlignTop | Qt::AlignVCenter);
+
+    ui->rightsideBar->setLayout(historyLayout);
+    ui->historyList->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+
+    connect(ui->displayList,
+           SIGNAL(sendTempPlayInfo(const PlayArea&,const int&, const int&)),
+           this->media,
+           SLOT(play(const PlayArea&, const int&, const int&)));
+
+
+    QStringList oldFolders = this->media->getFolders().getFolderNames();
+    QList<QStringList> oldFiles = this->media->getFolders().getFolderFilePaths();
+
+    for(int i = 0; i< oldFolders.length(); i++)
+    {
+        playlistsContainer.append(new mergedPlaylist);
+        playlistsContainer.last()->setListName(oldFolders.at(i));
+        playlistsContainer.last()->setFileInList(oldFiles.at(i));
+        playlistsContainer.last()->showOldContents();
+
+        listBoxLayout->addWidget(playlistsContainer.at(playlistsContainer.length() - 1));
+
+        connect(playlistsContainer.at(playlistsContainer.length() - 1),
+        SIGNAL(givingTempSNAndFiles(int, QList<QString>)),
+        ui->displayList,
+        SLOT(recevingSNAndFiles(int, QList<QString>)));
+
+        connect(ui->displayList,
+        SIGNAL(changeFilesInListSignal(int, QList<QString>)),
+        playlistsContainer.at(playlistsContainer.length() - 1),
+        SLOT(changeFilesInListSlot(int, QList<QString>)));
+
+        connect(playlistsContainer.at(playlistsContainer.length() - 1),
+        SIGNAL(showChangedListSignal(int, QList<QString>)),
+        ui->displayList,
+        SLOT(showChangedListSlot(int, QList<QString>)));
+
+        connect(playlistsContainer.at(playlistsContainer.length() - 1),
+        SIGNAL(givingListName(QString)),
+        this,
+        SLOT(receivingListName(QString)));
+
+        connect(playlistsContainer.at(playlistsContainer.length() - 1),
+        SIGNAL(hideContentsExceptThisSignal(int)),
+        this,
+        SLOT(hideContentsExceptThisSlot(int)));
+
+        connect(playlistsContainer.at(playlistsContainer.length() - 1),
+        SIGNAL(allowDragAndMenuSignal()),
+        this,
+        SLOT(allowDragAndMenuSlot()));
+
+        // 收藏夹改名
+        connect(
+        playlistsContainer.at(playlistsContainer.length() - 1),
+        SIGNAL(sendFolderName(int,QString)),
+        &this->media->getFolders(),
+        SLOT(renameFolder(int, QString))
+        );
+
+    // 向收藏夹中添加内容
+        connect(playlistsContainer.at(playlistsContainer.length() - 1),
+        SIGNAL(sendAddFileToFolder(const int&, const QString& ,const QString&, const bool&)),
+        &this->media->getFolders(),
+        SLOT(addContent2Folder(const int&, const QString&,
+                         const QString&, const bool&)));
+
+        // 在左边的连接
+        connect(playlistsContainer.at(playlistsContainer.length() - 1),
+        SIGNAL(sendPlayInfo(const PlayArea&,const int&, const int&)),
+        this,
+        SLOT(sltResendPlayInfo(const PlayArea&, const int&, const int&)));
+
+        connect(playlistsContainer.at(playlistsContainer.length() - 1),
+                SIGNAL(removeContent(int,int)),
+                &this->media->getFolders(),
+                SLOT(removeContentFromFolder(int, int)));
+    }
+
+
+    QList<QStringList> what = this->media->getHistories().get4Client();
+    for (QStringList stringList: what)
+        this->addHistory(stringList[0], stringList[1]);
+
+}
+
+void TMZPlayer::moveZHisText2First(const int& fromIndex)
+{
+    history* tHistory = this->historyContainer.at(fromIndex);
+    for (int i = this->historyContainer.length() - 1; i > 0; --i)
+        this->historyContainer[i] = this->historyContainer[i - 1];
+    this->historyContainer[0] = tHistory;
 }
 
 

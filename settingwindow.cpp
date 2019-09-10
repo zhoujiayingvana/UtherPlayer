@@ -42,9 +42,11 @@ SettingWindow::SettingWindow(QWidget *parent,Media * m) :
     connect(ui->recordSizeSpinBox, SIGNAL(valueChanged(int)), ui->recordSizeSlider, SLOT(setValue(int)));
     connect(ui->recordSizeSlider, SIGNAL(valueChanged(int)), ui->recordSizeSpinBox, SLOT(setValue(int)));
     ui->recordSizeSpinBox->setMinimum(0);
-    ui->recordSizeSpinBox->setMaximum(300);
+    ui->recordSizeSpinBox->setMaximum(60);
+    ui->recordSizeSpinBox->setValue(5);
     ui->recordSizeSlider->setMinimum(0);
-    ui->recordSizeSlider->setMaximum(300);
+    ui->recordSizeSlider->setMaximum(60);
+    ui->recordSizeSlider->setValue(5);
     ui->recordSizeSpinBox->setSuffix("s");
     ui->recordSizeSpinBox->setWrapping(true);
 
@@ -60,6 +62,16 @@ SettingWindow::SettingWindow(QWidget *parent,Media * m) :
     ui->quickMoveSpinBox->setValue(5);
     ui->quickMoveSpinBox->setSuffix("s");
     ui->quickMoveSpinBox->setWrapping(true);
+
+    //连接luminSpinBox和luminSlider互相修改
+    connect(ui->luminSpinBox,SIGNAL(valueChanged(int)),ui->luminSlider,SLOT(setValue(int)));
+    connect(ui->luminSlider,SIGNAL(valueChanged(int)),ui->luminSpinBox,SLOT(setValue(int)));
+    ui->luminSlider->setMinimum(-100);
+    ui->luminSlider->setMaximum(100);
+    ui->luminSpinBox->setMinimum(-100);
+    ui->luminSpinBox->setMaximum(100);
+    ui->luminSlider->setValue(0);
+    ui->luminSpinBox->setValue(0);
 
     //字体SpinBox
     ui->fontSpinBox->setMinimum(9);
@@ -866,4 +878,56 @@ void SettingWindow::on_picPngButton_clicked()
 void SettingWindow::on_picWebpButton_clicked()
 {
     emit sigShotFormatChange("webp");
+}
+
+/**
+* @method        SettingWindow::on_luminSpinBox_valueChanged
+* @brief         修改主界面亮度
+* @param         INT
+* @return        VOID
+* @author        涂晴昊
+* @date          2019-09-10
+*/
+void SettingWindow::on_luminSpinBox_valueChanged(int arg1)
+{
+    emit sigLuminChange(arg1);
+}
+
+/**
+* @method        SettingWindow::changeSetLumin
+* @brief         主界面修改设置界面亮度
+* @param         INT
+* @return        VOID
+* @author        涂晴昊
+* @date          2019-09-10
+*/
+void SettingWindow::changeSetLumin(int i)
+{
+    ui->luminSpinBox->setValue(i);
+}
+
+/**
+* @method        SettingWindow::on_recordSizeSpinBox_valueChanged
+* @brief         录屏最大时长
+* @param         INT
+* @return        VOID
+* @author        涂晴昊
+* @date          2019-09-10
+*/
+void SettingWindow::on_recordSizeSpinBox_valueChanged(int arg1)
+{
+    emit sigTimeLimitChange(arg1);
+}
+
+/**
+* @method        SettingWindow::on_checkBox_clicked
+* @brief         是否自动分割录屏
+* @param         VOID
+* @return        VOID
+* @author        涂晴昊
+* @date          2019-09-10
+*/
+void SettingWindow::on_checkBox_clicked()
+{
+    emit sigAutoSplitRecord();
 }

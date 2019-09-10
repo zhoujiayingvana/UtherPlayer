@@ -65,7 +65,7 @@ QString history::getName()
 
 QString history::getAddress()
 {
-  return address;
+    return address;
 }
 
 /* Author: zyt

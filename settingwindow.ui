@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>630</width>
+    <width>673</width>
     <height>640</height>
    </rect>
   </property>
@@ -19,7 +19,7 @@
   <widget class="QDialogButtonBox" name="buttonBox">
    <property name="geometry">
     <rect>
-     <x>220</x>
+     <x>260</x>
      <y>580</y>
      <width>389</width>
      <height>41</height>
@@ -58,7 +58,7 @@
   <widget class="QStackedWidget" name="stackedWidget">
    <property name="geometry">
     <rect>
-     <x>150</x>
+     <x>180</x>
      <y>10</y>
      <width>481</width>
      <height>571</height>
@@ -154,7 +154,7 @@
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>120</y>
+         <y>200</y>
          <width>461</width>
          <height>161</height>
         </rect>
@@ -245,7 +245,7 @@
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>310</y>
+         <y>380</y>
          <width>461</width>
          <height>121</height>
         </rect>
@@ -332,6 +332,73 @@
         </property>
        </widget>
       </widget>
+      <widget class="QLabel" name="label_32">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>110</y>
+         <width>91</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>亮度设置：</string>
+       </property>
+      </widget>
+      <widget class="QWidget" name="widget_3" native="true">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>130</y>
+         <width>451</width>
+         <height>51</height>
+        </rect>
+       </property>
+       <widget class="QSpinBox" name="luminSpinBox">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>16</y>
+          <width>81</width>
+          <height>21</height>
+         </rect>
+        </property>
+        <property name="maximum">
+         <number>300</number>
+        </property>
+        <property name="singleStep">
+         <number>1</number>
+        </property>
+        <property name="value">
+         <number>60</number>
+        </property>
+       </widget>
+       <widget class="QSlider" name="luminSlider">
+        <property name="geometry">
+         <rect>
+          <x>120</x>
+          <y>20</y>
+          <width>181</width>
+          <height>16</height>
+         </rect>
+        </property>
+        <property name="maximum">
+         <number>300</number>
+        </property>
+        <property name="singleStep">
+         <number>1</number>
+        </property>
+        <property name="value">
+         <number>60</number>
+        </property>
+        <property name="sliderPosition">
+         <number>60</number>
+        </property>
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+      </widget>
      </widget>
     </widget>
    </widget>
@@ -345,7 +412,7 @@
     <widget class="QScrollArea" name="scrollArea_2">
      <property name="geometry">
       <rect>
-       <x>-1</x>
+       <x>0</x>
        <y>-1</y>
        <width>491</width>
        <height>571</height>
@@ -596,10 +663,10 @@
        <widget class="QSpinBox" name="recordSizeSpinBox">
         <property name="geometry">
          <rect>
-          <x>30</x>
+          <x>20</x>
           <y>126</y>
-          <width>71</width>
-          <height>22</height>
+          <width>81</width>
+          <height>21</height>
          </rect>
         </property>
         <property name="maximum">
@@ -691,7 +758,7 @@
        <widget class="QLabel" name="label_15">
         <property name="geometry">
          <rect>
-          <x>140</x>
+          <x>160</x>
           <y>30</y>
           <width>91</width>
           <height>21</height>
@@ -722,7 +789,7 @@
        <widget class="MyLineEdit" name="actionShortcutEdit">
         <property name="geometry">
          <rect>
-          <x>120</x>
+          <x>140</x>
           <y>60</y>
           <width>113</width>
           <height>20</height>
@@ -735,7 +802,7 @@
        <widget class="MyLineEdit" name="lastShortcutEdit">
         <property name="geometry">
          <rect>
-          <x>120</x>
+          <x>140</x>
           <y>100</y>
           <width>113</width>
           <height>20</height>
@@ -771,7 +838,7 @@
        <widget class="MyLineEdit" name="nextShortcutEdit">
         <property name="geometry">
          <rect>
-          <x>120</x>
+          <x>140</x>
           <y>140</y>
           <width>113</width>
           <height>20</height>
@@ -781,7 +848,7 @@
        <widget class="MyLineEdit" name="louderShortcutEdit">
         <property name="geometry">
          <rect>
-          <x>120</x>
+          <x>140</x>
           <y>180</y>
           <width>113</width>
           <height>20</height>
@@ -791,7 +858,7 @@
        <widget class="MyLineEdit" name="lowerShortcutEdit">
         <property name="geometry">
          <rect>
-          <x>120</x>
+          <x>140</x>
           <y>220</y>
           <width>113</width>
           <height>20</height>
@@ -931,7 +998,7 @@
        <widget class="MyLineEdit" name="volumeOnOffEdit">
         <property name="geometry">
          <rect>
-          <x>120</x>
+          <x>140</x>
           <y>260</y>
           <width>113</width>
           <height>20</height>
@@ -941,7 +1008,7 @@
        <widget class="MyLineEdit" name="speedUpScreenEdit">
         <property name="geometry">
          <rect>
-          <x>120</x>
+          <x>140</x>
           <y>300</y>
           <width>113</width>
           <height>20</height>
@@ -951,7 +1018,7 @@
        <widget class="MyLineEdit" name="speedDownScreenEdit">
         <property name="geometry">
          <rect>
-          <x>120</x>
+          <x>140</x>
           <y>340</y>
           <width>113</width>
           <height>20</height>
@@ -961,7 +1028,7 @@
        <widget class="MyLineEdit" name="luminUpEdit">
         <property name="geometry">
          <rect>
-          <x>120</x>
+          <x>140</x>
           <y>380</y>
           <width>113</width>
           <height>20</height>
@@ -971,7 +1038,7 @@
        <widget class="MyLineEdit" name="luminDownEdit">
         <property name="geometry">
          <rect>
-          <x>120</x>
+          <x>140</x>
           <y>420</y>
           <width>113</width>
           <height>20</height>
@@ -981,7 +1048,7 @@
        <widget class="MyLineEdit" name="openFileEdit">
         <property name="geometry">
          <rect>
-          <x>120</x>
+          <x>140</x>
           <y>460</y>
           <width>113</width>
           <height>20</height>
@@ -991,7 +1058,7 @@
        <widget class="MyLineEdit" name="closeFileEdit">
         <property name="geometry">
          <rect>
-          <x>120</x>
+          <x>140</x>
           <y>500</y>
           <width>113</width>
           <height>20</height>
@@ -1001,7 +1068,7 @@
        <widget class="MyLineEdit" name="screenShotEdit">
         <property name="geometry">
          <rect>
-          <x>120</x>
+          <x>140</x>
           <y>540</y>
           <width>113</width>
           <height>20</height>
@@ -1024,7 +1091,7 @@
        <widget class="MyLineEdit" name="screenRecordEdit">
         <property name="geometry">
          <rect>
-          <x>120</x>
+          <x>140</x>
           <y>580</y>
           <width>113</width>
           <height>20</height>
@@ -1406,8 +1473,8 @@
     <rect>
      <x>10</x>
      <y>10</y>
-     <width>141</width>
-     <height>131</height>
+     <width>161</width>
+     <height>161</height>
     </rect>
    </property>
    <property name="autoFillBackground">
@@ -1418,8 +1485,8 @@
      <rect>
       <x>20</x>
       <y>10</y>
-      <width>111</width>
-      <height>31</height>
+      <width>121</width>
+      <height>41</height>
      </rect>
     </property>
     <property name="font">
@@ -1438,9 +1505,9 @@
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>50</y>
-      <width>111</width>
-      <height>31</height>
+      <y>60</y>
+      <width>121</width>
+      <height>41</height>
      </rect>
     </property>
     <property name="font">
@@ -1456,9 +1523,9 @@
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>90</y>
-      <width>111</width>
-      <height>31</height>
+      <y>110</y>
+      <width>121</width>
+      <height>41</height>
      </rect>
     </property>
     <property name="font">

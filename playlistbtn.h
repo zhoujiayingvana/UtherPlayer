@@ -25,6 +25,11 @@ public:
   bool getIsClicked();
   void setIsClicked(bool);
 
+  //名字在playlistBtn里，playlistBtn在mergedPlaylist里
+  QString getFolderName();
+
+  void setFolderName(QString);
+
 signals:
   void showOrHideListContentSignal(bool);
   void hideOtherContentsSignal(int);
@@ -33,6 +38,7 @@ signals:
   void doubleClickedSignal();
   void givingSN(int);
   void wantingName(QString);
+  void sendChangedFolderName(int,QString);
 
 public slots:
   void renameSlot();
@@ -47,7 +53,9 @@ public slots:
 private:
   bool isClicked;
   QLabel* statusPix;
+
   newLineEdit* listName;
+
   int btn_SN;
 
   bool doubleClicked;

@@ -25,6 +25,32 @@ void MediaWidget::hideBottomBar()
 
 }
 
+/**
+* @method        MediaWidget::mediaLuminAdd
+* @brief         亮度增
+* @param         VOID
+* @return        VOID
+* @author        涂晴昊
+* @date          2019-09-10
+*/
+void MediaWidget::mediaLuminAdd()
+{
+    setBrightness(brightness()+5);
+}
+
+/**
+* @method        MediaWidget::mediaLuminSub
+* @brief         亮度减
+* @param         VOID
+* @return        VOID
+* @author        涂晴昊
+* @date          2019-09-10
+*/
+void MediaWidget::mediaLuminSub()
+{
+    setBrightness(brightness()-5);
+}
+
 void MediaWidget::mouseDoubleClickEvent(QMouseEvent *event)
 {
 

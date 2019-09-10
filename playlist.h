@@ -5,6 +5,7 @@
 
 #include <QDir>
 #include <QWidget>
+#include <util/helper.h>
 #include <QPushButton>
 #include <QListWidget>
 #include <QTableWidget>
@@ -38,6 +39,20 @@ signals:
   void downloadFilesChangesSignal(int,QList<QString>);
 
   void sendFileAddress(QString);
+
+  void temp_removeContentSignal(int,int);
+
+
+  // 9.10
+
+  //由于displayList直接在主界面，故可建立它打开文件信号和media的连接
+  //但是左边mergedPlaylist中也有playlist，故也需要再发信号给mergedPlaylist，再由后者发出给tmzplayer，道理同下
+  void sendTempPlayInfo(const PlayArea&,const int&, const int&);
+
+  // 向文件加中添加文件信号，发给外面mergedPlaylist的，ml不要管我，看外面就好了好吧
+  void temp_addFileToFolderSignal(const int&, const QString&, const QString&, const bool&);
+
+  void deleteFilesInListSignal(int,QList<QString>);
 
 public slots:
 

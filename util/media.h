@@ -38,12 +38,6 @@ public:
     Histories& getHistories();
     // 获取收藏夹组
     Folders& getFolders();
-    // 打开文件播放视频, 并且为文件去了名字
-    void play(const bool& _isLocal, const QString& _fileName, const QString& _filePath);
-    // 打开文件或输入了网址来播放视频, 没有为其取名字
-    void play(const bool& _isLocal, const QString& _filePath);
-    // 从已有的空间上获取位置索引, 来播放视频
-    void play(const PlayArea& _playArea, const int& _firstRank, const int& _secondRank=-1);
     // 清空当前的容器
     void makeContainerEmpty();
     // 开始关闭
@@ -95,6 +89,12 @@ public slots:
     bool playLast();
     // 读取历史记录播放的话, 应该跳转时间
     void back2Last();
+    // 打开文件播放视频, 并且为文件去了名字
+    void play(const bool& _isLocal, const QString& _fileName, const QString& _filePath);
+    // 打开文件或输入了网址来播放视频, 没有为其取名字
+    void play(const bool& _isLocal, const QString& _filePath);
+    // 从已有的空间上获取位置索引, 来播放视频
+    void play(const PlayArea& _playArea, const int& _firstRank, const int& _secondRank=-1);
 private:
     Player* media_Player;
     Controller* media_Controller;
@@ -136,9 +136,9 @@ protected:
     int secondRank;
     QString filePath;
 public:
-    MediaStateInfo(const PlayArea& _where=PlayArea::UNSURE,
-                   const int& _firstRank=-1,
-                   const int& _secondRank=-1,
+    MediaStateInfo(const PlayArea& _where=PlayArea::FOLDERS,
+                   const int& _firstRank=0,
+                   const int& _secondRank=0,
                    const QString& _filePath="");
     MediaStateInfo(const MediaStateInfo& other);
     MediaStateInfo& operator=(const MediaStateInfo& other);

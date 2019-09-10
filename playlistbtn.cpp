@@ -82,6 +82,18 @@ void playlistBtn::setIsClicked(bool status)
   isClicked = status;
 }
 
+//返回文件名
+QString playlistBtn::getFolderName()
+{
+  return listName->text();
+}
+
+//改变文件名
+void playlistBtn::setFolderName(QString name)
+{
+  listName->setText(name);
+}
+
 /* Author: zyt
  * Name: contextMenuEvent
  * Function: 实现右键播放列表表头进行改名
@@ -192,6 +204,7 @@ void playlistBtn::displayListSlot()
 void playlistBtn::editingFinishedSlot()
 {
   listName->setReadOnly(true);
+  emit sendChangedFolderName(btn_SN,listName->text());
 }
 
 /* Author: zyt

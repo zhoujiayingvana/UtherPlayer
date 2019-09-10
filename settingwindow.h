@@ -110,6 +110,14 @@ signals:
     //修改快进快退时间
     void sigQuickMoveTimeChange(int);
 
+    //修改主界面亮度
+    void sigLuminChange(int);
+
+    //修改录屏时长信号
+    void sigTimeLimitChange(int);
+    //自动分割录屏
+    void sigAutoSplitRecord();
+
 private slots:
     //切换页面1
     void on_pushButton_1_clicked();
@@ -232,11 +240,26 @@ private slots:
     //修改快进快退时间
     void on_quickMoveSpinBox_valueChanged(int arg1);
 
+    //图片格式jpg
     void on_picJpgButton_clicked();
 
+    //图片格式png
     void on_picPngButton_clicked();
 
+    //图片格式webp
     void on_picWebpButton_clicked();
+
+    //亮度修改
+    void on_luminSpinBox_valueChanged(int arg1);
+
+    //主界面修改亮度
+    void changeSetLumin(int);
+
+    //录屏最大时长修改
+    void on_recordSizeSpinBox_valueChanged(int arg1);
+
+    //是否自动分割录屏
+    void on_checkBox_clicked();
 
 private:
     Ui::SettingWindow *ui;
