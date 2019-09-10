@@ -62,6 +62,7 @@ signals:
     void durationSignal(int);
     void sendMediaType(MediaType&);
     void whetherPlaying(bool);
+    void getPosition(int);
 
 private slots:
     void currentPosChanged(int);
@@ -152,6 +153,8 @@ private slots:
     void stopFunction();
     //改变meidia音量
     void changeVolume(int);
+    //返回现在时间
+    void returnPosition();
 
 
     //截屏
@@ -178,7 +181,8 @@ private:
     QHBoxLayout *rightLayout;
     QWidget *middleWidget;
     QVBoxLayout *middleLayout;
-    QVBoxLayout * mMiddleLayout;
+    QWidget *fileWidget;
+    QVBoxLayout * fileLayout;
 
     QVBoxLayout *pLayout;
 

@@ -2,10 +2,11 @@
 #define BOTTOMBAR_H
 
 #include <QWidget>
-#include<QPushButton>
-#include<QLabel>
-#include<QLayout>
-#include<QShortcut>
+#include <QPushButton>
+#include <QLabel>
+#include <QTimer>
+#include <QLayout>
+#include <QShortcut>
 #include "myslider.h"
 #include "bottombutton.h"
 #include "widget.h"
@@ -36,6 +37,7 @@ signals:
     void pauseButton_clicked();
     void nextButton_clicked();
     void stopButton_clicked();
+    void needPosition();
 
 public slots:
 
@@ -46,8 +48,11 @@ public slots:
     //上一个
     void on_lastButton_clicked();
     //播放暂停
-
     void on_pauseButton_clicked();
+    //使进度条随时间走
+    void timePassingBy();
+    //使进度条随时间走
+    void setPlaySliderValue(int);
     //下一个
     void on_nextButton_clicked();
     //停止
@@ -172,8 +177,10 @@ private:
 
     int quickMoveTime;//快进快退秒数
 
+    QTimer *timer;
 
-    int volume;//TEST
+
+
 
 };
 
