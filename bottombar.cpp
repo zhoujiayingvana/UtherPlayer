@@ -112,7 +112,7 @@ BottomBar::BottomBar(QWidget *parent) : QWidget(parent)
 
 
     lastButton->setStyleSheet("QPushButton{ border-image: url(:/image/image/bottomBar/last.png); }");
-    pauseButton->setStyleSheet("QPushButton{ border-image: url(:/image/image/bottomBar/pause.png); }");
+    pauseButton->setStyleSheet("QPushButton{ border-image: url(:/image/image/bottomBar/play.png); }");
     nextButton->setStyleSheet("QPushButton{ border-image: url(:/image/image/bottomBar/next.png); }");
     stopButton->setStyleSheet("QPushButton{ border-image: url(:/image/image/bottomBar/stop.png); }");
     currentPos->setText(QStringLiteral("00:00"));

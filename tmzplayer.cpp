@@ -278,6 +278,9 @@ TMZPlayer::TMZPlayer(QWidget *parent,Media* m) :
             pBottomBar, SLOT(setTotalTime(qint64)));
 
 
+
+    addHistory("no.1","address");
+    addHistory("no.2","adddddress");
     
     
     //    connect(settingAction,SIGNAL(triggered()),//托盘模式打开设置窗口
@@ -1181,10 +1184,13 @@ void TMZPlayer::addHistory(QString _name, QString _address)
     {
         delete historyContainer.last();
     }
+
     historyContainer.insert(0,new history);
     historyContainer.first()->setNameAndAddress(_name,_address);
+
+    historyLayout->addWidget(historyContainer.first());
     
-    connect(historyContainer.last(),SIGNAL(historyDoubleClicked()),
+    connect(historyContainer.first(),SIGNAL(historyDoubleClicked()),
             this,SLOT(givingHistoryAddress()));
 }
 
@@ -1280,6 +1286,8 @@ void TMZPlayer::zinit()
     QList<QStringList> what = this->media->getHistories().get4Client();
     for (QStringList stringList: what)
         this->addHistory(stringList[0], stringList[1]);
+
+
 
 }
 

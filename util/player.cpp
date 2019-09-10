@@ -5,6 +5,7 @@ Player::Player(QWidget *parent) : QWidget(parent)
     //初始化
     this->m_Player=new QMediaPlayer(this);
     this->m_PlayState=QMediaPlayer::StoppedState;
+    qDebug()<<this->m_Player->state();
     this->m_Duration=0;
     this->m_CurrentPosition=0;
     //槽函数
