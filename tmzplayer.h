@@ -14,6 +14,8 @@
 
 #include <QIcon>
 #include <QMenu>
+#include <QDateTime>
+#include <QTimer>
 #include <QWidget>
 #include <QAction>
 #include <QGroupBox>
@@ -127,16 +129,18 @@ private slots:
     //打开文件快捷键修改
     void changeOpenFileShortcut(QString);
 
+    //亮度增快捷键修改
+    void changeLuminAddShortcut(QString);
+    //亮度减快捷键修改
+    void changeLuminSubShortcut(QString);
+
     //修改截屏路径
     void changeShotDir(QString);
     //修改录屏路径
     void changeRecordDir(QString);
-    /*
-     * 修改主界面背景
-     * 设置界面三个button分别emit传QString
-     * */
-    void changeBackGround(QString);
 
+    //修改主界面背景
+    void changeBackGround(QString);
     //修改主界面自定义图片背景
     void changePicBackGround(QString);
 
@@ -147,8 +151,18 @@ private slots:
     void shotMyScreen();
     //录屏
     void recordMyScreen();
+
     //修改截屏格式
     void changeShotFormat(QString);
+    //修改录屏时长
+    void changeRecordSize(int);
+    //修改是否自动分割录屏状态
+    void changeSplitStatus();
+    //用户停止录屏
+    void userEndRecord();
+
+    //修改主界面亮度
+    void changeLumin(int);
 
     void on_openFile_clicked();
 
@@ -219,9 +233,16 @@ private:
 
     QString currentQss;//当前qss
     
-    //截屏快捷键
+    //截屏录屏快捷键
     QShortcut *shotScreen;
     QShortcut *recordScreen;
+    QTimer *recordTimer;
+    int timeLimit;
+    QDateTime *picTime;
+
+    //亮度快捷键
+    QShortcut *luminAdd;
+    QShortcut *luminSub;
 
     //播放模块zjy&ml
     Media* media;
@@ -231,6 +252,8 @@ private:
     QString shotFormat;//截图格式
 
     bool recordStatus;//录屏状态
+    bool splitOrNot;//是否自动分割录屏
+    int userEnd;//用户停止录屏
     
     //9.9
     QBoxLayout* historyLayout;
