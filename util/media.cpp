@@ -206,6 +206,7 @@ void Media::play(const PlayArea& _playArea, const int& _firstRank, const int& _s
 
     // 指定位置的播放, 需要判断跳转
     this->back2Last();
+
 }
 
 void Media::makeContainerEmpty()
