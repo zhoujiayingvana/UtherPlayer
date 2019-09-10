@@ -177,6 +177,22 @@ SettingWindow::SettingWindow(QWidget *parent,Media * m) :
     ui->buttonBox->setFocusPolicy(Qt::NoFocus);
     ui->quickMoveSpinBox->setFocusPolicy(Qt::NoFocus);
 
+    //初始化快捷键
+    ui->actionShortcutEdit->setText("Space");
+    ui->lastShortcutEdit->setText("Ctrl+Left");
+    ui->nextShortcutEdit->setText("Ctrl+Right");
+    ui->louderShortcutEdit->setText("Up");
+    ui->lowerShortcutEdit->setText("Down");
+    ui->volumeOnOffEdit->setText("Ctrl+`");
+    ui->speedDownScreenEdit->setText("Left");
+    ui->speedUpScreenEdit->setText("Right");
+    ui->luminUpEdit->setText("Ctrl+Up");
+    ui->luminDownEdit->setText("Ctrl+Down");
+    ui->openFileEdit->setText("Ctrl+O");
+    ui->closeFileEdit->setText("Ctrl+X");
+    ui->screenShotEdit->setText("Ctrl+1");
+    ui->screenRecordEdit->setText("Ctrl+2");
+
     QString back1Str=":/new/prefix1/myQss/style2.qss";
     QFile qssfile(":/new/prefix1/myQss/style2.qss");
     qssfile.open(QFile::ReadOnly);
@@ -612,6 +628,18 @@ void SettingWindow::on_screenShotEdit_textChanged(const QString &arg1)
     emit sigScreenshotShortcut(arg1);
 }
 
+/**
+* @method        SettingWindow::on_screenRecordEdit_textChanged
+* @brief         录屏快捷键修改
+* @param         STRING
+* @return        VOID
+* @author        涂晴昊
+* @date          2019-09-05
+*/
+void SettingWindow::on_screenRecordEdit_textChanged(const QString &arg1)
+{
+    emit sigRecordShotcut(arg1);
+}
 
 /**
 * @method        SettingWindow::on_radioButton_clicked
@@ -799,4 +827,43 @@ void SettingWindow::lv3DefinitionChange()
 void SettingWindow::on_quickMoveSpinBox_valueChanged(int arg1)
 {
     emit sigQuickMoveTimeChange(arg1);
+}
+
+
+/**
+* @method        SettingWindow::on_picJpgButton_clicked
+* @brief         修改截屏格式jpg
+* @param         VOID
+* @return        VOID
+* @author        涂晴昊
+* @date          2019-09-09
+*/
+void SettingWindow::on_picJpgButton_clicked()
+{
+    emit sigShotFormatChange("jpg");
+}
+
+/**
+* @method        SettingWindow::on_picPngButton_clicked
+* @brief         修改截屏格式png
+* @param         VOID
+* @return        VOID
+* @author        涂晴昊
+* @date          2019-09-09
+*/
+void SettingWindow::on_picPngButton_clicked()
+{
+    emit sigShotFormatChange("png");
+}
+/**
+* @method        SettingWindow::on_picWebpButton_clicked
+* @brief         修改截屏格式webp
+* @param         VOID
+* @return        VOID
+* @author        涂晴昊
+* @date          2019-09-09
+*/
+void SettingWindow::on_picWebpButton_clicked()
+{
+    emit sigShotFormatChange("webp");
 }

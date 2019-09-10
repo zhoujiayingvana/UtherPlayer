@@ -7,7 +7,8 @@ Player::Player(QWidget *parent) : QWidget(parent)
     this->m_PlayState=QMediaPlayer::StoppedState;
     this->m_Duration=0;
     this->m_CurrentPosition=0;
-    //设置player依附的播放窗口
+    //槽函数
+    connect(this->m_Player,SIGNAL(durationChanged(qint64)),this,SLOT(needGetInitDuration()));
 }
 
 Player::~Player(){}
@@ -30,16 +31,39 @@ QMediaPlayer *Player::getPlayer()
 void Player::needPlay( QMediaContent *content)
 {
     this->m_Player->setMedia(*content);
+
+    this->m_Player->play();
     this->needGetDuration();
     this->needGetPosition();
     this->needGetStatus();
+
+    if(this->m_Player->mediaStatus()==QMediaPlayer::InvalidMedia){
+        qDebug()<<"Player needPlay()"<<" Media cannot play error";
+                return;
+    }
     this->m_Player->play();
+    this->needGetPosition();
+    this->needGetStatus();
+    this->needGetDuration();
+    qDebug()<<"Media duration " <<this->m_Duration;
 }
 
 void Player::needGetDuration()
 {
+    //等待播放视频前duration change
+    //或者播放过程中
     this->m_Duration=this->m_Player->duration();
     emit returnDuration(this->m_Duration);
+
+    qDebug()<<"needGetDuration() "<<this->m_Duration;
+}
+
+void Player::needGetInitDuration()
+{
+    this->m_Duration=this->m_Player->duration();
+    emit returnInitDuration(m_Duration);
+    qDebug()<<"init duration"<<m_Duration;
+
 }
 
 void Player::needGetPosition()

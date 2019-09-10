@@ -80,6 +80,11 @@ signals:
 
     //截图快捷键更改
     void sigScreenshotShortcut(QString);
+    //录屏快捷键修改
+    void sigRecordShotcut(QString);
+
+    //截图格式修改
+    void sigShotFormatChange(QString);
 
     //倍速播放,连接bottomBar
     void sigSpeedChange(int);
@@ -182,6 +187,9 @@ private slots:
     //截图快捷键
     void on_screenShotEdit_textChanged(const QString &arg1);
 
+    //录屏快捷键修改
+    void on_screenRecordEdit_textChanged(const QString &arg1);
+
     //0.5倍速播放
     void on_radioButton_clicked();
 
@@ -223,6 +231,12 @@ private slots:
 
     //修改快进快退时间
     void on_quickMoveSpinBox_valueChanged(int arg1);
+
+    void on_picJpgButton_clicked();
+
+    void on_picPngButton_clicked();
+
+    void on_picWebpButton_clicked();
 
 private:
     Ui::SettingWindow *ui;

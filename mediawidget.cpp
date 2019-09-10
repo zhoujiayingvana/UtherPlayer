@@ -23,11 +23,11 @@ void MediaWidget::hideBottomBar()
     }
     emit volumeWidgetHide();
 
-
 }
 
 void MediaWidget::mouseDoubleClickEvent(QMouseEvent *event)
 {
+
     Q_UNUSED(event);
     emit full_screenButton_clicked();
 }

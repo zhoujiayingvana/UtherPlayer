@@ -20,6 +20,8 @@ Media::Media()
     //获取视频长度
     connect(this->media_Controller,SIGNAL(needGetDuration()),this->media_Player,SLOT(needGetDuration()));
     connect(this->media_Player,SIGNAL(returnDuration(qint64)),this->media_Controller,SLOT(receiveDuration(qint64)));
+    //播放视频时获取视频长度
+    connect(this->media_Player,SIGNAL(returnInitDuration(qint64)),this->media_Controller,SLOT(receiveInitDuration(qint64)));
     //获取视频播放位置
     connect(this->media_Controller,SIGNAL(needGetPosition()),this->media_Player,SLOT(needGetPosition()));
     //获取视频播放状态
@@ -443,7 +445,7 @@ void Media::back2Last()
     else  // 在历史记录中播放
         this->media_Controller->seekPosition(
             this->media_Histories.getPointedHistoricalContent().getProgressMilliSecond()
-        );
+                );
 }
 
 void Media::closeSelf()
