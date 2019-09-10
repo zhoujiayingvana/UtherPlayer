@@ -45,7 +45,6 @@ void Player::needPlay( QMediaContent *content)
     this->needGetPosition();
     this->needGetStatus();
     this->needGetDuration();
-    qDebug()<<"Media duration " <<this->m_Duration;
 }
 
 void Player::needGetDuration()
@@ -62,7 +61,6 @@ void Player::needGetInitDuration()
 {
     this->m_Duration=this->m_Player->duration();
     emit returnInitDuration(m_Duration);
-    qDebug()<<"init duration"<<m_Duration;
 
 }
 
