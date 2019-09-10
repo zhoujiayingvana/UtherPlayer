@@ -174,6 +174,8 @@ private slots:
 
     void closeEvent(QCloseEvent *event);
 
+    void sltResendPlayInfo(const PlayArea&, const int&, const int&);
+
     // zyt
 //    void temp_givingHistoryAddress();
 

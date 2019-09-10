@@ -1152,15 +1152,8 @@ void TMZPlayer::on_openFile_clicked()
         emit durationSignal(static_cast<int>(what));
 
         MediaType currentMediaType = this->media->getCurrentMediaType();
-        if (currentMediaType == MediaType::AUDIO)
-            qDebug() << "音频" << endl;
-        else if (currentMediaType == MediaType::VIDEO)
-            qDebug() << "video" << endl;
-        else
-            qDebug() << "what unknown" << endl;
         emit sendMediaType(currentMediaType);
         emit whetherPlaying(true);
-
     }
 }
 
@@ -1169,6 +1162,14 @@ void TMZPlayer::closeEvent(QCloseEvent* event)
     this->media->closeSelf();
 }
 
+void TMZPlayer::sltResendPlayInfo(const PlayArea& playArea,
+                                  const int& firstRank,
+                                  const int& secondRank)
+{
+    this->media->play(playArea, firstRank, secondRank);
+    MediaType currentMediaType = this->media->getCurrentMediaType();
+    emit sendMediaType(currentMediaType);
+}
 
 /* Author: zyt
  * Name: addHistory
@@ -1266,8 +1267,8 @@ void TMZPlayer::zinit()
         // 在左边的连接
         connect(playlistsContainer.at(playlistsContainer.length() - 1),
         SIGNAL(sendPlayInfo(const PlayArea&,const int&, const int&)),
-        this->media,
-        SLOT(play(const PlayArea&, const int&, const int&)));
+        this,
+        SLOT(sltResendPlayInfo(const PlayArea&, const int&, const int&)));
 
         connect(playlistsContainer.at(playlistsContainer.length() - 1),
                 SIGNAL(removeContent(int,int)),
