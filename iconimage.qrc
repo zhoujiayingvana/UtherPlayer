@@ -116,5 +116,7 @@
         <file>image/titleBar/recover.png</file>
         <file>image/titleBar/settings.png</file>
         <file>image/titleBar/skin.png</file>
+        <file>image/bottomBar/full_mute.png</file>
+        <file>image/bottomBar/full_volume.png</file>
     </qresource>
 </RCC>
