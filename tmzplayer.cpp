@@ -1097,6 +1097,7 @@ void TMZPlayer::lastFunction()
     {
         MediaType currentMediaType = this->media->getCurrentMediaType();
         emit sendMediaType(currentMediaType);
+        emit whetherPlaying(true);
     }
     else
         return;
