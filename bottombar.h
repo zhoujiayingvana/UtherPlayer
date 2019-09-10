@@ -28,6 +28,12 @@ public:
     //连接设置界面
     void connectSettingAndBottom(SettingWindow *);
 
+    int getQuickMoveTime() const;//得到快进快退秒数
+
+    int getMultiplyingPower() const;//得到播放倍速
+
+    MySlider *getPlaySpeedSlider() const;//得到播放倍速条
+
 signals:
     void full_screenButton_clicked();
     void volumeChanged(int);
@@ -165,7 +171,7 @@ private:
     QPushButton * playModeButton_3;
     QLabel * playSpeedLabel;
     QLabel * multiplyingPowerLabel;
-    MySlider * playSpeedSlider;
+    MySlider * playSpeedSlider;//倍速播放
     QLabel * videoRatioLabel;
     QPushButton * autoRatioButton;
     QPushButton * ratio4_3Button;

@@ -58,8 +58,8 @@ SettingWindow::SettingWindow(QWidget *parent,Media * m) :
     ui->quickMoveSpinBox->setMinimum(0);
     ui->quickMoveSpinBox->setMaximum(30);
     ui->quickMoveSpinBox->setSpecialValueText(tr("Automatic"));
-    ui->quickMoveSlider->setValue(5);
-    ui->quickMoveSpinBox->setValue(5);
+    ui->quickMoveSlider->setValue(1);
+    ui->quickMoveSpinBox->setValue(1);
     ui->quickMoveSpinBox->setSuffix("s");
     ui->quickMoveSpinBox->setWrapping(true);
 
@@ -663,7 +663,7 @@ void SettingWindow::on_screenRecordEdit_textChanged(const QString &arg1)
 */
 void SettingWindow::on_radioButton_clicked()
 {
-    emit sigSpeedChange(1);
+    emit sigSpeedChange(0);
 }
 
 /**
@@ -676,7 +676,7 @@ void SettingWindow::on_radioButton_clicked()
 */
 void SettingWindow::on_radioButton_2_clicked()
 {
-    emit sigSpeedChange(2);
+    emit sigSpeedChange(1);
 }
 
 /**
@@ -689,7 +689,7 @@ void SettingWindow::on_radioButton_2_clicked()
 */
 void SettingWindow::on_radioButton_3_clicked()
 {
-    emit sigSpeedChange(3);
+    emit sigSpeedChange(2);
 }
 
 /**
@@ -702,7 +702,7 @@ void SettingWindow::on_radioButton_3_clicked()
 */
 void SettingWindow::on_radioButton_4_clicked()
 {
-    emit sigSpeedChange(4);
+    emit sigSpeedChange(3);
 }
 
 /**

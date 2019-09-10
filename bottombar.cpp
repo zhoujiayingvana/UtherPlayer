@@ -13,7 +13,7 @@ BottomBar::BottomBar(QWidget *parent) : QWidget(parent)
 
 
     multiplyingPower=1;//倍速播放，默认1倍速
-    quickMoveTime=5;//快进快退秒数初始化5
+    quickMoveTime=1;//快进快退秒数初始化5
 
     setFixedHeight(60);
     lastButton = new QPushButton(this);//上一个按钮
@@ -656,6 +656,37 @@ void BottomBar::isatWidget(QWidget *suspensionindow)
     }
 }
 
+MySlider *BottomBar::getPlaySpeedSlider() const
+{
+    return playSpeedSlider;
+}
+
+/**
+* @method        BottomBar::getMultiplyingPower
+* @brief         得到播放倍速
+* @param         VOID
+* @return        INT
+* @author        涂晴昊
+* @date          2019-09-10
+*/
+int BottomBar::getMultiplyingPower() const
+{
+    return multiplyingPower;
+}
+
+/**
+* @method        BottomBar::getQuickMoveTime
+* @brief         得到快进快退秒数
+* @param         VOID
+* @return        INT
+* @author        涂晴昊
+* @date          2019-09-10
+*/
+int BottomBar::getQuickMoveTime() const
+{
+    return quickMoveTime;
+}
+
 
 
 void BottomBar::changeVolume(int vol)//改变音量
@@ -699,7 +730,7 @@ void BottomBar::quickMovePlaySliderPlus()
     playSlider->setValue(playSlider->value()+quickMoveTime);
 }
 
-/**
+/*
 * @method        BottomBar::quickMovePlaySliderMinus
 * @brief         快退功能实现
 * @param         VOID

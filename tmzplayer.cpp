@@ -200,6 +200,8 @@ TMZPlayer::TMZPlayer(QWidget *parent,Media* m) :
     quickMoveMinus=new QShortcut(this);
     quickMoveMinus->setKey(tr("left"));
     quickMoveMinus->setAutoRepeat(true);
+    connect(quickMovePlus,SIGNAL(activated()),this,SLOT(quickMoveMediaPlus()));
+    connect(quickMoveMinus,SIGNAL(activated()),this,SLOT(quickMoveMediaMinus()));
     connect(quickMovePlus, SIGNAL(activated()), pBottomBar, SLOT(quickMovePlaySliderPlus()));
     connect(quickMoveMinus, SIGNAL(activated()), pBottomBar, SLOT(quickMovePlaySliderMinus()));
 
@@ -296,6 +298,10 @@ TMZPlayer::TMZPlayer(QWidget *parent,Media* m) :
             this,SLOT(changeRecordSize(int)));
     connect(pTitleBar->settingWindow,SIGNAL(sigAutoSplitRecord()),//自动分割录屏
             this,SLOT(changeSplitStatus()));
+    connect(pTitleBar->settingWindow,SIGNAL(sigSpeedChange(int)),//设置修改视频播放倍速
+            this,SLOT(changeMediaSpeed(int)));
+    connect(pBottomBar->getPlaySpeedSlider(),SIGNAL(valueChanged(int)),//主界面修改播放倍速
+            this,SLOT(changeMediaSpeed(int)));
 
     // 连接自动切换模式
     connect(this, SIGNAL(sendMediaType(MediaType&)),
@@ -1255,6 +1261,57 @@ void TMZPlayer::userEndRecord()
 void TMZPlayer::changeLumin(int i)
 {
     space->setBrightness(i);
+}
+
+/**
+* @method        TMZPlayer::quickMoveMediaPlus
+* @brief         视频快进
+* @param         VOID
+* @return        VOID
+* @author        涂晴昊
+* @date          2019-09-10
+*/
+void TMZPlayer::quickMoveMediaPlus()
+{
+    int jumpTime=pBottomBar->getQuickMoveTime();
+    media->getController()->jump(jumpTime);
+    qDebug()<<jumpTime;
+}
+
+/**
+* @method        TMZPlayer::quickMoveMediaMinus
+* @brief         视频快退
+* @param         VOID
+* @return        VOID
+* @author        涂晴昊
+* @date          2019-09-10
+*/
+void TMZPlayer::quickMoveMediaMinus()
+{
+    int jumpTime=-pBottomBar->getQuickMoveTime();
+    media->getController()->jump(jumpTime);
+    qDebug()<<jumpTime;
+}
+
+/**
+* @method        TMZPlayer::changeMediaSpeed
+* @brief         修改视频播放倍速
+* @param         INT
+* @return        VOID
+* @author        涂晴昊
+* @date          2019-09-10
+*/
+void TMZPlayer::changeMediaSpeed(int i)
+{
+    qDebug()<<i;
+    if(i==0)
+        media->getController()->setPlaybackRate(0.5);
+    else if(i==1)
+        media->getController()->setPlaybackRate(1);
+    else if(i==2)
+        media->getController()->setPlaybackRate(1.5);
+    else if(i==3)
+        media->getController()->setPlaybackRate(2);
 }
 
 
