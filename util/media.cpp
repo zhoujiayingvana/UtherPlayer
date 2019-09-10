@@ -24,6 +24,7 @@ Media::Media()
     connect(this->media_Player,SIGNAL(returnInitDuration(qint64)),this->media_Controller,SLOT(receiveInitDuration(qint64)));
     //获取视频播放位置
     connect(this->media_Controller,SIGNAL(needGetPosition()),this->media_Player,SLOT(needGetPosition()));
+    connect(this->media_Player,SIGNAL(returnPosition(qint64)),this->media_Controller,SLOT(receivePosition(qint64)));
     //获取视频播放状态
     connect(this->media_Controller,SIGNAL(needGetStatus()),this->media_Player,SLOT(needGetStatus()));
     connect(this->media_Player,SIGNAL(returnStatus(QMediaPlayer::State)),this->media_Controller,SLOT(receiveStatus(QMediaPlayer::State)));
@@ -205,6 +206,7 @@ void Media::play(const PlayArea& _playArea, const int& _firstRank, const int& _s
 
     // 指定位置的播放, 需要判断跳转
     this->back2Last();
+
 }
 
 void Media::makeContainerEmpty()

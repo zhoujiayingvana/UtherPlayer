@@ -24,9 +24,7 @@ Mini::Mini(QWidget *parent,Media* m) :
     ui->setupUi(this);
     drag = false;
     //暂时将播放状态设为真
-    isPlaying = true;
-    //暂时将歌曲设为不喜欢
-    like = false;
+
     volumeSlider = new MySlider;
     volumeSlider->setWindowFlags(Qt::Window|Qt::SubWindow|Qt::FramelessWindowHint|Qt::WindowTitleHint);
     volumeSlider->setMinimum(0);
@@ -41,9 +39,7 @@ Mini::Mini(QWidget *parent,Media* m) :
     ui->lastSongBtn->setCursor(QCursor(Qt::PointingHandCursor));
     ui->playOrPauseBtn->setCursor(QCursor(Qt::PointingHandCursor));
     ui->nextSongBtn->setCursor(QCursor(Qt::PointingHandCursor));
-    ui->likeBtn->setCursor(QCursor(Qt::PointingHandCursor));
     ui->volumeBtn->setCursor(QCursor(Qt::PointingHandCursor));
-    ui->listBtn->setCursor(QCursor(Qt::PointingHandCursor));
     ui->closeBtn->setCursor(QCursor(Qt::PointingHandCursor));
     ui->maxModeBtn->setCursor(QCursor(Qt::PointingHandCursor));
     ui->albumPic->setCursor(QCursor(Qt::PointingHandCursor));
@@ -53,26 +49,16 @@ Mini::Mini(QWidget *parent,Media* m) :
     ui->lastSongBtn->setFocusPolicy(Qt::NoFocus);
     ui->playOrPauseBtn->setFocusPolicy(Qt::NoFocus);
     ui->nextSongBtn->setFocusPolicy(Qt::NoFocus);
-    ui->likeBtn->setFocusPolicy(Qt::NoFocus);
     ui->volumeBtn->setFocusPolicy(Qt::NoFocus);
-    ui->listBtn->setFocusPolicy(Qt::NoFocus);
     ui->closeBtn->setFocusPolicy(Qt::NoFocus);
     ui->maxModeBtn->setFocusPolicy(Qt::NoFocus);
     ui->albumPic->setFocusPolicy(Qt::NoFocus);
 
-    if(isPlaying)
-    {
-        ui->playOrPauseBtn->setStyleSheet("QPushButton{ border-image: url(:/image/image/mini_pause.png); }");
-    }
-    else if(!isPlaying)
-    {
-        ui->playOrPauseBtn->setStyleSheet("QPushButton{ border-image: url(:/image/image/icon_play.png); }");
-    }
+    ui->playOrPauseBtn->setStyleSheet("QPushButton{ border-image: url(:/image/image/mini_pause.png); }");
+
     ui->lastSongBtn->setStyleSheet("QPushButton{ border-image: url(:/image/image/mini_last.jpg); }");
     ui->nextSongBtn->setStyleSheet("QPushButton{ border-image: url(:/image/image/mini_next.jpg); }");
-    ui->likeBtn->setStyleSheet("QPushButton{ border-image: url(:/image/image/musicform/btn_like_n.png); }");
     ui->volumeBtn->setStyleSheet("QPushButton{ border-image: url(:/image/image/horn.png); }");
-    ui->listBtn->setStyleSheet("QPushButton{ border-image: url(:/image/image/musiclist.png); }");
     ui->closeBtn->setStyleSheet("QPushButton{ border-image: url(:/image/image/btn_close_n.png); }");
     ui->maxModeBtn->setStyleSheet("QPushButton{ border-image: url(:/image/image/btn_max_n.png); }");
 
@@ -87,26 +73,11 @@ Mini::Mini(QWidget *parent,Media* m) :
     ui->playOrPauseBtn->setText("");
     ui->nextSongBtn->setText("");
 
-    if(isPlaying)
-    {
-        ui->playOrPauseBtn->setToolTip(QStringLiteral("暂停"));
-    }
-    else if(!isPlaying)
-    {
-        ui->playOrPauseBtn->setToolTip(QStringLiteral("播放"));
-    }
+    ui->playOrPauseBtn->setToolTip(QStringLiteral("暂停"));
 
-    if(like)
-    {
-        ui->likeBtn->setToolTip(QStringLiteral("取消收藏"));
-    }
-    else if(!like)
-    {
-        ui->likeBtn->setToolTip(QStringLiteral("收藏"));
-    }
+
     ui->lastSongBtn->setToolTip(QStringLiteral("上一曲"));
     ui->nextSongBtn->setToolTip(QStringLiteral("下一曲"));
-    ui->listBtn->setToolTip(QStringLiteral("显示播放列表"));
     ui->volumeBtn->setToolTip(QStringLiteral("调节音量"));
     ui->closeBtn->setToolTip(QStringLiteral("托盘模式"));
     ui->maxModeBtn->setToolTip(QStringLiteral("显示主界面"));
@@ -272,43 +243,12 @@ void Mini::on_volumeSlider_valueChanged(int vol)//拖拽改变音量时用toolti
 void Mini::on_playOrPauseBtn_clicked()
 {
     volumeSlider->hide();
-    emit sendPlayOrPauseSignal(!isPlaying);
-    if(isPlaying)
-    {
-        ui->playOrPauseBtn->setStyleSheet("QPushButton{ border-image: url(:/image/image/icon_play.png); }");
-        ui->playOrPauseBtn->setToolTip(QStringLiteral("播放"));
-    }
-    else if(!isPlaying)
-    {
-        ui->playOrPauseBtn->setStyleSheet("QPushButton{ border-image: url(:/image/image/mini_pause.png); }");
-        ui->playOrPauseBtn->setToolTip(QStringLiteral("暂停"));
-    }
-    isPlaying = !isPlaying;
+    emit sendPlayOrPauseSignal();
+
 }
 
-/* Author: zyt
- * Name: on_likeBtn_clicked
- * Function: 槽：点击时切换喜欢/不喜欢的图标
- */
-void Mini::on_likeBtn_clicked()
-{
-    /*获取此歌曲是否为喜欢
-   * 默认为不喜欢
-   */
-    volumeSlider->hide();
-    emit sendLikeSignal(!like);
-    if(like)
-    {
-        ui->likeBtn->setStyleSheet("border-image: url(:/image/image/musicform/btn_like_n.png)");
-        ui->likeBtn->setToolTip(QStringLiteral("收藏"));
-    }
-    else if(!like)
-    {
-        ui->likeBtn->setStyleSheet("border-image: url(:/image/image/musicform/btn_unlike_h.png)");
-        ui->likeBtn->setToolTip(QStringLiteral("取消收藏"));
-    }
-    like = !like;
-}
+
+
 
 void Mini::changeVolume(int vol)//改变音量
 {
@@ -322,4 +262,28 @@ void Mini::changeVolume(int vol)//改变音量
         volumeSlider->setValue(vol);
     }
 
+}
+
+void Mini::changePlayOrPauseBtn(bool isPlaying)
+{
+    if(!isPlaying)
+    {
+        ui->playOrPauseBtn->setStyleSheet("QPushButton{ border-image: url(:/image/image/icon_play.png); }");
+        ui->playOrPauseBtn->setToolTip(QStringLiteral("播放"));
+    }
+    else if(isPlaying)
+    {
+        ui->playOrPauseBtn->setStyleSheet("QPushButton{ border-image: url(:/image/image/mini_pause.png); }");
+        ui->playOrPauseBtn->setToolTip(QStringLiteral("暂停"));
+    }
+}
+
+void Mini::on_lastSongBtn_clicked()
+{
+    emit sendLastSignal();
+}
+
+void Mini::on_nextSongBtn_clicked()
+{
+    emit sendNextSignal();
 }

@@ -43,8 +43,8 @@ void Folders::startClose()
     pThread->run();
 }
 
-void Folders::removeContentFromFolder(const int& _folderIndex,
-                                      const int& _contentIndex)
+void Folders::removeContentFromFolder(int _folderIndex,
+                                      int _contentIndex)
 {
     if (!this->rank2Folder->keys().contains(_folderIndex))
         throw MyErrors::FOLDER_INDEX_ERROR;
@@ -152,7 +152,7 @@ bool Folders::hasFolderName(const QString& _folderName)
     return this->folderName2Rank->keys().contains(_folderName);
 }
 
-void Folders::addNewFolder(const QString& _folderName)
+void Folders::addNewFolder(QString _folderName)
 {
     if (!Helper::isLegalName(_folderName) ||
         this->hasFolderName(_folderName))
@@ -163,9 +163,12 @@ void Folders::addNewFolder(const QString& _folderName)
     ++this->pNext;
 }
 
-QList<QString> Folders::getFolderNames() const
+QStringList Folders::getFolderNames() const
 {
-    return this->folderName2Rank->keys();
+    QStringList ans;
+    for (int i = 0; i < this->pNext; ++i)
+        ans.append((*this->rank2Folder)[i].getFolderName());
+    return ans;
 }
 
 Folder& Folders::getFolder(const int& _index)
@@ -196,7 +199,7 @@ void Folders::removeFolder(const int& _index)
     --this->pNext;
 }
 
-void Folders::renameFolder(const int& _index, const QString& _newFolderName)
+void Folders::renameFolder(int _index, QString _newFolderName)
 {
     if (!Helper::isLegalName(_newFolderName))
         throw MyErrors::NAME_ERROR;
@@ -318,4 +321,16 @@ void Folders::addChosenFolderContent2Histories(Histories& _histories)
         _histories.move2First(filePath);
     else  // 不存在则加入
         _histories.addContent(fileName, filePath, isLocal, 0);
+}
+
+QList<QStringList> Folders::getFolderFilePaths() const
+{
+    QList<QStringList> ans;
+    for (int i = 0; i < this->pNext; ++i)
+    {
+        QStringList temp;
+        temp = (*this->rank2Folder)[i].getRankedFilePaths();
+        ans.append(temp);
+    }
+    return ans;
 }

@@ -2,10 +2,11 @@
 #define BOTTOMBAR_H
 
 #include <QWidget>
-#include<QPushButton>
-#include<QLabel>
-#include<QLayout>
-#include<QShortcut>
+#include <QPushButton>
+#include <QLabel>
+#include <QTimer>
+#include <QLayout>
+#include <QShortcut>
 #include "myslider.h"
 #include "bottombutton.h"
 #include "widget.h"
@@ -32,6 +33,11 @@ signals:
     void volumeChanged(int);
     void wheelMoving(int,int);
     void currentPosChanged(int);
+    void lastButton_clicked();
+    void pauseButton_clicked();
+    void nextButton_clicked();
+    void stopButton_clicked();
+    void needPosition();
 
 public slots:
 
@@ -39,7 +45,20 @@ public slots:
     //拖拽播放条时改变当前时间
     void on_playSlider_valueChanged(int);
 
+    //上一个
+    void on_lastButton_clicked();
+    //播放暂停
     void on_pauseButton_clicked();
+    //使进度条随时间走
+    void timePassingBy();
+    //使进度条随时间走
+    void setPlaySliderValue(int);
+    //下一个
+    void on_nextButton_clicked();
+    //停止
+    void on_stopButton_clicked();
+    //改变播放暂停键图标
+    void changePauseButton(bool);
 
     //快进快退秒数修改
     void changePlaySliderPlus(int);
@@ -47,7 +66,7 @@ public slots:
     //静音/恢复音量
     void on_volumeButton_clicked();
     //拖拽改变音量时用tooltip显示当前音量
-    void on_volumeSlider_valueChanged(int);    
+    void on_volumeSlider_valueChanged(int);
     //点击切换音乐/视频模式
     void rcvSwitchModeButton(MediaType& _mediaType);
     //检测鼠标是否移至音量悬浮窗
@@ -96,6 +115,8 @@ public slots:
     void quickMovePlaySliderPlus();
     //快退
     void quickMovePlaySliderMinus();
+    //改变totalTime
+    void setTotalTime(qint64);
 
 
 private:
@@ -156,8 +177,10 @@ private:
 
     int quickMoveTime;//快进快退秒数
 
+    QTimer *timer;
 
-    int volume;//TEST
+
+
 
 };
 

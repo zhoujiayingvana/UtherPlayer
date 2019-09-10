@@ -59,10 +59,18 @@ public:
     QString getFileName(QString);
     void addHistory(QString _name, QString _address);
 
+    void zinit();
+    void moveZHisText2First(const int& fromIndex);
+
 signals:
     void maximizeButton_clicked();
     void durationSignal(int);
     void sendMediaType(MediaType&);
+    void sendNewFolderName(QString);
+    void whetherPlaying(bool);
+    void givingHistoryAddress(QString);
+    void sendFolderNames(QStringList);
+    void getPosition(int);
 
 private slots:
     void currentPosChanged(int);
@@ -144,8 +152,20 @@ private slots:
     //修改主界面自定义图片背景
     void changePicBackGround(QString);
 
+    //上一个
+    void lastFunction();
+
     //播放
     void playFunction();
+    //下一个
+    void nextFunction();
+    //停止
+    void stopFunction();
+    //改变meidia音量
+    void changeVolume(int);
+    //返回现在时间
+    void returnPosition();
+
 
     //截屏
     void shotMyScreen();
@@ -168,6 +188,11 @@ private slots:
 
     void closeEvent(QCloseEvent *event);
 
+    void sltResendPlayInfo(const PlayArea&, const int&, const int&);
+
+    // zyt
+//    void temp_givingHistoryAddress();
+
 private:
     Ui::TMZPlayer *ui;
     QWidget *widget;
@@ -181,7 +206,8 @@ private:
     QHBoxLayout *rightLayout;
     QWidget *middleWidget;
     QVBoxLayout *middleLayout;
-    QVBoxLayout * mMiddleLayout;
+    QWidget *fileWidget;
+    QVBoxLayout * fileLayout;
 
     QVBoxLayout *pLayout;
 

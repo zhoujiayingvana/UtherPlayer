@@ -123,13 +123,12 @@ BottomBar::BottomBar(QWidget *parent) : QWidget(parent)
     definitionButton->setText(QStringLiteral("清晰度"));
     settingsButton->setStyleSheet("QPushButton{ border-image: url(:/image/image/bottomBar/settings.png); }");
     full_screenButton->setStyleSheet("QPushButton{ border-image: url(:/image/image/bottomBar/fullScreen.png); }");
-    //TEST
-    volume = 10;
+
 
 
     //鼠标悬停在按钮上显示提示条
     lastButton->setToolTip(QStringLiteral("上一个"));
-    pauseButton->setToolTip(QStringLiteral("播放"));
+    pauseButton->setToolTip(QStringLiteral("暂停"));
     nextButton->setToolTip(QStringLiteral("下一个"));
     stopButton->setToolTip(QStringLiteral("停止"));
     volumeButton->setToolTip(QStringLiteral("静音"));
@@ -342,7 +341,12 @@ BottomBar::BottomBar(QWidget *parent) : QWidget(parent)
 
 
 
-
+    timer = new QTimer(this);
+    connect(timer,SIGNAL(timeout()),this,SLOT(timePassingBy()));
+    connect(lastButton,SIGNAL(clicked()),this,SLOT(on_lastButton_clicked()));
+    connect(pauseButton,SIGNAL(clicked()),this,SLOT(on_pauseButton_clicked()));
+    connect(nextButton,SIGNAL(clicked()),this,SLOT(on_nextButton_clicked()));
+    connect(stopButton,SIGNAL(clicked()),this,SLOT(on_stopButton_clicked()));
     connect(playSlider,SIGNAL(valueChanged(int)),this,SLOT(on_playSlider_valueChanged(int)));
     connect(volumeButton,SIGNAL(clicked(bool)),this,SLOT(on_volumeButton_clicked()));
     connect(volumeSlider,SIGNAL(valueChanged(int)),this,SLOT(on_volumeSlider_valueChanged(int)));
@@ -360,8 +364,9 @@ BottomBar::BottomBar(QWidget *parent) : QWidget(parent)
 
 }
 
-void BottomBar::on_playSlider_valueChanged(int val)
+void BottomBar::on_playSlider_valueChanged(int value)
 {
+    int val =value/1000;
     if(val/60>=10&&val%60>=10)
     {
         currentPos->setText(QString::number(val/60) + ":" + QString::number(val%60));
@@ -380,12 +385,58 @@ void BottomBar::on_playSlider_valueChanged(int val)
     }
     
 
-    //    emit currentPosChanged(val);
+    emit currentPosChanged(value);
+}
+
+void BottomBar::on_lastButton_clicked()
+{
+    emit lastButton_clicked();
 }
 
 void BottomBar::on_pauseButton_clicked()
 {
-    
+    emit pauseButton_clicked();
+
+}
+
+void BottomBar::timePassingBy()
+{
+    emit needPosition();
+}
+
+void BottomBar::setPlaySliderValue(int val)
+{
+    playSlider->setValue(val);
+}
+
+void BottomBar::on_nextButton_clicked()
+{
+    emit nextButton_clicked();
+
+}
+
+void BottomBar::on_stopButton_clicked()
+{
+    emit stopButton_clicked();
+
+}
+
+void BottomBar::changePauseButton(bool isPlaying)
+{
+    if(isPlaying)
+    {
+        pauseButton->setStyleSheet("QPushButton{ border-image: url(:/image/image/bottomBar/pause.png); }");
+        pauseButton->setToolTip(QStringLiteral("暂停"));
+        timer->start();
+
+    }
+    else
+    {
+        pauseButton->setStyleSheet("QPushButton{ border-image: url(:/image/image/bottomBar/play.png); }");
+        pauseButton->setToolTip(QStringLiteral("播放"));
+        timer->stop();
+
+    }
 }
 
 /**
@@ -408,7 +459,6 @@ void BottomBar::on_volumeButton_clicked()//点击按钮实现静音与恢复音�
 
     if(volumeSlider->value() == 0)
     {
-        volume = 10;
         volumeSlider->setValue(10);
         volumeButton->setStyleSheet("QPushButton{ border-image: url(:/image/image/bottomBar/volume.png); }");
         volumeButton->setToolTip(QStringLiteral("静音"));
@@ -417,12 +467,11 @@ void BottomBar::on_volumeButton_clicked()//点击按钮实现静音与恢复音�
     
     else
     {
-        volume = 0;
         volumeSlider->setValue(0);
         volumeButton->setStyleSheet("QPushButton{ border-image: url(:/image/image/bottomBar/mute.png); }");
         volumeButton->setToolTip(QStringLiteral("恢复音量"));
     }
-    emit volumeSlider->valueChanged(volume);
+    emit volumeSlider->valueChanged(volumeSlider->value());
 }
 
 void BottomBar::on_volumeSlider_valueChanged(int vol)//拖拽改变音量时用tooltip显示当前音量
@@ -437,10 +486,13 @@ void BottomBar::on_volumeSlider_valueChanged(int vol)//拖拽改变音量时用t
         volumeButton->setStyleSheet("QPushButton{ border-image: url(:/image/image/bottomBar/volume.png); }");
 
     }
+    emit volumeChanged(vol);
+
 }
 
 void BottomBar::rcvSwitchModeButton(MediaType& _mediaType)//点击切换音乐/视频模式
 {
+    timer->start(100);
     if(_mediaType == MediaType::VIDEO)  // 视频模式
     {
         setFixedHeight(70);
@@ -659,6 +711,30 @@ void BottomBar::quickMovePlaySliderMinus()
 {
     playSlider->setValue(playSlider->value()-quickMoveTime);
 }
+
+void BottomBar::setTotalTime(qint64 value)
+{
+    int val = value/1000;
+    if(val/60>=10&&val%60>=10)
+    {
+        totalTime->setText(QString::number(val/60) + ":" + QString::number(val%60));
+    }
+    else if (val/60<10&&val%60>=10)
+    {
+        totalTime->setText("0" + QString::number(val/60) + ":" + QString::number(val%60));
+    }
+    else if (val/60>=10&&val%60<10)
+    {
+        totalTime->setText(QString::number(val/60) + ":" + "0" + QString::number(val%60));
+    }
+    else
+    {
+        totalTime->setText("0" + QString::number(val/60) + ":" + "0" + QString::number(val%60));
+    }
+    playSlider->setMaximum(value);
+
+}
+
 /**
 * @method        BottomBar::connectSettingAndBottom
 * @brief         连接设置界面
@@ -700,7 +776,7 @@ void BottomBar::connectSettingAndBottom(SettingWindow *settingWindow)
 void BottomBar::startPlaying(int time)
 {
     int total = time/1000;
-    playSlider->setMaximum(total);
+    playSlider->setMaximum(time);
     if(total/60>=10&&total%60>=10)
     {
         totalTime->setText(QString::number(total/60) + ":" + QString::number(total%60));
