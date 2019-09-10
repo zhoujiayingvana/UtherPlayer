@@ -61,7 +61,11 @@ signals:
     void maximizeButton_clicked();
     void durationSignal(int);
     void sendMediaType(MediaType&);
+<<<<<<< HEAD
     void sendNewFolderName(QString);
+=======
+    void whetherPlaying(bool);
+>>>>>>> 54c4eb72aac15550250826831ee62f10a66c6ec0
 
 private slots:
     void currentPosChanged(int);
@@ -141,8 +145,18 @@ private slots:
     //修改主界面自定义图片背景
     void changePicBackGround(QString);
 
+    //上一个
+    void lastFunction();
+
     //播放
     void playFunction();
+    //下一个
+    void nextFunction();
+    //停止
+    void stopFunction();
+    //改变meidia音量
+    void changeVolume(int);
+
 
     //截屏
     void shotMyScreen();
