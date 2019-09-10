@@ -376,7 +376,7 @@ void BottomBar::on_playSlider_valueChanged(int val)
     }
     
 
-    //    emit currentPosChanged(val);
+    emit currentPosChanged(val);
 }
 
 void BottomBar::on_lastButton_clicked()
@@ -693,9 +693,9 @@ void BottomBar::quickMovePlaySliderMinus()
     playSlider->setValue(playSlider->value()-quickMoveTime);
 }
 
-void BottomBar::setTotalTime(qint64 val)
+void BottomBar::setTotalTime(qint64 value)
 {
-    qDebug()<<val<<"a";
+    int val = value/1000;
     if(val/60>=10&&val%60>=10)
     {
         totalTime->setText(QString::number(val/60) + ":" + QString::number(val%60));
@@ -712,6 +712,7 @@ void BottomBar::setTotalTime(qint64 val)
     {
         totalTime->setText("0" + QString::number(val/60) + ":" + "0" + QString::number(val%60));
     }
+    playSlider->setMaximum(val);
 
 }
 /**

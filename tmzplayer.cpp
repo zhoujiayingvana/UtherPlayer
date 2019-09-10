@@ -127,20 +127,20 @@ TMZPlayer::TMZPlayer(QWidget *parent,Media* m) :
     rightLayout->addWidget(ui->hideRightBarBtn);
     rightLayout->addWidget(ui->historyList);
     rightLayout->addWidget(ui->showRightBarBtn);
-    mMiddleLayout = new QVBoxLayout(space);
-    QWidget * a = new QWidget(space);//test
-    a->setAutoFillBackground(true);//test
-    QHBoxLayout *b = new QHBoxLayout(a);//test
-    b->addWidget(ui->listNameLabel);//test
-    b->setContentsMargins(0, 0, 0, 0);//test
-    ui->listNameLabel->setFixedHeight(50);
-    ui->listNameLabel->setCursor(Qt::ArrowCursor);
-    ui->displayList->setCursor(Qt::ArrowCursor);
+//    mMiddleLayout = new QVBoxLayout(space);
+//    QWidget * a = new QWidget(space);//test
+//    a->setAutoFillBackground(true);//test
+//    QHBoxLayout *b = new QHBoxLayout(a);//test
+//    b->addWidget(ui->listNameLabel);//test
+//    b->setContentsMargins(0, 0, 0, 0);//test
+//    ui->listNameLabel->setFixedHeight(50);
+//    ui->listNameLabel->setCursor(Qt::ArrowCursor);
+//    ui->displayList->setCursor(Qt::ArrowCursor);
 
-    mMiddleLayout->setContentsMargins(0, 0, 0, 0);
-    mMiddleLayout->setSpacing(0);
-    mMiddleLayout->addWidget(a);
-    mMiddleLayout->addWidget(ui->displayList);
+//    mMiddleLayout->setContentsMargins(0, 0, 0, 0);
+//    mMiddleLayout->setSpacing(0);
+//    mMiddleLayout->addWidget(a);
+//    mMiddleLayout->addWidget(ui->displayList);
     space->show();
     middleLayout->addWidget(space);
     
@@ -262,8 +262,8 @@ TMZPlayer::TMZPlayer(QWidget *parent,Media* m) :
     connect(this, SIGNAL(sendMediaType(MediaType&)),
             pBottomBar, SLOT(rcvSwitchModeButton(MediaType&)));
     //获取视频总时长
-    connect(media->getController(), SIGNAL(media->getController()->returnInitDuration(qint64)),
-            pBottomBar, SLOT(setTotalTime()));
+    connect(media->getController(), SIGNAL(returnInitDuration(qint64)),
+            pBottomBar, SLOT(setTotalTime(qint64)));
 
     
     
@@ -307,6 +307,10 @@ bool TMZPlayer::nativeEvent(const QByteArray &eventType, void *message, long *re
     
     const int HIT_BORDER = 5;
     const MSG *msg=static_cast<MSG*>(message);
+
+
+
+    qDebug()<<msg->message<<WM_NCHITTEST;
     if(msg->message == WM_NCHITTEST)
     {
         int xPos = GET_X_LPARAM(msg->lParam) - this->geometry().x();
@@ -316,8 +320,7 @@ bool TMZPlayer::nativeEvent(const QByteArray &eventType, void *message, long *re
         {
             return QWidget::nativeEvent(eventType, message, result);
         }
-        
-        *result = HTCAPTION;
+
         
         //鼠标在边框上则缩放
         if(xPos > 0 && xPos < HIT_BORDER)
@@ -921,8 +924,9 @@ void TMZPlayer::on_miniMode_clicked()
 void TMZPlayer::miniToMaxSlot()
 {
     mini->hide();
-    changeBackGround(currentQss);
     this->show();
+    space->show();
+    changeBackGround(currentQss);
 }
 
 /* Author: zyt
