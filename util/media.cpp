@@ -468,7 +468,7 @@ void Media::startCreateGif(WId wid, QString fileName, QString filePath)
         qDebug()<<"Media StartCreateGif() "<<Debug::getDebugErrorType(Debug::MyErrors::FILE_PATH_ERROR);
         return;
     }
-    this->media_GifFullPath=filePath+fileName+".gif";
+    this->media_GifFullPath=filePath+"/"+fileName+".gif";
     //开始gif录制线程
     this->media_WId=wid;
     this->start();
