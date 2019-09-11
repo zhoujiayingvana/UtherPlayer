@@ -224,12 +224,12 @@ void TitleBar::mousePressEvent(QMouseEvent *event)//拖拽界面
     }
 }
 
-void TitleBar::on_miniButton_clicked()
+void TitleBar::on_miniButton_clicked()//转到mini模式
 {
     emit miniMode();
 }
 
-void TitleBar::on_fileButton_clicked()
+void TitleBar::on_fileButton_clicked()//发射信号打开文件
 {
     emit openFile_clicked();
 }
