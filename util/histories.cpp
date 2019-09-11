@@ -25,6 +25,8 @@ Histories& Histories::operator =(const Histories& other)
     this->pNext = other.pNext;
     this->pChosen = other.pChosen;
     this->rank2content = new QMap<int, HistoricalContent>(*other.rank2content);
+    return *this;
+
 }
 
 void Histories::testPrint() const

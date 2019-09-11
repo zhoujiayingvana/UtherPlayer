@@ -30,6 +30,7 @@ TitleBar::TitleBar(QWidget *parent) : QWidget(parent)
 
     iconLabel = new QLabel(this); //标题栏图标
     titleLabel = new QLabel(this); //标题栏标题
+    fileButton = new QPushButton(this); //文件按钮
     SettingsButton = new QPushButton(this); //设置按钮
     SkinButton = new MySkinMenuButton(this); //换肤按钮
     miniButton = new QPushButton(this); //迷你模式按钮
@@ -37,6 +38,7 @@ TitleBar::TitleBar(QWidget *parent) : QWidget(parent)
     maximizeButton = new QPushButton(this); //最大化/还原按钮
     closeButton = new QPushButton(this);//关闭窗口按钮
 
+    fileButton->setFocusPolicy(Qt::NoFocus);
     SettingsButton->setFocusPolicy(Qt::NoFocus);
     SkinButton->setFocusPolicy(Qt::NoFocus);
     miniButton->setFocusPolicy(Qt::NoFocus);
@@ -47,6 +49,7 @@ TitleBar::TitleBar(QWidget *parent) : QWidget(parent)
 
     iconLabel->setObjectName("iconLabel");
     titleLabel->setObjectName("titleLabel");
+    fileButton->setObjectName("fileButton");
     SettingsButton->setObjectName("settingsButton");
     SkinButton->setObjectName("SkinButton");
     miniButton->setObjectName("miniButton");
@@ -57,6 +60,7 @@ TitleBar::TitleBar(QWidget *parent) : QWidget(parent)
     //固定按钮大小
 	iconLabel->setFixedSize(30, 30);
 	titleLabel->setFixedSize(30, 30);
+    fileButton->setFixedSize(30, 30);
 	SettingsButton->setFixedSize(30, 30);
 	SkinButton->setFixedSize(30, 30);
 	miniButton->setFixedSize(30, 30);
@@ -65,6 +69,7 @@ TitleBar::TitleBar(QWidget *parent) : QWidget(parent)
 	closeButton->setFixedSize(30, 30);
 
     //去除按钮边框
+    fileButton->setFlat(true);
     SettingsButton->setFlat(true);
     SkinButton->setFlat(true);
     miniButton->setFlat(true);
@@ -73,7 +78,7 @@ TitleBar::TitleBar(QWidget *parent) : QWidget(parent)
     closeButton->setFlat(true);
 
 
-    //test
+    fileButton->setStyleSheet("QPushButton{ border-image: url(:/image/image/titleBar/file.png); }");
     SettingsButton->setStyleSheet("QPushButton{ border-image: url(:/image/image/titleBar/settings.png); }");
     SkinButton->setStyleSheet("QPushButton{ border-image: url(:/image/image/titleBar/skin.png); }");
     miniButton->setStyleSheet("QPushButton{ border-image: url(:/image/image/titleBar/mini.png); }");
@@ -83,6 +88,7 @@ TitleBar::TitleBar(QWidget *parent) : QWidget(parent)
 
 
     //鼠标悬停在按钮上显示提示条
+    fileButton->setToolTip(QStringLiteral("打开文件"));
     SettingsButton->setToolTip(QStringLiteral("设置"));
     SkinButton->setToolTip(QStringLiteral("换肤"));
     miniButton->setToolTip(QStringLiteral("迷你模式"));
@@ -91,6 +97,7 @@ TitleBar::TitleBar(QWidget *parent) : QWidget(parent)
     closeButton->setToolTip(QStringLiteral("关闭"));
 
     //改变光标样式
+    fileButton->setCursor(Qt::PointingHandCursor);
     SettingsButton->setCursor(Qt::PointingHandCursor);
     SkinButton->setCursor(Qt::PointingHandCursor);
     miniButton->setCursor(Qt::PointingHandCursor);
@@ -106,6 +113,7 @@ TitleBar::TitleBar(QWidget *parent) : QWidget(parent)
     TitleBarLayout->addWidget(iconLabel);
     TitleBarLayout->addWidget(titleLabel);
     TitleBarLayout->addWidget(space);
+    TitleBarLayout->addWidget(fileButton);
     TitleBarLayout->addWidget(SkinButton);
     TitleBarLayout->addWidget(SettingsButton);
     TitleBarLayout->addWidget(miniButton);
@@ -118,7 +126,11 @@ TitleBar::TitleBar(QWidget *parent) : QWidget(parent)
 
     closeStatus=1;//关闭界面
 
+    //快捷键初始化
+    fileButton->setShortcut(QKeySequence("Ctrl+O"));
+
     connectSettingAndTitle();
+
 
     //打开设置界面
     connect(SettingsButton,SIGNAL(clicked()),this,SLOT(on_SettingsButton_clicked()));
@@ -129,12 +141,14 @@ TitleBar::TitleBar(QWidget *parent) : QWidget(parent)
 
 
     //连接信号
+    connect(fileButton,SIGNAL(clicked()),this,SLOT(on_fileButton_clicked()));
     connect(minimizeButton,SIGNAL(clicked(bool)),this,SLOT(on_minimizeButton_clicked()));
     connect(maximizeButton,SIGNAL(clicked(bool)),this,SLOT(on_maximizeButton_clicked()));
     connect(closeButton,SIGNAL(clicked(bool)),this,SLOT(on_closeButton_clicked()));
     connect(miniButton,SIGNAL(clicked(bool)),this,SLOT(on_miniButton_clicked()));
-    qDebug()<<p;
+
 }
+
 
 void TitleBar::on_minimizeButton_clicked()//最小化
 {
@@ -210,6 +224,11 @@ void TitleBar::on_miniButton_clicked()
     emit miniMode();
 }
 
+void TitleBar::on_fileButton_clicked()
+{
+    emit openFile_clicked();
+}
+
 /**
 * @method        TitleBar::on_SettingsButton_clicked
 * @brief         打开设置界面
@@ -237,6 +256,8 @@ void TitleBar::connectSettingAndTitle()
             p,SLOT(changePicBackGround(QString)));//换图片背景
     connect(settingWindow,SIGNAL(sigCloseChange(int)),
             this,SLOT(changeCloseStatus(int)));//关闭/最小化托盘
+    connect(settingWindow,SIGNAL(sigOpenFileShortcut(QString)),//打开文件快捷键修改
+            this,SLOT(changeOpenFileShortcut(QString)));
 }
 
 /**
@@ -249,6 +270,19 @@ void TitleBar::connectSettingAndTitle()
 */
 void TitleBar::changeFontType(QFont *font)
 {
+
+}
+/**
+* @method        TitleBar::changeOpenFileShortcut
+* @brief         打开文件快捷键修改
+* @param         QSTRING
+* @return        VOID
+* @author        涂晴昊
+* @date          2019-09-09
+*/
+void TitleBar::changeOpenFileShortcut(QString str)
+{
+    fileButton->setShortcut(QKeySequence(str.toLatin1().data()));
 
 }
 

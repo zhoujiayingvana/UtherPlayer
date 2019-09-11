@@ -104,19 +104,6 @@
       </property>
       <layout class="QVBoxLayout" name="leftsideBarLayout"/>
      </widget>
-     <widget class="QPushButton" name="openFile">
-      <property name="geometry">
-       <rect>
-        <x>190</x>
-        <y>200</y>
-        <width>75</width>
-        <height>23</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>PushButton</string>
-      </property>
-     </widget>
     </widget>
    </widget>
    <widget class="QPushButton" name="showRightBarBtn">

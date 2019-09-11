@@ -11,7 +11,8 @@
 
 TMZPlayer::TMZPlayer(QWidget *parent,Media* m) :
     QMainWindow(parent),
-    ui(new Ui::TMZPlayer),media(m)
+    ui(new Ui::TMZPlayer),media(m),
+    lastPos(0)
 {
     ui->setupUi(this);
     resize(1280,768);
@@ -37,8 +38,7 @@ TMZPlayer::TMZPlayer(QWidget *parent,Media* m) :
     connect(recordTimer,SIGNAL(timeout()),this,SLOT(recordMyScreen()));
     userEnd=0;
 
-    //快捷键初始化
-    ui->openFile->setShortcut(QKeySequence("Ctrl+O"));
+
     
     pTitleBar = new TitleBar(this);
     //    pTitleBar->setAutoFillBackground(true);//test
@@ -65,8 +65,8 @@ TMZPlayer::TMZPlayer(QWidget *parent,Media* m) :
     mini = new Mini(this);
     sysTrayIcon = new QSystemTrayIcon(this);
     
-    
-    
+
+
     downloadListBtn = new QPushButton(this);
     downloadListBtn->setFlat(true);
     downloadListBtn->setText(QStringLiteral(" 我的下载"));
@@ -118,13 +118,7 @@ TMZPlayer::TMZPlayer(QWidget *parent,Media* m) :
     
     sysTrayIcon->show();
     
-    //9.9
-    historyLayout = new QBoxLayout(QBoxLayout::BottomToTop);
-    historyLayout->setAlignment(Qt::AlignTop | Qt::AlignVCenter);
-    
-    ui->rightsideBar->setLayout(historyLayout);
-    ui->historyList
-            ->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+
     
     
     middleBarLayout = new QHBoxLayout();
@@ -265,8 +259,7 @@ TMZPlayer::TMZPlayer(QWidget *parent,Media* m) :
             this, SLOT(downloadFilesChangesSlot(int, QList<QString>)));
     
     //9.9
-    connect(pTitleBar->settingWindow,SIGNAL(sigOpenFileShortcut(QString)),//打开文件快捷键修改
-            this,SLOT(changeOpenFileShortcut(QString)));
+
     connect(pTitleBar->settingWindow,SIGNAL(sigLouderShortcut(QString)),//换音量增快捷键
             this,SLOT(changeLouderShortcut(QString)));
     connect(pTitleBar->settingWindow,SIGNAL(sigLowerShortcut(QString)),//换音量减快捷键
@@ -316,13 +309,11 @@ TMZPlayer::TMZPlayer(QWidget *parent,Media* m) :
     //获取视频总时长
     connect(media->getController(), SIGNAL(returnInitDuration(qint64)),
             pBottomBar, SLOT(setTotalTime(qint64)));
+    //得到信号打开文件
+    connect(pTitleBar,SIGNAL(openFile_clicked()),this,SLOT(on_openFile_clicked()));
 
 
 
-    addHistory("no.1","address");
-    addHistory("no.2","adddddress");
-    
-    
     //    connect(settingAction,SIGNAL(triggered()),//托盘模式打开设置窗口
     //            pTitleBar->settingWindow,SLOT(setVisible(true)));
     //    connect(pTitleBar->settingWindow,SIGNAL(sigPlayDirChange(QString)),//修改媒体库目录
@@ -346,8 +337,7 @@ TMZPlayer::TMZPlayer(QWidget *parent,Media* m) :
     qDebug()<<this;
     
     
-    
-    ui->openFile->setParent(widget);
+
     
     
     // 建立
@@ -525,8 +515,8 @@ void TMZPlayer::addListSlot()
     // 在左边的连接
     connect(playlistsContainer.at(playlistsContainer.length() - 1),
             SIGNAL(sendPlayInfo(const PlayArea&,const int&, const int&)),
-            this->media,
-            SLOT(play(const PlayArea&, const int&, const int&)));
+            this,
+            SLOT(sltResendPlayInfo(const PlayArea&, const int&, const int&)));
 
     connect(playlistsContainer.at(playlistsContainer.length() - 1),
             SIGNAL(removeContent(int,int)),
@@ -659,18 +649,7 @@ void TMZPlayer::changeQuickMoveMinusShortcut(QString str)
     quickMoveMinus->setKey(str);
 }
 
-/**
-* @method        TMZPlayer::changeOpenFileShortcut
-* @brief         打开文件快捷键修改
-* @param         QSTRING
-* @return        VOID
-* @author        涂晴昊
-* @date          2019-09-09
-*/
-void TMZPlayer::changeOpenFileShortcut(QString str)
-{
-    ui->openFile->setShortcut(QKeySequence(str.toLatin1().data()));
-}
+
 
 /**
 * @method        TMZPlayer::changeLuminAddShortcut
@@ -1400,125 +1379,165 @@ void TMZPlayer::sltResendPlayInfo(const PlayArea& playArea,
                                   const int& secondRank)
 {
     this->media->play(playArea, firstRank, secondRank);
+    qint64 what = media->getController()->getDuration();
+    emit durationSignal(static_cast<int>(what));
     MediaType currentMediaType = this->media->getCurrentMediaType();
     emit sendMediaType(currentMediaType);
+    this->flushHisUI();
+}
+
+void TMZPlayer::flushHisUI()
+{
+    QList<QStringList> whatsStrings = this->media->getHistories().get4Client();
+    for (int i = 0; i < whatsStrings.length(); ++i)
+        addHistory(whatsStrings[i][0], whatsStrings[i][1], i);
+    for (int i = whatsStrings.length(); i < 12; ++i)
+        addHistory("", "", i);
+}
+
+
+// 双击历史记录，发送该历史记录的文件地址
+void TMZPlayer::givingHistoryAddressToPlay()
+{
+    history* temp_history = qobject_cast<history*>(sender());
+    QString address = temp_history->getAddress();
+    emit playFileAddress(address);
+}
+
+// 点击删除按钮，发送该删除的历史记录的文件地址
+void TMZPlayer::givingHistoryAddressToDelete(QString)
+{
+    history* temp_history = qobject_cast<history*>(sender());
+    QString address = temp_history->getAddress();
+    emit deleteFileAddress(address);
+}
+
+void TMZPlayer::sltDelHistoricalContent(const int& _index)
+{
+    this->media->getHistories().removeContent(_index);
+    this->flushHisUI();
 }
 
 /* Author: zyt
  * Name: addHistory
  * Function: 增加新的一条历史记录
  */
-void TMZPlayer::addHistory(QString _name, QString _address)
+void TMZPlayer::addHistory(QString _name, QString _address, int where)
 {
-    if(historyContainer.length() == 12)
-    {
-        delete historyContainer.last();
-    }
-
-    historyContainer.insert(0,new history);
-    historyContainer.first()->setNameAndAddress(_name,_address);
-
-    historyLayout->addWidget(historyContainer.first());
-    
-    connect(historyContainer.first(),SIGNAL(historyDoubleClicked()),
-            this,SLOT(givingHistoryAddress()));
+    this->historyContainer[where]->setNameAndAddress(
+        _name, _address
+    );
 }
 
 void TMZPlayer::zinit()
 {
-    //
-//    history* his = new history;
-//    his->setNameAndAddress("123","123123");
-//    historyLayout->addWidget(his);
-
     historyLayout = new QBoxLayout(QBoxLayout::BottomToTop);
-    historyLayout->setAlignment(Qt::AlignTop | Qt::AlignVCenter);
+      historyLayout->setAlignment(Qt::AlignTop);
 
-    ui->rightsideBar->setLayout(historyLayout);
-    ui->historyList->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+      ui->rightsideBar->setLayout(historyLayout);
+      ui->historyList->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
-    connect(ui->displayList,
-           SIGNAL(sendTempPlayInfo(const PlayArea&,const int&, const int&)),
-           this->media,
-           SLOT(play(const PlayArea&, const int&, const int&)));
+      // 初始化历史纪录,12个
+      for(int i = 0; i < 12; i++)
+        {
+          history* tempHistory = new history(nullptr, i);
+          historyContainer.append(tempHistory);
+          tempHistory->setNameAndAddress("", "");
+          connect(tempHistory,SIGNAL(historyDoubleClicked()),
+                  this,SLOT(givingHistoryAddressToPlay()));
+          connect(tempHistory,SIGNAL(deleteHistorySignal(QString)),
+                  this,SLOT(givingHistoryAddressToDelete(QString)));
+          connect(tempHistory,
+                  SIGNAL(sigPlayHistoricalContent(const PlayArea&, const int&, const int&)),
+                  this,
+                  SLOT(sltResendPlayInfo(const PlayArea&, const int&, const int&)));
+          connect(tempHistory,
+                  SIGNAL(sigDeleteHistoricalContent(const int&)),
+                  this,
+                  SLOT(sltDelHistoricalContent(const int&)));
+        }
+      for(int i = 11; i >= 0; --i)
+        {
+          historyLayout->addWidget(historyContainer.at(i));
+        }
+
+      connect(ui->displayList,
+              SIGNAL(sendTempPlayInfo(const PlayArea&,const int&, const int&)),
+              this->media,
+              SLOT(play(const PlayArea&, const int&, const int&)));
 
 
-    QStringList oldFolders = this->media->getFolders().getFolderNames();
-    QList<QStringList> oldFiles = this->media->getFolders().getFolderFilePaths();
+      QStringList oldFolders = this->media->getFolders().getFolderNames();
+      QList<QStringList> oldFiles = this->media->getFolders().getFolderFilePaths();
 
-    for(int i = 0; i< oldFolders.length(); i++)
-    {
-        playlistsContainer.append(new mergedPlaylist);
-        playlistsContainer.last()->setListName(oldFolders.at(i));
-        playlistsContainer.last()->setFileInList(oldFiles.at(i));
-        playlistsContainer.last()->showOldContents();
+      for(int i = 0; i< oldFolders.length(); i++)
+        {
+          playlistsContainer.append(new mergedPlaylist);
+          playlistsContainer.last()->setListName(oldFolders.at(i));
+          playlistsContainer.last()->setFileInList(oldFiles.at(i));
+          playlistsContainer.last()->showOldContents();
 
-        listBoxLayout->addWidget(playlistsContainer.at(playlistsContainer.length() - 1));
+          listBoxLayout->addWidget(playlistsContainer.at(playlistsContainer.length() - 1));
 
-        connect(playlistsContainer.at(playlistsContainer.length() - 1),
-        SIGNAL(givingTempSNAndFiles(int, QList<QString>)),
-        ui->displayList,
-        SLOT(recevingSNAndFiles(int, QList<QString>)));
+          connect(playlistsContainer.at(playlistsContainer.length() - 1),
+                  SIGNAL(givingTempSNAndFiles(int, QList<QString>)),
+                  ui->displayList,
+                  SLOT(recevingSNAndFiles(int, QList<QString>)));
 
-        connect(ui->displayList,
-        SIGNAL(changeFilesInListSignal(int, QList<QString>)),
-        playlistsContainer.at(playlistsContainer.length() - 1),
-        SLOT(changeFilesInListSlot(int, QList<QString>)));
+          connect(ui->displayList,
+                  SIGNAL(changeFilesInListSignal(int, QList<QString>)),
+                  playlistsContainer.at(playlistsContainer.length() - 1),
+                  SLOT(changeFilesInListSlot(int, QList<QString>)));
 
-        connect(playlistsContainer.at(playlistsContainer.length() - 1),
-        SIGNAL(showChangedListSignal(int, QList<QString>)),
-        ui->displayList,
-        SLOT(showChangedListSlot(int, QList<QString>)));
+          connect(playlistsContainer.at(playlistsContainer.length() - 1),
+                  SIGNAL(showChangedListSignal(int, QList<QString>)),
+                  ui->displayList,
+                  SLOT(showChangedListSlot(int, QList<QString>)));
 
-        connect(playlistsContainer.at(playlistsContainer.length() - 1),
-        SIGNAL(givingListName(QString)),
-        this,
-        SLOT(receivingListName(QString)));
+          connect(playlistsContainer.at(playlistsContainer.length() - 1),
+                  SIGNAL(givingListName(QString)),
+                  this,
+                  SLOT(receivingListName(QString)));
 
-        connect(playlistsContainer.at(playlistsContainer.length() - 1),
-        SIGNAL(hideContentsExceptThisSignal(int)),
-        this,
-        SLOT(hideContentsExceptThisSlot(int)));
+          connect(playlistsContainer.at(playlistsContainer.length() - 1),
+                  SIGNAL(hideContentsExceptThisSignal(int)),
+                  this,
+                  SLOT(hideContentsExceptThisSlot(int)));
 
-        connect(playlistsContainer.at(playlistsContainer.length() - 1),
-        SIGNAL(allowDragAndMenuSignal()),
-        this,
-        SLOT(allowDragAndMenuSlot()));
+          connect(playlistsContainer.at(playlistsContainer.length() - 1),
+                  SIGNAL(allowDragAndMenuSignal()),
+                  this,
+                  SLOT(allowDragAndMenuSlot()));
 
-        // 收藏夹改名
-        connect(
-        playlistsContainer.at(playlistsContainer.length() - 1),
-        SIGNAL(sendFolderName(int,QString)),
-        &this->media->getFolders(),
-        SLOT(renameFolder(int, QString))
-        );
-
-    // 向收藏夹中添加内容
-        connect(playlistsContainer.at(playlistsContainer.length() - 1),
-        SIGNAL(sendAddFileToFolder(const int&, const QString& ,const QString&, const bool&)),
-        &this->media->getFolders(),
-        SLOT(addContent2Folder(const int&, const QString&,
-                         const QString&, const bool&)));
-
-        // 在左边的连接
-        connect(playlistsContainer.at(playlistsContainer.length() - 1),
-        SIGNAL(sendPlayInfo(const PlayArea&,const int&, const int&)),
-        this,
-        SLOT(sltResendPlayInfo(const PlayArea&, const int&, const int&)));
-
-        connect(playlistsContainer.at(playlistsContainer.length() - 1),
-                SIGNAL(removeContent(int,int)),
+          // 收藏夹改名
+          connect(
+                playlistsContainer.at(playlistsContainer.length() - 1),
+                SIGNAL(sendFolderName(int,QString)),
                 &this->media->getFolders(),
-                SLOT(removeContentFromFolder(int, int)));
-    }
+                SLOT(renameFolder(int, QString))
+                );
+
+          // 向收藏夹中添加内容
+          connect(playlistsContainer.at(playlistsContainer.length() - 1),
+                  SIGNAL(sendAddFileToFolder(const int&, const QString& ,const QString&, const bool&)),
+                  &this->media->getFolders(),
+                  SLOT(addContent2Folder(const int&, const QString&,
+                                         const QString&, const bool&)));
+
+          // 在左边的连接
+          connect(playlistsContainer.at(playlistsContainer.length() - 1),
+                  SIGNAL(sendPlayInfo(const PlayArea&,const int&, const int&)),
+                  this,
+                  SLOT(sltResendPlayInfo(const PlayArea&, const int&, const int&)));
+
+          connect(playlistsContainer.at(playlistsContainer.length() - 1),
+                  SIGNAL(removeContent(int,int)),
+                  &this->media->getFolders(),
+                  SLOT(removeContentFromFolder(int, int)));
+        }
 
 
-    QList<QStringList> what = this->media->getHistories().get4Client();
-    for (QStringList stringList: what)
-        this->addHistory(stringList[0], stringList[1]);
-
-
-
+      this->flushHisUI();
 }
 
 void TMZPlayer::moveZHisText2First(const int& fromIndex)
