@@ -58,8 +58,8 @@ SettingWindow::SettingWindow(QWidget *parent,Media * m) :
     ui->quickMoveSpinBox->setMinimum(0);
     ui->quickMoveSpinBox->setMaximum(30);
     ui->quickMoveSpinBox->setSpecialValueText(tr("Automatic"));
-    ui->quickMoveSlider->setValue(5);
-    ui->quickMoveSpinBox->setValue(5);
+    ui->quickMoveSlider->setValue(1);
+    ui->quickMoveSpinBox->setValue(1);
     ui->quickMoveSpinBox->setSuffix("s");
     ui->quickMoveSpinBox->setWrapping(true);
 
@@ -663,7 +663,7 @@ void SettingWindow::on_screenRecordEdit_textChanged(const QString &arg1)
 */
 void SettingWindow::on_radioButton_clicked()
 {
-    emit sigSpeedChange(1);
+    emit sigSpeedChange(0);
 }
 
 /**
@@ -676,7 +676,7 @@ void SettingWindow::on_radioButton_clicked()
 */
 void SettingWindow::on_radioButton_2_clicked()
 {
-    emit sigSpeedChange(2);
+    emit sigSpeedChange(1);
 }
 
 /**
@@ -689,7 +689,7 @@ void SettingWindow::on_radioButton_2_clicked()
 */
 void SettingWindow::on_radioButton_3_clicked()
 {
-    emit sigSpeedChange(3);
+    emit sigSpeedChange(2);
 }
 
 /**
@@ -702,7 +702,7 @@ void SettingWindow::on_radioButton_3_clicked()
 */
 void SettingWindow::on_radioButton_4_clicked()
 {
-    emit sigSpeedChange(4);
+    emit sigSpeedChange(3);
 }
 
 /**
@@ -752,7 +752,7 @@ void SettingWindow::speedChange(int s)
 
 /**
 * @method        SettingWindow::on_lv1Button_2_clicked
-* @brief         普通播放
+* @brief         默认播放
 * @param         VOID
 * @return        VOID
 * @author        涂晴昊
@@ -765,7 +765,7 @@ void SettingWindow::on_lv1Button_2_clicked()
 
 /**
 * @method        SettingWindow::on_lv2Button_2_clicked
-* @brief         清晰播放
+* @brief         明亮播放
 * @param         VOID
 * @return        VOID
 * @author        涂晴昊
@@ -778,7 +778,7 @@ void SettingWindow::on_lv2Button_2_clicked()
 
 /**
 * @method        SettingWindow::on_lv3Button_2_clicked
-* @brief         高清播放
+* @brief         柔和播放
 * @param         VOID
 * @return        VOID
 * @author        涂晴昊
@@ -791,7 +791,7 @@ void SettingWindow::on_lv3Button_2_clicked()
 
 /**
 * @method        SettingWindow::lv1DefinitionChange
-* @brief         主界面->设置界面普通清晰播放
+* @brief         主界面->设置界面默认风格播放
 * @param         VOID
 * @return        VOID
 * @author        涂晴昊
@@ -804,7 +804,7 @@ void SettingWindow::lv1DefinitionChange()
 
 /**
 * @method        SettingWindow::lv2DefinitionChange
-* @brief         主界面->设置界面清晰清晰播放
+* @brief         主界面->设置界面明亮风格播放
 * @param         VOID
 * @return        VOID
 * @author        涂晴昊
@@ -817,7 +817,7 @@ void SettingWindow::lv2DefinitionChange()
 
 /**
 * @method        SettingWindow::lv3DefinitionChange
-* @brief         主界面->设置界面高清清晰播放
+* @brief         主界面->设置界面柔和风格播放
 * @param         VOID
 * @return        VOID
 * @author        涂晴昊

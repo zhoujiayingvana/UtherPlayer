@@ -91,7 +91,7 @@ QGroupBox {
 }
 QGroupBox::title {
         color: rgb(56, 99, 154);
-        top: -12px;
+        top: -6px;
         left: 10px;
 }
 
@@ -349,7 +349,3 @@ QScrollBar#verticalScrollBar:vertical {
         margin-top: 30px;
 }
 
-QPushButton #deleteBtn{
-background:transparent;
- image: url(qrc:/image/image/btn_delete_n.png);
-}

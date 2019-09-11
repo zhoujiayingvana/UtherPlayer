@@ -202,6 +202,17 @@ private slots:
     //修改主界面亮度
     void changeLumin(int);
 
+    //视频快进
+    void quickMoveMediaPlus();
+    //视频快退
+    void quickMoveMediaMinus();
+
+    //修改视频播放倍速
+    void changeMediaSpeed(int);
+
+    //更换滤镜风格
+    void changeMediaStyle(int);
+
     void on_openFile_clicked();
 
     void closeEvent(QCloseEvent *event);
