@@ -1,3 +1,9 @@
+/**
+* @projectName   UtherPlayer
+* @brief         快捷键edit
+* @author        涂晴昊
+* @date          2019-09-11
+*/
 #ifndef MYLINEEDIT_H
 #define MYLINEEDIT_H
 

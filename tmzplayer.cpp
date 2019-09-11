@@ -330,15 +330,6 @@ TMZPlayer::TMZPlayer(QWidget *parent,Media* m) :
     connect(this,SIGNAL(stopPlaying()),pBottomBar,SLOT(clearPlaySlider()));
 
 
-
-
-    //    connect(settingAction,SIGNAL(triggered()),//托盘模式打开设置窗口
-    //            pTitleBar->settingWindow,SLOT(setVisible(true)));
-    //    connect(pTitleBar->settingWindow,SIGNAL(sigPlayDirChange(QString)),//修改媒体库目录
-    //            )
-    //    connect(pTitleBar->settingWindow,SIGNAL(sigDownloadDirChange(QString)),
-    //            )//修改下载路径
-
     //连接设置与BottomBar
     pBottomBar->connectSettingAndBottom(pTitleBar->settingWindow);
 

@@ -1,4 +1,10 @@
-﻿#ifndef SETTINGWINDOW_H
+﻿/**
+* @projectName   UtherPlayer
+* @brief         设置界面
+* @author        涂晴昊
+* @date          2019-09-11
+*/
+#ifndef SETTINGWINDOW_H
 #define SETTINGWINDOW_H
 #include<QHBoxLayout>
 #include<QLayout>

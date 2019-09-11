@@ -1,3 +1,9 @@
+/**
+* @projectName   UtherPlayer
+* @brief         快捷键Edit
+* @author        涂晴昊
+* @date          2019-09-11
+*/
 #include "mylineedit.h"
 #define MAX_SHORTCUTS 3
 

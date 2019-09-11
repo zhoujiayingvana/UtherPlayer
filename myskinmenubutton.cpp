@@ -1,5 +1,5 @@
 /**
-* @projectName   TMZPlayer
+* @projectName   UtherPlayer
 * @brief         换肤下拉菜单
 * @author        涂晴昊
 * @date          2019-08-30

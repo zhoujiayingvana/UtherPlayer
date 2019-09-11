@@ -238,6 +238,8 @@ void TitleBar::on_fileButton_clicked()
 /**
 * @method        TitleBar::on_SettingsButton_clicked
 * @brief         打开设置界面
+* @param         VOID
+* @return        VOID
 * @author        涂晴昊
 * @date          2019-08-26
 */
@@ -251,6 +253,8 @@ void TitleBar::on_SettingsButton_clicked()
 /**
 * @method        TitleBar::connectSettingAndTMZ
 * @brief         建立所有设置与主界面的connect
+* @param         VOID
+* @return        VOID
 * @author        涂晴昊
 * @date          2019-08-30
 */

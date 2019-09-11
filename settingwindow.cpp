@@ -1,5 +1,5 @@
 ﻿/**
-* @projectName   TMZPlayer
+* @projectName   UtherPlayer
 * @brief         设置界面
 * @author        涂晴昊
 * @date          2019-08-23
@@ -205,6 +205,7 @@ SettingWindow::SettingWindow(QWidget *parent,Media * m) :
     ui->screenShotEdit->setText("Ctrl+1");
     ui->screenRecordEdit->setText("Ctrl+2");
 
+    //设置初始皮肤
     QString back1Str=":/new/prefix1/myQss/style2.qss";
     QFile qssfile(":/new/prefix1/myQss/style2.qss");
     qssfile.open(QFile::ReadOnly);
@@ -226,6 +227,14 @@ SettingWindow::~SettingWindow()
     delete ui;
 }
 
+/**
+* @method        SettingWindow::getSettingWindow
+* @brief         返回设置界面
+* @param         VOID
+* @return        SettingWindow*
+* @author        涂晴昊
+* @date          2019-09-11
+*/
 SettingWindow *SettingWindow::getSettingWindow()
 {
     return this;
@@ -375,12 +384,12 @@ void SettingWindow::on_shotDirButton_clicked()
 */
 void SettingWindow::on_recordDirButton_clicked()
 {
-    QLabel * shotDir = ui->shotDirLabel;
+    QLabel * shotDir = ui->recordDirLabel;
     QString dirName =QFileDialog::getExistingDirectory(this,"选择目录","C:/CloudMusic/record");
     if(dirName!="")
     {
         shotDir->setText(dirName);
-        ui->shotDirLabel->setText(shotDir->text());
+        ui->recordDirLabel->setText(shotDir->text());
         emit sigRecordDirChange(dirName);
     }
 }
