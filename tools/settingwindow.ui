@@ -13,10 +13,6 @@
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
-  <property name="windowIcon">
-   <iconset resource="background.qrc">
-    <normaloff>:/new/prefix1/myQss/uther.ico</normaloff>:/new/prefix1/myQss/uther.ico</iconset>
-  </property>
   <property name="styleSheet">
    <string notr="true"/>
   </property>
@@ -439,7 +435,7 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>98</width>
+        <width>479</width>
         <height>1170</height>
        </rect>
       </property>
@@ -1550,9 +1546,7 @@
    <header>mylineedit.h</header>
   </customwidget>
  </customwidgets>
- <resources>
-  <include location="background.qrc"/>
- </resources>
+ <resources/>
  <connections>
   <connection>
    <sender>buttonBox</sender>

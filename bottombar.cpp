@@ -955,7 +955,7 @@ void BottomBar::changeVolumeOnOffShortcut(QString str)
 void BottomBar::changeMultiplyingPower(int mul)
 {
     multiplyingPower=mul;
-    playSpeedSlider->setValue(mul-1);
+    playSpeedSlider->setValue(mul);
 }
 
 /**

@@ -11,7 +11,7 @@ MySkinMenuButton::MySkinMenuButton(QWidget *parent):
 {
     title=parent;
     skinMenu = new QMenu(this);
-    black = skinMenu->addAction("black");
+    black = skinMenu->addAction("silver");
     blue = skinMenu->addAction("blue");
     pink = skinMenu->addAction("pink");
     own = skinMenu->addAction("fromFile");
