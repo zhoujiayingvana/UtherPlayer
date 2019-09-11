@@ -81,7 +81,7 @@ QSlider::handle:horizontal:hover {
 }  
 
 QGroupBox {
-        font-size: 15px;
+        font-size: 18px;
         border: 1px solid #CF6679;
         border-radius: 4px;
         margin-top: 10px;

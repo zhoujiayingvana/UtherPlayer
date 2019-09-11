@@ -1072,10 +1072,13 @@ void TMZPlayer::changeBackGround(QString back)
 */
 void TMZPlayer::changePicBackGround(QString back)
 {
-    this->setStyleSheet("QMainWindow{background-image:url("+back+");}"
-                        +"MediaWidget #space{background-color:rgba(255,255,255,200);}"
-                        +"QTableWidget{background-color:rgba(255,255,255,200);}"
-                        +"QScrollArea #scrollArea{background-color:rgba(255,255,255,200);}");
+    QFile qssfile(":/new/prefix1/myQss/back.qss");
+    qssfile.open(QFile::ReadOnly);
+    if(!qssfile.exists())
+        qDebug() <<"no file";
+    QString qss;
+    qss = qssfile.readAll();
+    this->setStyleSheet("QMainWindow{background-image:url("+back+");}"+qss);
     
 }
 void TMZPlayer::lastFunction()

@@ -1,0 +1,101 @@
+ QScrollArea #scrollArea{
+background-color:rgba(255,255,255,0.8);
+}
+QScrollBar:vertical {
+        width: 15px;
+        background: transparent;
+        margin-left: 3px;
+        margin-right: 3px;
+}
+QScrollBar::handle:vertical {
+        width: 15px;
+        min-height: 30px;
+        background: rgba(255,255,255,50%);
+        margin-top: 15px;
+        margin-bottom: 15px;
+}
+QScrollBar::handle:vertical:hover {
+        background: transparent;
+}
+QScrollBar::sub-line:vertical {
+        height: 15px;
+        background: transparent;
+        image: url(:/White/topArrow);
+        subcontrol-position: top;
+}
+QScrollBar::add-line:vertical {
+        height: 15px;
+        background: transparent;
+        image: url(:/White/bottomArrow);
+        subcontrol-position: bottom;
+}
+QScrollBar::sub-line:vertical:hover {
+        background:transparent;
+}
+QScrollBar::add-line:vertical:hover {
+        background:transparent;
+}
+QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
+        background: transparent;
+}
+
+QScrollBar#verticalScrollBar:vertical {
+        margin-top: 30px;
+}
+SettingWindow QScrollBar::handle:vertical {
+        width: 15px;
+        min-height: 30px;
+        background: transparent;
+        margin-top: 15px;
+        margin-bottom: 15px;
+}
+QScrollArea {
+        border: 1px solid #B2B6B9;
+        background: rgba(255,255,255,30%);
+}
+QWidget #page1ScrollAreaWidgetContents ,QWidget#page2ScrollAreaWidgetContents ,QWidget#page3ScrollAreaWidgetContents{
+        background: rgba(255,255,255,30%);
+}
+QMainWindow QPushButton{
+        width: 75px;
+        height: 25px;
+
+}
+QMainWindow QPushButton{
+        background: transparent;
+}
+SettingWindow QPushButton{
+        border-radius: 4px;
+        width: 75px;
+        height: 25px;
+border: 1px solid #afb5ba;
+}
+SettingWindow QPushButton:enabled {
+        background: rgba(255,255,255,50%);
+        color: black;
+}
+
+QWidget #rightsideBar,QWidget #leftsideBar{
+        background: rgba(255,255,255,30%);
+}
+
+history{
+background: transparent;
+}
+
+playList,mergedPlaylist{
+background: rgba(255,255,255,20%);
+border: 1px solid grey;
+}
+
+playlistBtn{
+        background: rgba(255,255,255,30%);
+}
+
+newLineEdit,QLabel{
+        background: transparent;
+}
+
+mergedPlaylist playlistBtn{
+        background: transparent;
+}

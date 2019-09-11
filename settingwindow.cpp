@@ -88,7 +88,7 @@ SettingWindow::SettingWindow(QWidget *parent,Media * m) :
     ui->toBottomButton->setToolTip(QStringLiteral("最小化到系统托盘"));
     ui->toCloseButton->setToolTip(QStringLiteral("关闭TMZPlayer"));
     ui->colorButton->setToolTip(QStringLiteral("选择字体颜色"));
-    ui->back1->setToolTip(QStringLiteral("黑色"));
+    ui->back1->setToolTip(QStringLiteral("银色"));
     ui->back2->setToolTip(QStringLiteral("蓝色"));
     ui->back3->setToolTip(QStringLiteral("粉色"));
     ui->myBack->setToolTip(QStringLiteral("选择背景图片"));
@@ -150,7 +150,7 @@ SettingWindow::SettingWindow(QWidget *parent,Media * m) :
 
 
     //设置按键背景颜色
-    ui->back1->setStyleSheet("background-color:black");
+    ui->back1->setStyleSheet("background-color:#CCD3D9");
     ui->back2->setStyleSheet("background-color:#55aaff");
     ui->back3->setStyleSheet("background-color:#ff99c0");
 
@@ -460,13 +460,19 @@ void SettingWindow::on_myBack_clicked()
 {
     QString fileName =QFileDialog::getOpenFileName(this,"选择图片","C:/CloudMusic",
                                                    tr("Images (*.png *.bmp *.jpg *.tif *.GIF )"));
+    QFile qssfile(":/new/prefix1/myQss/back.qss");
+    qssfile.open(QFile::ReadOnly);
+    if(!qssfile.exists())
+        qDebug() <<"no file";
+    QString qss;
+    qss = qssfile.readAll();
     if(fileName.isEmpty())
     {
         return;
     }
     else
     {
-        this->setStyleSheet("QDialog{background-image:url("+fileName+")}");
+        this->setStyleSheet("QDialog{background-image:url("+fileName+")}"+qss);
         emit sigPictureBackGround(fileName);
     }
 }
