@@ -28,6 +28,8 @@ TitleBar::TitleBar(QWidget *parent) : QWidget(parent)
     settingWindow = new SettingWindow(this);
 
 
+    searchLineEdit = new QLineEdit(this); //网上搜索
+    searchLineEdit->setFixedWidth(200);
     iconLabel = new QLabel(this); //标题栏图标
     titleLabel = new QLabel(this); //标题栏标题
     fileButton = new QPushButton(this); //文件按钮
@@ -113,6 +115,7 @@ TitleBar::TitleBar(QWidget *parent) : QWidget(parent)
     TitleBarLayout->addWidget(iconLabel);
     TitleBarLayout->addWidget(titleLabel);
     TitleBarLayout->addWidget(space);
+    TitleBarLayout->addWidget(searchLineEdit);
     TitleBarLayout->addWidget(fileButton);
     TitleBarLayout->addWidget(SkinButton);
     TitleBarLayout->addWidget(SettingsButton);
@@ -147,6 +150,8 @@ TitleBar::TitleBar(QWidget *parent) : QWidget(parent)
     connect(closeButton,SIGNAL(clicked(bool)),this,SLOT(on_closeButton_clicked()));
     connect(miniButton,SIGNAL(clicked(bool)),this,SLOT(on_miniButton_clicked()));
 
+    connect(searchLineEdit,SIGNAL(returnPressed()),this,SLOT(tempSendInputStr()));
+    connect(this,SIGNAL(sendInputStr(QString)),this->window(),SLOT(displaySearchResult(QString)));
 }
 
 
@@ -301,3 +306,8 @@ void TitleBar::changeCloseStatus(int s)
     else closeStatus=2;
 }
 
+void TitleBar::tempSendInputStr()
+{
+  // can enter here
+  emit sendInputStr(searchLineEdit->text());
+}

@@ -119,5 +119,7 @@
         <file>image/bottomBar/full_mute.png</file>
         <file>image/bottomBar/full_volume.png</file>
         <file>image/titleBar/file.png</file>
+        <file>image/hint.png</file>
+        <file>image/uther4.png</file>
     </qresource>
 </RCC>

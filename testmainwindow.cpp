@@ -13,7 +13,7 @@ TestMainWindow::TestMainWindow(QWidget *parent) :
     myVideoWidget->setParent(this);
     myVideoWidget->resize(291,151);
     myVideoWidget->move(80,25);
-    media->getPlayWindow()->setVideoOutput(myVideoWidget);
+   // media->getPlayWindow()->setVideoOutput(myVideoWidget);
     myVideoWidget->setWindowFlags(Qt::WindowStaysOnTopHint);
     label=new QLabel(this->myVideoWidget);
     label->setPixmap((QPixmap("E:/QT/UtherPlayer/image/backgroundPicture/uther1.png")));

@@ -17,12 +17,15 @@ signals:
     void volumeWidgetHide();
     void bottomBarShow();
     void wheelMoved(QWheelEvent *);
+    void mousePress();
+
 public slots:
     void hideBottomBar();
     void mediaLuminAdd();//亮度增
     void mediaLuminSub();//亮度减
 
 protected:
+    virtual void mousePressEvent(QMouseEvent *event);
     virtual void mouseDoubleClickEvent(QMouseEvent *event);
     virtual void mouseMoveEvent(QMouseEvent *event);
     virtual void enterEvent(QEvent *event);

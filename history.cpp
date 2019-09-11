@@ -13,7 +13,7 @@ history::history(QWidget *parent, const int& _firstRank)
     NameLabel->setObjectName(QString::fromUtf8("NameLabel"));
     NameLabel->setGeometry(QRect(0, 0, 221, 31));
     NameLabel->setText("歌曲名字");
-    NameLabel->setToolTip(NameLabel->text());
+
 
     QFont font;
     font.setFamily(QString::fromUtf8("宋体"));
@@ -24,7 +24,7 @@ history::history(QWidget *parent, const int& _firstRank)
     AddressLabel->setObjectName(QString::fromUtf8("AddressLabel"));
     AddressLabel->setGeometry(QRect(0, 31, 221, 21));
     AddressLabel->setText("歌曲地址");
-    AddressLabel->setToolTip(AddressLabel->text());
+
 
     deleteBtn = new QPushButton(this);
     deleteBtn->setObjectName(QString::fromUtf8("deleteBtn"));
@@ -78,6 +78,8 @@ void history::enterEvent(QEvent *event)
     Q_UNUSED(event);
     deleteBtn->setVisible(true);
     this->setPalette(active_backgroundPalette);
+    NameLabel->setToolTip(NameLabel->text());
+    AddressLabel->setToolTip(AddressLabel->text());
 
 }
 

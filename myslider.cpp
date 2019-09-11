@@ -26,6 +26,19 @@ void MySlider::mousePressEvent(QMouseEvent *event)
 
     //设定滑动条位置
     this->setValue(value);
+    //发射信号使计时器停止
+    emit timerStop();
+
+
+
+}
+
+void MySlider::mouseReleaseEvent(QMouseEvent *event)
+{
+    //使Slider能正常响应其他鼠标事件
+    QSlider::mouseReleaseEvent(event);
+    //发射信号使计时器重启
+    emit timerStart();
 
 
 

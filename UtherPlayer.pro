@@ -43,6 +43,7 @@ SOURCES += \
     newLineEdit.cpp \
     playlist.cpp \
     playlistbtn.cpp \
+    searchresult.cpp \
     settingwindow.cpp \
     testmainwindow.cpp \
     titlebar.cpp \
@@ -77,6 +78,7 @@ HEADERS += \
     newLineEdit.h \
     playlist.h \
     playlistbtn.h \
+    searchresult.h \
     settingwindow.h \
     testmainwindow.h \
     titlebar.h \
@@ -96,6 +98,7 @@ HEADERS += \
 
 FORMS += \
     mini.ui \
+    searchresult.ui \
     settingwindow.ui \
     testmainwindow.ui \
     tmzplayer.ui

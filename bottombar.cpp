@@ -13,7 +13,7 @@ BottomBar::BottomBar(QWidget *parent) : QWidget(parent)
 
 
     multiplyingPower=1;//倍速播放，默认1倍速
-    quickMoveTime=5;//快进快退秒数初始化5
+    quickMoveTime=1;//快进快退秒数初始化5
 
     setFixedHeight(60);
     lastButton = new QPushButton(this);//上一个按钮
@@ -31,9 +31,10 @@ BottomBar::BottomBar(QWidget *parent) : QWidget(parent)
     slashLabel = new QLabel ();//视频模式“/”
     slashLabel->setText("/");
     anotherSpace = new QLabel ();//另一片空白
-    definitionButton = new BottomButton();//清晰度按钮
+    definitionButton = new BottomButton();//滤镜按钮
     settingsButton = new BottomButton();//视频设置按钮
     full_screenButton = new QPushButton();//全屏/恢复按钮
+    playModeNum = 1;//播放模式初始为顺序播放
 
     //初始化快捷键
     pauseButton->setShortcut(QKeySequence("Space"));
@@ -62,7 +63,7 @@ BottomBar::BottomBar(QWidget *parent) : QWidget(parent)
     /*
      * playSlider还需设最大值
      */
-    playSlider->setMaximum(6009); //test
+    playSlider->setMaximum(0); //test
     volumeSlider->setMaximum(100);
 
 
@@ -115,10 +116,10 @@ BottomBar::BottomBar(QWidget *parent) : QWidget(parent)
     nextButton->setStyleSheet("QPushButton{ border-image: url(:/image/image/bottomBar/next.png); }");
     stopButton->setStyleSheet("QPushButton{ border-image: url(:/image/image/bottomBar/stop.png); }");
     currentPos->setText(QStringLiteral("00:00"));
-    totalTime->setText(QStringLiteral("4:00"));
+    totalTime->setText(QStringLiteral("00:00"));
     volumeButton->setStyleSheet("QPushButton{ border-image: url(:/image/image/bottomBar/volume.png); }");
     playModeButton->setStyleSheet("QPushButton{ border-image: url(:/image/image/bottomBar/order.png); }");
-    definitionButton->setText(QStringLiteral("清晰度"));
+    definitionButton->setText(QStringLiteral("滤镜"));
     settingsButton->setStyleSheet("QPushButton{ border-image: url(:/image/image/bottomBar/settings.png); }");
     full_screenButton->setStyleSheet("QPushButton{ border-image: url(:/image/image/bottomBar/fullScreen.png); }");
 
@@ -131,8 +132,11 @@ BottomBar::BottomBar(QWidget *parent) : QWidget(parent)
     stopButton->setToolTip(QStringLiteral("停止"));
     volumeButton->setToolTip(QStringLiteral("静音"));
     volumeSlider->setToolTip(QStringLiteral("音量调节(Up/Down)"));
-    playModeButton->setToolTip(QStringLiteral("播放模式"));
+    playModeButton->setToolTip(QStringLiteral("顺序播放"));
     definitionButton->setToolTip(QStringLiteral("清晰度"));
+    settingsButton->setToolTip(QStringLiteral("调节倍速"));
+    playModeButton->setToolTip(QStringLiteral("顺序播放"));
+    definitionButton->setToolTip(QStringLiteral("滤镜"));
     settingsButton->setToolTip(QStringLiteral("设置"));
     full_screenButton->setToolTip(QStringLiteral("全屏"));
 
@@ -153,10 +157,10 @@ BottomBar::BottomBar(QWidget *parent) : QWidget(parent)
 
     BottomLayout = new QVBoxLayout(this);
     BmBottomLayout = new QHBoxLayout();
+    BmBottomLayout->addWidget(stopButton);
     BmBottomLayout->addWidget(lastButton);
     BmBottomLayout->addWidget(pauseButton);
     BmBottomLayout->addWidget(nextButton);
-    BmBottomLayout->addWidget(stopButton);
     BmBottomLayout->addWidget(currentPos);
     BmBottomLayout->addWidget(playSlider);
     BmBottomLayout->addWidget(totalTime);
@@ -180,42 +184,35 @@ BottomBar::BottomBar(QWidget *parent) : QWidget(parent)
     volumeLayout->setContentsMargins(5, 5, 5, 5);
 
 
-    definitionWidget = new Widget(parent);//视频模式清晰度窗口
+    definitionWidget = new Widget(parent);//视频模式滤镜窗口
     definitionWidget->setObjectName(QString::fromUtf8("definitionWidget"));
     definitionWidget->setAutoFillBackground(true);//test
     definitionWidget->setPalette(QPalette(Qt::black));//test
     definitionWidget->setGeometry(200, 200, 40, 90);//test
     definitionWidget->hide();
-    //视频模式清晰度窗口下各清晰度按钮
-    autoDefinitionButton = new QPushButton(definitionWidget);
+    //视频模式滤镜窗口下各滤镜按钮
     p360DefinitionButton = new QPushButton(definitionWidget);
     p480DefinitionButton = new QPushButton(definitionWidget);
     p720DefinitionButton = new QPushButton(definitionWidget);
-    autoDefinitionButton->setFocusPolicy(Qt::NoFocus);
     p360DefinitionButton->setFocusPolicy(Qt::NoFocus);
     p480DefinitionButton->setFocusPolicy(Qt::NoFocus);
     p720DefinitionButton->setFocusPolicy(Qt::NoFocus);
-    autoDefinitionButton->setObjectName("autoDefinitionButton");
     p360DefinitionButton->setObjectName("p360DefinitionButton");
     p480DefinitionButton->setObjectName("p480DefinitionButton");
     p720DefinitionButton->setObjectName("p720DefinitionButton");
-    autoDefinitionButton->setFixedSize(30,20);
     p360DefinitionButton->setFixedSize(30,20);
     p480DefinitionButton->setFixedSize(30,20);
     p720DefinitionButton->setFixedSize(30,20);
-    autoDefinitionButton->setFlat(true);
     p360DefinitionButton->setFlat(true);
     p480DefinitionButton->setFlat(true);
     p720DefinitionButton->setFlat(true);
-    autoDefinitionButton->setText(QStringLiteral("自动"));//TEST
-    p360DefinitionButton->setText(QStringLiteral("普通"));//TEST
-    p480DefinitionButton->setText(QStringLiteral("清晰"));//TEST
-    p720DefinitionButton->setText(QStringLiteral("高清"));//TEST
-    definitionLayout =new QVBoxLayout(definitionWidget);//视频模式清晰度窗口的布局
+    p360DefinitionButton->setText(QStringLiteral("默认"));//TEST
+    p480DefinitionButton->setText(QStringLiteral("明亮"));//TEST
+    p720DefinitionButton->setText(QStringLiteral("柔和"));//TEST
+    definitionLayout =new QVBoxLayout(definitionWidget);//视频模式滤镜窗口的布局
     definitionLayout->addWidget(p720DefinitionButton);
     definitionLayout->addWidget(p480DefinitionButton);
     definitionLayout->addWidget(p360DefinitionButton);
-    definitionLayout->addWidget(autoDefinitionButton);
     definitionLayout->setContentsMargins(5, 5, 5, 5);
     definitionLayout->setSpacing(0);
 
@@ -225,111 +222,39 @@ BottomBar::BottomBar(QWidget *parent) : QWidget(parent)
     settingsWidget->setObjectName(QString::fromUtf8("settingsWidget"));
     settingsWidget->setAutoFillBackground(true);//test
     settingsWidget->setPalette(QPalette(Qt::black));//test
-    settingsWidget->setGeometry(200, 200, 100, 165);//test
+    settingsWidget->setGeometry(200, 200, 190, 60);//test
     settingsWidget->hide();
     //视频模式设置窗口下各按钮
-    playModeLabel = new QLabel(settingsWidget);
-    playModeButton_1 = new QPushButton(settingsWidget);
-    playModeButton_2 = new QPushButton(settingsWidget);
-    playModeButton_3 = new QPushButton(settingsWidget);
+
     playSpeedLabel = new QLabel(settingsWidget);
     multiplyingPowerLabel = new QLabel(settingsWidget);
     playSpeedSlider = new MySlider(settingsWidget);
-    videoRatioLabel = new QLabel(settingsWidget);
-    autoRatioButton = new QPushButton(settingsWidget);
-    ratio4_3Button = new QPushButton(settingsWidget);
-    ratio16_9Button = new QPushButton(settingsWidget);
-    othersLabel = new QLabel(settingsWidget);
-    someFunctionButton = new QPushButton(settingsWidget);//test
 
     playSpeedSlider->setMaximum(3);
     playSpeedSlider->setValue(1);//倍速播放默认一倍速
 
-    playModeButton_1->setFocusPolicy(Qt::NoFocus);
-    playModeButton_2->setFocusPolicy(Qt::NoFocus);
-    playModeButton_3->setFocusPolicy(Qt::NoFocus);
     playSpeedSlider->setFocusPolicy(Qt::NoFocus);
-    autoRatioButton->setFocusPolicy(Qt::NoFocus);
-    ratio4_3Button->setFocusPolicy(Qt::NoFocus);
-    ratio16_9Button->setFocusPolicy(Qt::NoFocus);
-    someFunctionButton->setFocusPolicy(Qt::NoFocus);
 
     playSpeedSlider->setOrientation(Qt::Horizontal);
 
-    playModeLabel->setObjectName("playModeLabel");
-    playModeButton_1->setObjectName("playModeButton_1");
-    playModeButton_2->setObjectName("playModeButton_2");
-    playModeButton_3->setObjectName("playModeButton_3");
     playSpeedLabel->setObjectName("playSpeedLabel");
     multiplyingPowerLabel->setObjectName("multiplyingPowerLabel");
     playSpeedSlider->setObjectName("playSpeedSlider");
-    videoRatioLabel->setObjectName("videoRatioLabel");
-    autoRatioButton->setObjectName("autoRatioButton");
-    ratio4_3Button->setObjectName("ratio4_3Button");
-    ratio16_9Button->setObjectName("ratio16_9Button");
-    othersLabel->setObjectName("othersLabel");
-    someFunctionButton->setObjectName("someFunctionButton");
 
-    playModeLabel->setFixedSize(90,15);
-    playModeButton_1->setFixedSize(30,20);
-    playModeButton_2->setFixedSize(30,20);
-    playModeButton_3->setFixedSize(30,20);
-    playSpeedLabel->setFixedSize(90,15);
-    multiplyingPowerLabel->setFixedSize(90,15);
-    playSpeedSlider->setFixedSize(90,20);
-    videoRatioLabel->setFixedSize(30,15);
-    autoRatioButton->setFixedSize(30,20);
-    ratio4_3Button->setFixedSize(30,20);
-    ratio16_9Button->setFixedSize(30,20);
-    othersLabel->setFixedSize(30,15);
-    someFunctionButton->setFixedSize(30,20);
+    playSpeedLabel->setFixedSize(180,15);
+    multiplyingPowerLabel->setFixedSize(180,15);
+    playSpeedSlider->setFixedSize(180,20);
 
 
 
 
-    playModeButton_1->setFlat(true);
-    playModeButton_2->setFlat(true);
-    playModeButton_3->setFlat(true);
-    autoRatioButton->setFlat(true);
-    ratio4_3Button->setFlat(true);
-    ratio16_9Button->setFlat(true);
-    someFunctionButton->setFlat(true);
-
-    playModeLabel->setText(QStringLiteral("播放方式"));
-    playModeButton_1->setText(QStringLiteral("默认"));
-    playModeButton_2->setText(QStringLiteral("循环"));
-    playModeButton_3->setText(QStringLiteral("播完暂停"));
     playSpeedLabel->setText(QStringLiteral("播放速度"));
-    multiplyingPowerLabel->setText(QStringLiteral("0.5 1.0 1.25 1.5 2.0"));
-    videoRatioLabel->setText(QStringLiteral("视频比例"));
-    autoRatioButton->setText(QStringLiteral("自动"));
-    ratio4_3Button->setText(QStringLiteral("4:3"));
-    ratio16_9Button->setText(QStringLiteral("16:9"));
-    othersLabel->setText(QStringLiteral("其他"));
-    someFunctionButton->setText(QStringLiteral("其他"));
+    multiplyingPowerLabel->setText(QStringLiteral("0.5      1.0      1.5     2.0"));
 
     settingsLayout =new QVBoxLayout(settingsWidget);//视频模式设置窗口的布局
-    settingsLayout->addWidget(playModeLabel);
-    QHBoxLayout * playModeLayout = new QHBoxLayout();
-    playModeLayout->addWidget(playModeButton_1);
-    playModeLayout->addWidget(playModeButton_2);
-    playModeLayout->addWidget(playModeButton_3);
-    playModeLayout->setContentsMargins(0, 0, 0, 0);
-    playModeLayout->setSpacing(0);
-    settingsLayout->addLayout(playModeLayout);
     settingsLayout->addWidget(playSpeedLabel);
     settingsLayout->addWidget(multiplyingPowerLabel);
     settingsLayout->addWidget(playSpeedSlider);
-    settingsLayout->addWidget(videoRatioLabel);
-    QHBoxLayout * videoRatioLayout = new QHBoxLayout();
-    videoRatioLayout->addWidget(autoRatioButton);
-    videoRatioLayout->addWidget(ratio4_3Button);
-    videoRatioLayout->addWidget(ratio16_9Button);
-    videoRatioLayout->setContentsMargins(0, 0, 0, 0);
-    videoRatioLayout->setSpacing(0);
-    settingsLayout->addLayout(videoRatioLayout);
-    settingsLayout->addWidget(othersLabel);
-    settingsLayout->addWidget(someFunctionButton);
     settingsLayout->setContentsMargins(5, 5, 5, 5);
     settingsLayout->setSpacing(0);
 
@@ -342,8 +267,16 @@ BottomBar::BottomBar(QWidget *parent) : QWidget(parent)
     connect(pauseButton,SIGNAL(clicked()),this,SLOT(on_pauseButton_clicked()));
     connect(nextButton,SIGNAL(clicked()),this,SLOT(on_nextButton_clicked()));
     connect(stopButton,SIGNAL(clicked()),this,SLOT(on_stopButton_clicked()));
+    connect(p360DefinitionButton,SIGNAL(clicked()),this,SLOT(on_p360DefinitionButton_clicked()));
+    connect(p480DefinitionButton,SIGNAL(clicked()),this,SLOT(on_p480DefinitionButton_clicked()));
+    connect(p720DefinitionButton,SIGNAL(clicked()),this,SLOT(on_p720DefinitionButton_clicked()));
     connect(playSlider,SIGNAL(valueChanged(int)),this,SLOT(on_playSlider_valueChanged(int)));
+    connect(playSlider,SIGNAL(timerStop()),timer,SLOT(stop()));
+    connect(playSlider,SIGNAL(timerStop()),this,SLOT(on_pauseButton_clicked()));
+    connect(playSlider,SIGNAL(timerStart()),timer,SLOT(start()));
+    connect(playSlider,SIGNAL(timerStart()),this,SLOT(on_pauseButton_clicked()));
     connect(volumeButton,SIGNAL(clicked(bool)),this,SLOT(on_volumeButton_clicked()));
+    connect(playModeButton,SIGNAL(clicked()),this,SLOT(on_playModeButton_clicked()));
     connect(volumeSlider,SIGNAL(valueChanged(int)),this,SLOT(on_volumeSlider_valueChanged(int)));
     connect(volumeButton,SIGNAL(leaveSignal()),this,SLOT(volumeWidgetDetection()));
     connect(definitionButton,SIGNAL(enterSignal(int ,int)),definitionWidget,SLOT(display(int,int)));
@@ -413,6 +346,51 @@ void BottomBar::on_stopButton_clicked()
 {
     emit stopButton_clicked();
 
+}
+
+void BottomBar::on_playModeButton_clicked()
+{
+    switch(playModeNum)
+    {
+    case 1://改为列表循环
+        emit changePlayMode(ORDER_CYCLE);
+        playModeButton->setStyleSheet("QPushButton{ border-image: url(:/image/image/bottomBar/listOrder.png); }");
+        playModeButton->setToolTip(QStringLiteral("列表循环"));
+        QToolTip::showText(QCursor::pos(),QStringLiteral("列表循环"), this);
+        break;
+    case 2://改为单曲循环
+        emit changePlayMode(SINGLE_CYCLE);
+        playModeButton->setStyleSheet("QPushButton{ border-image: url(:/image/image/bottomBar/repeat.png); }");
+        playModeButton->setToolTip(QStringLiteral("单曲循环"));
+        QToolTip::showText(QCursor::pos(),QStringLiteral("单曲循环"), this);
+        break;
+    case 3://改为随机播放
+        emit changePlayMode(SHUFFLE);
+        playModeButton->setStyleSheet("QPushButton{ border-image: url(:/image/image/bottomBar/shuffle.png); }");
+        playModeButton->setToolTip(QStringLiteral("随机播放"));
+        QToolTip::showText(QCursor::pos(),QStringLiteral("随机播放"), this);
+        break;
+    case 4://改为顺序播放
+        emit changePlayMode(ORDER_PLAY);
+        playModeButton->setStyleSheet("QPushButton{ border-image: url(:/image/image/bottomBar/order.png); }");
+        playModeButton->setToolTip(QStringLiteral("顺序播放"));
+        QToolTip::showText(QCursor::pos(),QStringLiteral("顺序播放"), this);
+        break;
+    default:
+        break;
+
+    }
+    playModeNum++;
+    if(playModeNum==5)
+        playModeNum=1;
+
+
+}
+
+void BottomBar::changePlayMode(int pmn)
+{
+    playModeNum = pmn;
+    emit playModeButton->click();
 }
 
 void BottomBar::changePauseButton(bool isPlaying)
@@ -569,6 +547,7 @@ void BottomBar::rcvSwitchModeButton(MediaType& _mediaType)//点击切换音乐/�
 
         volumeLayout->addWidget(volumeSlider);
         connect(volumeButton,SIGNAL(enterSignal(int ,int)),volumeWidget,SLOT(display(int,int)));
+        emit videoPlaying();
 
     }
     else if (_mediaType == MediaType::AUDIO)  // 变为音乐模式
@@ -612,6 +591,7 @@ void BottomBar::rcvSwitchModeButton(MediaType& _mediaType)//点击切换音乐/�
         }
 
         disconnect(volumeButton,SIGNAL(enterSignal(int ,int)),volumeWidget,SLOT(display(int,int)));
+        emit audioPlaying();
 
     }
     else
@@ -703,6 +683,37 @@ void BottomBar::isatWidget(QWidget *suspensionindow)
     }
 }
 
+MySlider *BottomBar::getPlaySpeedSlider() const
+{
+    return playSpeedSlider;
+}
+
+/**
+* @method        BottomBar::getMultiplyingPower
+* @brief         得到播放倍速
+* @param         VOID
+* @return        INT
+* @author        涂晴昊
+* @date          2019-09-10
+*/
+int BottomBar::getMultiplyingPower() const
+{
+    return multiplyingPower;
+}
+
+/**
+* @method        BottomBar::getQuickMoveTime
+* @brief         得到快进快退秒数
+* @param         VOID
+* @return        INT
+* @author        涂晴昊
+* @date          2019-09-10
+*/
+int BottomBar::getQuickMoveTime() const
+{
+    return quickMoveTime;
+}
+
 
 
 void BottomBar::changeVolume(int vol)//改变音量
@@ -746,7 +757,7 @@ void BottomBar::quickMovePlaySliderPlus()
     playSlider->setValue(playSlider->value()+quickMoveTime);
 }
 
-/**
+/*
 * @method        BottomBar::quickMovePlaySliderMinus
 * @brief         快退功能实现
 * @param         VOID
@@ -782,6 +793,52 @@ void BottomBar::setTotalTime(qint64 value)
 
 }
 
+void BottomBar::clearPlaySlider()
+{
+    playSlider->setValue(0);
+    playSlider->setMaximum(0);
+    totalTime->setText("00:00");
+}
+
+/**
+* @method        BottomBar::on_p360DefinitionButton_clicked
+* @brief         播放滤镜默认
+* @param         VOID
+* @return        VOID
+* @author        涂晴昊
+* @date          2019-09-04
+*/
+void BottomBar::on_p360DefinitionButton_clicked()
+{
+    emit sigChangeMediaStyle(1);
+}
+
+/**
+* @method        BottomBar::on_p360DefinitionButton_clicked
+* @brief         播放明亮默认
+* @param         VOID
+* @return        VOID
+* @author        涂晴昊
+* @date          2019-09-04
+*/
+void BottomBar::on_p480DefinitionButton_clicked()
+{
+    emit sigChangeMediaStyle(2);
+}
+
+/**
+* @method        BottomBar::on_p360DefinitionButton_clicked
+* @brief         播放柔和默认
+* @param         VOID
+* @return        VOID
+* @author        涂晴昊
+* @date          2019-09-04
+*/
+void BottomBar::on_p720DefinitionButton_clicked()
+{
+    emit sigChangeMediaStyle(3);
+}
+
 /**
 * @method        BottomBar::connectSettingAndBottom
 * @brief         连接设置界面
@@ -804,43 +861,20 @@ void BottomBar::connectSettingAndBottom(SettingWindow *settingWindow)
 
     connect(settingWindow,SIGNAL(sigSpeedChange(int)),//设置界面修改主界面倍速
             this,SLOT(changeMultiplyingPower(int)));
-    connect(settingWindow,SIGNAL(sigDefinitionChange(int)),//设置界面修改主界面清晰度
+    connect(settingWindow,SIGNAL(sigDefinitionChange(int)),//设置界面修改主界面滤镜
             this,SLOT(changeDefinition(int)));
-    connect(p360DefinitionButton,SIGNAL(clicked()),//主界面->设置界面普通清晰度
+    connect(p360DefinitionButton,SIGNAL(clicked()),//主界面->设置界面默认滤镜
             settingWindow,SLOT(lv1DefinitionChange()));
-    connect(p480DefinitionButton,SIGNAL(clicked()),//主界面->设置界面清晰清晰度
+    connect(p480DefinitionButton,SIGNAL(clicked()),//主界面->设置界面明亮滤镜
             settingWindow,SLOT(lv2DefinitionChange()));
-    connect(p720DefinitionButton,SIGNAL(clicked()),//主界面->设置界面高清清晰度
+    connect(p720DefinitionButton,SIGNAL(clicked()),//主界面->设置界面柔和滤镜
             settingWindow,SLOT(lv3DefinitionChange()));
-    connect(autoDefinitionButton,SIGNAL(clicked()),//主界面->设置界面自动清晰度
-            settingWindow,SLOT(lv1DefinitionChange()));
     connect(this->playSpeedSlider,SIGNAL(valueChanged(int)),//主界面修改设置界面倍速
             settingWindow,SLOT(speedChange(int)));
     connect(settingWindow,SIGNAL(sigQuickMoveTimeChange(int)),//快进快退秒数修改
             this,SLOT(changePlaySliderPlus(int)));
 }
 
-void BottomBar::startPlaying(int time)
-{
-    int total = time/1000;
-    playSlider->setMaximum(time);
-    if(total/60>=10&&total%60>=10)
-    {
-        totalTime->setText(QString::number(total/60) + ":" + QString::number(total%60));
-    }
-    else if (total/60<10&&total%60>=10)
-    {
-        totalTime->setText("0" + QString::number(total/60) + ":" + QString::number(total%60));
-    }
-    else if (total/60>=10&&total%60<10)
-    {
-        totalTime->setText(QString::number(total/60) + ":" + "0" + QString::number(total%60));
-    }
-    else
-    {
-        totalTime->setText("0" + QString::number(total/60) + ":" + "0" + QString::number(total%60));
-    }
-}
 
 
 
@@ -926,7 +960,7 @@ void BottomBar::changeMultiplyingPower(int mul)
 
 /**
 * @method        BottomBar::changeDefinition
-* @brief         改变主界面清晰度
+* @brief         改变主界面滤镜
 * @param         INT
 * @return        VOID
 * @author        涂晴昊
@@ -940,6 +974,7 @@ void BottomBar::changeDefinition(int d)
         p480DefinitionButton->click();
     else
         p720DefinitionButton->click();
+    emit sigChangeMediaStyle(d);
 
 }
 
