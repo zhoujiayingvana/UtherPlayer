@@ -22,8 +22,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_TMZPlayer_t {
-    QByteArrayData data[91];
-    char stringdata0[1660];
+    QByteArrayData data[92];
+    char stringdata0[1678];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -92,37 +92,38 @@ QT_MOC_LITERAL(56, 1095, 22), // "changeLuminAddShortcut"
 QT_MOC_LITERAL(57, 1118, 22), // "changeLuminSubShortcut"
 QT_MOC_LITERAL(58, 1141, 13), // "changeShotDir"
 QT_MOC_LITERAL(59, 1155, 15), // "changeRecordDir"
-QT_MOC_LITERAL(60, 1171, 16), // "changeBackGround"
-QT_MOC_LITERAL(61, 1188, 19), // "changePicBackGround"
-QT_MOC_LITERAL(62, 1208, 12), // "lastFunction"
-QT_MOC_LITERAL(63, 1221, 12), // "playFunction"
-QT_MOC_LITERAL(64, 1234, 12), // "nextFunction"
-QT_MOC_LITERAL(65, 1247, 12), // "stopFunction"
-QT_MOC_LITERAL(66, 1260, 12), // "changeVolume"
-QT_MOC_LITERAL(67, 1273, 14), // "returnPosition"
-QT_MOC_LITERAL(68, 1288, 14), // "changePlayMode"
-QT_MOC_LITERAL(69, 1303, 9), // "PlayOrder"
-QT_MOC_LITERAL(70, 1313, 12), // "shotMyScreen"
-QT_MOC_LITERAL(71, 1326, 14), // "recordMyScreen"
-QT_MOC_LITERAL(72, 1341, 16), // "changeShotFormat"
-QT_MOC_LITERAL(73, 1358, 16), // "changeRecordSize"
-QT_MOC_LITERAL(74, 1375, 17), // "changeSplitStatus"
-QT_MOC_LITERAL(75, 1393, 13), // "userEndRecord"
-QT_MOC_LITERAL(76, 1407, 11), // "changeLumin"
-QT_MOC_LITERAL(77, 1419, 18), // "quickMoveMediaPlus"
-QT_MOC_LITERAL(78, 1438, 19), // "quickMoveMediaMinus"
-QT_MOC_LITERAL(79, 1458, 16), // "changeMediaSpeed"
-QT_MOC_LITERAL(80, 1475, 16), // "changeMediaStyle"
-QT_MOC_LITERAL(81, 1492, 19), // "on_openFile_clicked"
-QT_MOC_LITERAL(82, 1512, 10), // "closeEvent"
-QT_MOC_LITERAL(83, 1523, 12), // "QCloseEvent*"
-QT_MOC_LITERAL(84, 1536, 5), // "event"
-QT_MOC_LITERAL(85, 1542, 17), // "sltResendPlayInfo"
-QT_MOC_LITERAL(86, 1560, 8), // "PlayArea"
-QT_MOC_LITERAL(87, 1569, 10), // "flushHisUI"
-QT_MOC_LITERAL(88, 1580, 26), // "givingHistoryAddressToPlay"
-QT_MOC_LITERAL(89, 1607, 28), // "givingHistoryAddressToDelete"
-QT_MOC_LITERAL(90, 1636, 23) // "sltDelHistoricalContent"
+QT_MOC_LITERAL(60, 1171, 17), // "musicWidgetChange"
+QT_MOC_LITERAL(61, 1189, 16), // "changeBackGround"
+QT_MOC_LITERAL(62, 1206, 19), // "changePicBackGround"
+QT_MOC_LITERAL(63, 1226, 12), // "lastFunction"
+QT_MOC_LITERAL(64, 1239, 12), // "playFunction"
+QT_MOC_LITERAL(65, 1252, 12), // "nextFunction"
+QT_MOC_LITERAL(66, 1265, 12), // "stopFunction"
+QT_MOC_LITERAL(67, 1278, 12), // "changeVolume"
+QT_MOC_LITERAL(68, 1291, 14), // "returnPosition"
+QT_MOC_LITERAL(69, 1306, 14), // "changePlayMode"
+QT_MOC_LITERAL(70, 1321, 9), // "PlayOrder"
+QT_MOC_LITERAL(71, 1331, 12), // "shotMyScreen"
+QT_MOC_LITERAL(72, 1344, 14), // "recordMyScreen"
+QT_MOC_LITERAL(73, 1359, 16), // "changeShotFormat"
+QT_MOC_LITERAL(74, 1376, 16), // "changeRecordSize"
+QT_MOC_LITERAL(75, 1393, 17), // "changeSplitStatus"
+QT_MOC_LITERAL(76, 1411, 13), // "userEndRecord"
+QT_MOC_LITERAL(77, 1425, 11), // "changeLumin"
+QT_MOC_LITERAL(78, 1437, 18), // "quickMoveMediaPlus"
+QT_MOC_LITERAL(79, 1456, 19), // "quickMoveMediaMinus"
+QT_MOC_LITERAL(80, 1476, 16), // "changeMediaSpeed"
+QT_MOC_LITERAL(81, 1493, 16), // "changeMediaStyle"
+QT_MOC_LITERAL(82, 1510, 19), // "on_openFile_clicked"
+QT_MOC_LITERAL(83, 1530, 10), // "closeEvent"
+QT_MOC_LITERAL(84, 1541, 12), // "QCloseEvent*"
+QT_MOC_LITERAL(85, 1554, 5), // "event"
+QT_MOC_LITERAL(86, 1560, 17), // "sltResendPlayInfo"
+QT_MOC_LITERAL(87, 1578, 8), // "PlayArea"
+QT_MOC_LITERAL(88, 1587, 10), // "flushHisUI"
+QT_MOC_LITERAL(89, 1598, 26), // "givingHistoryAddressToPlay"
+QT_MOC_LITERAL(90, 1625, 28), // "givingHistoryAddressToDelete"
+QT_MOC_LITERAL(91, 1654, 23) // "sltDelHistoricalContent"
 
     },
     "TMZPlayer\0sendInputStr\0\0maximizeButton_clicked\0"
@@ -159,13 +160,14 @@ QT_MOC_LITERAL(90, 1636, 23) // "sltDelHistoricalContent"
     "changeShotScreenShortcut\0changeRecordShortcut\0"
     "changeLuminAddShortcut\0changeLuminSubShortcut\0"
     "changeShotDir\0changeRecordDir\0"
-    "changeBackGround\0changePicBackGround\0"
-    "lastFunction\0playFunction\0nextFunction\0"
-    "stopFunction\0changeVolume\0returnPosition\0"
-    "changePlayMode\0PlayOrder\0shotMyScreen\0"
-    "recordMyScreen\0changeShotFormat\0"
-    "changeRecordSize\0changeSplitStatus\0"
-    "userEndRecord\0changeLumin\0quickMoveMediaPlus\0"
+    "musicWidgetChange\0changeBackGround\0"
+    "changePicBackGround\0lastFunction\0"
+    "playFunction\0nextFunction\0stopFunction\0"
+    "changeVolume\0returnPosition\0changePlayMode\0"
+    "PlayOrder\0shotMyScreen\0recordMyScreen\0"
+    "changeShotFormat\0changeRecordSize\0"
+    "changeSplitStatus\0userEndRecord\0"
+    "changeLumin\0quickMoveMediaPlus\0"
     "quickMoveMediaMinus\0changeMediaSpeed\0"
     "changeMediaStyle\0on_openFile_clicked\0"
     "closeEvent\0QCloseEvent*\0event\0"
@@ -182,7 +184,7 @@ static const uint qt_meta_data_TMZPlayer[] = {
        8,       // revision
        0,       // classname
        0,    0, // classinfo
-      81,   14, // methods
+      82,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -190,89 +192,90 @@ static const uint qt_meta_data_TMZPlayer[] = {
       13,       // signalCount
 
  // signals: name, argc, parameters, tag, flags
-       1,    1,  419,    2, 0x06 /* Public */,
-       3,    0,  422,    2, 0x06 /* Public */,
-       4,    1,  423,    2, 0x06 /* Public */,
-       5,    1,  426,    2, 0x06 /* Public */,
-       7,    1,  429,    2, 0x06 /* Public */,
-       8,    1,  432,    2, 0x06 /* Public */,
-       9,    1,  435,    2, 0x06 /* Public */,
-      10,    1,  438,    2, 0x06 /* Public */,
-      11,    0,  441,    2, 0x06 /* Public */,
-      12,    1,  442,    2, 0x06 /* Public */,
-      13,    0,  445,    2, 0x06 /* Public */,
-      14,    1,  446,    2, 0x06 /* Public */,
-      15,    1,  449,    2, 0x06 /* Public */,
+       1,    1,  424,    2, 0x06 /* Public */,
+       3,    0,  427,    2, 0x06 /* Public */,
+       4,    1,  428,    2, 0x06 /* Public */,
+       5,    1,  431,    2, 0x06 /* Public */,
+       7,    1,  434,    2, 0x06 /* Public */,
+       8,    1,  437,    2, 0x06 /* Public */,
+       9,    1,  440,    2, 0x06 /* Public */,
+      10,    1,  443,    2, 0x06 /* Public */,
+      11,    0,  446,    2, 0x06 /* Public */,
+      12,    1,  447,    2, 0x06 /* Public */,
+      13,    0,  450,    2, 0x06 /* Public */,
+      14,    1,  451,    2, 0x06 /* Public */,
+      15,    1,  454,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-      16,    1,  452,    2, 0x0a /* Public */,
-      17,    1,  455,    2, 0x08 /* Private */,
-      19,    1,  458,    2, 0x08 /* Private */,
-      20,    0,  461,    2, 0x08 /* Private */,
-      21,    0,  462,    2, 0x08 /* Private */,
-      22,    0,  463,    2, 0x08 /* Private */,
-      23,    0,  464,    2, 0x08 /* Private */,
-      24,    0,  465,    2, 0x08 /* Private */,
-      25,    0,  466,    2, 0x08 /* Private */,
-      26,    1,  467,    2, 0x08 /* Private */,
-      28,    0,  470,    2, 0x08 /* Private */,
-      29,    0,  471,    2, 0x08 /* Private */,
-      30,    0,  472,    2, 0x08 /* Private */,
-      31,    0,  473,    2, 0x08 /* Private */,
-      32,    0,  474,    2, 0x08 /* Private */,
-      33,    0,  475,    2, 0x08 /* Private */,
-      34,    0,  476,    2, 0x08 /* Private */,
-      35,    0,  477,    2, 0x08 /* Private */,
-      36,    0,  478,    2, 0x08 /* Private */,
-      37,    0,  479,    2, 0x08 /* Private */,
-      38,    0,  480,    2, 0x08 /* Private */,
-      39,    0,  481,    2, 0x08 /* Private */,
-      40,    0,  482,    2, 0x08 /* Private */,
-      41,    0,  483,    2, 0x08 /* Private */,
-      42,    0,  484,    2, 0x08 /* Private */,
-      43,    0,  485,    2, 0x08 /* Private */,
-      44,    0,  486,    2, 0x08 /* Private */,
-      45,    2,  487,    2, 0x08 /* Private */,
-      47,    1,  492,    2, 0x08 /* Private */,
-      48,    1,  495,    2, 0x08 /* Private */,
-      49,    0,  498,    2, 0x08 /* Private */,
-      50,    1,  499,    2, 0x08 /* Private */,
-      51,    1,  502,    2, 0x08 /* Private */,
-      52,    1,  505,    2, 0x08 /* Private */,
-      53,    1,  508,    2, 0x08 /* Private */,
-      54,    1,  511,    2, 0x08 /* Private */,
-      55,    1,  514,    2, 0x08 /* Private */,
-      56,    1,  517,    2, 0x08 /* Private */,
-      57,    1,  520,    2, 0x08 /* Private */,
-      58,    1,  523,    2, 0x08 /* Private */,
-      59,    1,  526,    2, 0x08 /* Private */,
-      60,    1,  529,    2, 0x08 /* Private */,
-      61,    1,  532,    2, 0x08 /* Private */,
-      62,    0,  535,    2, 0x08 /* Private */,
-      63,    0,  536,    2, 0x08 /* Private */,
-      64,    0,  537,    2, 0x08 /* Private */,
-      65,    0,  538,    2, 0x08 /* Private */,
-      66,    1,  539,    2, 0x08 /* Private */,
-      67,    0,  542,    2, 0x08 /* Private */,
-      68,    1,  543,    2, 0x08 /* Private */,
-      70,    0,  546,    2, 0x08 /* Private */,
-      71,    0,  547,    2, 0x08 /* Private */,
-      72,    1,  548,    2, 0x08 /* Private */,
-      73,    1,  551,    2, 0x08 /* Private */,
-      74,    0,  554,    2, 0x08 /* Private */,
-      75,    0,  555,    2, 0x08 /* Private */,
-      76,    1,  556,    2, 0x08 /* Private */,
-      77,    0,  559,    2, 0x08 /* Private */,
-      78,    0,  560,    2, 0x08 /* Private */,
-      79,    1,  561,    2, 0x08 /* Private */,
-      80,    1,  564,    2, 0x08 /* Private */,
-      81,    0,  567,    2, 0x08 /* Private */,
-      82,    1,  568,    2, 0x08 /* Private */,
-      85,    3,  571,    2, 0x08 /* Private */,
-      87,    0,  578,    2, 0x08 /* Private */,
-      88,    0,  579,    2, 0x08 /* Private */,
-      89,    1,  580,    2, 0x08 /* Private */,
-      90,    1,  583,    2, 0x08 /* Private */,
+      16,    1,  457,    2, 0x0a /* Public */,
+      17,    1,  460,    2, 0x08 /* Private */,
+      19,    1,  463,    2, 0x08 /* Private */,
+      20,    0,  466,    2, 0x08 /* Private */,
+      21,    0,  467,    2, 0x08 /* Private */,
+      22,    0,  468,    2, 0x08 /* Private */,
+      23,    0,  469,    2, 0x08 /* Private */,
+      24,    0,  470,    2, 0x08 /* Private */,
+      25,    0,  471,    2, 0x08 /* Private */,
+      26,    1,  472,    2, 0x08 /* Private */,
+      28,    0,  475,    2, 0x08 /* Private */,
+      29,    0,  476,    2, 0x08 /* Private */,
+      30,    0,  477,    2, 0x08 /* Private */,
+      31,    0,  478,    2, 0x08 /* Private */,
+      32,    0,  479,    2, 0x08 /* Private */,
+      33,    0,  480,    2, 0x08 /* Private */,
+      34,    0,  481,    2, 0x08 /* Private */,
+      35,    0,  482,    2, 0x08 /* Private */,
+      36,    0,  483,    2, 0x08 /* Private */,
+      37,    0,  484,    2, 0x08 /* Private */,
+      38,    0,  485,    2, 0x08 /* Private */,
+      39,    0,  486,    2, 0x08 /* Private */,
+      40,    0,  487,    2, 0x08 /* Private */,
+      41,    0,  488,    2, 0x08 /* Private */,
+      42,    0,  489,    2, 0x08 /* Private */,
+      43,    0,  490,    2, 0x08 /* Private */,
+      44,    0,  491,    2, 0x08 /* Private */,
+      45,    2,  492,    2, 0x08 /* Private */,
+      47,    1,  497,    2, 0x08 /* Private */,
+      48,    1,  500,    2, 0x08 /* Private */,
+      49,    0,  503,    2, 0x08 /* Private */,
+      50,    1,  504,    2, 0x08 /* Private */,
+      51,    1,  507,    2, 0x08 /* Private */,
+      52,    1,  510,    2, 0x08 /* Private */,
+      53,    1,  513,    2, 0x08 /* Private */,
+      54,    1,  516,    2, 0x08 /* Private */,
+      55,    1,  519,    2, 0x08 /* Private */,
+      56,    1,  522,    2, 0x08 /* Private */,
+      57,    1,  525,    2, 0x08 /* Private */,
+      58,    1,  528,    2, 0x08 /* Private */,
+      59,    1,  531,    2, 0x08 /* Private */,
+      60,    0,  534,    2, 0x08 /* Private */,
+      61,    1,  535,    2, 0x08 /* Private */,
+      62,    1,  538,    2, 0x08 /* Private */,
+      63,    0,  541,    2, 0x08 /* Private */,
+      64,    0,  542,    2, 0x08 /* Private */,
+      65,    0,  543,    2, 0x08 /* Private */,
+      66,    0,  544,    2, 0x08 /* Private */,
+      67,    1,  545,    2, 0x08 /* Private */,
+      68,    0,  548,    2, 0x08 /* Private */,
+      69,    1,  549,    2, 0x08 /* Private */,
+      71,    0,  552,    2, 0x08 /* Private */,
+      72,    0,  553,    2, 0x08 /* Private */,
+      73,    1,  554,    2, 0x08 /* Private */,
+      74,    1,  557,    2, 0x08 /* Private */,
+      75,    0,  560,    2, 0x08 /* Private */,
+      76,    0,  561,    2, 0x08 /* Private */,
+      77,    1,  562,    2, 0x08 /* Private */,
+      78,    0,  565,    2, 0x08 /* Private */,
+      79,    0,  566,    2, 0x08 /* Private */,
+      80,    1,  567,    2, 0x08 /* Private */,
+      81,    1,  570,    2, 0x08 /* Private */,
+      82,    0,  573,    2, 0x08 /* Private */,
+      83,    1,  574,    2, 0x08 /* Private */,
+      86,    3,  577,    2, 0x08 /* Private */,
+      88,    0,  584,    2, 0x08 /* Private */,
+      89,    0,  585,    2, 0x08 /* Private */,
+      90,    1,  586,    2, 0x08 /* Private */,
+      91,    1,  589,    2, 0x08 /* Private */,
 
  // signals: parameters
     QMetaType::Void, QMetaType::QString,    2,
@@ -331,18 +334,19 @@ static const uint qt_meta_data_TMZPlayer[] = {
     QMetaType::Void, QMetaType::QString,    2,
     QMetaType::Void, QMetaType::QString,    2,
     QMetaType::Void, QMetaType::QString,    2,
-    QMetaType::Void, QMetaType::QString,    2,
-    QMetaType::Void, QMetaType::QString,    2,
-    QMetaType::Void,
-    QMetaType::Void,
-    QMetaType::Void,
-    QMetaType::Void,
-    QMetaType::Void, QMetaType::Int,    2,
-    QMetaType::Void,
-    QMetaType::Void, 0x80000000 | 69,    2,
-    QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void, QMetaType::QString,    2,
+    QMetaType::Void, QMetaType::QString,    2,
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void, QMetaType::Int,    2,
+    QMetaType::Void,
+    QMetaType::Void, 0x80000000 | 70,    2,
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void, QMetaType::QString,    2,
     QMetaType::Void, QMetaType::Int,    2,
     QMetaType::Void,
     QMetaType::Void,
@@ -352,8 +356,8 @@ static const uint qt_meta_data_TMZPlayer[] = {
     QMetaType::Void, QMetaType::Int,    2,
     QMetaType::Void, QMetaType::Int,    2,
     QMetaType::Void,
-    QMetaType::Void, 0x80000000 | 83,   84,
-    QMetaType::Void, 0x80000000 | 86, QMetaType::Int, QMetaType::Int,    2,    2,    2,
+    QMetaType::Void, 0x80000000 | 84,   85,
+    QMetaType::Void, 0x80000000 | 87, QMetaType::Int, QMetaType::Int,    2,    2,    2,
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void, QMetaType::QString,    2,
@@ -422,33 +426,34 @@ void TMZPlayer::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, v
         case 51: _t->changeLuminSubShortcut((*reinterpret_cast< QString(*)>(_a[1]))); break;
         case 52: _t->changeShotDir((*reinterpret_cast< QString(*)>(_a[1]))); break;
         case 53: _t->changeRecordDir((*reinterpret_cast< QString(*)>(_a[1]))); break;
-        case 54: _t->changeBackGround((*reinterpret_cast< QString(*)>(_a[1]))); break;
-        case 55: _t->changePicBackGround((*reinterpret_cast< QString(*)>(_a[1]))); break;
-        case 56: _t->lastFunction(); break;
-        case 57: _t->playFunction(); break;
-        case 58: _t->nextFunction(); break;
-        case 59: _t->stopFunction(); break;
-        case 60: _t->changeVolume((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 61: _t->returnPosition(); break;
-        case 62: _t->changePlayMode((*reinterpret_cast< PlayOrder(*)>(_a[1]))); break;
-        case 63: _t->shotMyScreen(); break;
-        case 64: _t->recordMyScreen(); break;
-        case 65: _t->changeShotFormat((*reinterpret_cast< QString(*)>(_a[1]))); break;
-        case 66: _t->changeRecordSize((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 67: _t->changeSplitStatus(); break;
-        case 68: _t->userEndRecord(); break;
-        case 69: _t->changeLumin((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 70: _t->quickMoveMediaPlus(); break;
-        case 71: _t->quickMoveMediaMinus(); break;
-        case 72: _t->changeMediaSpeed((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 73: _t->changeMediaStyle((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 74: _t->on_openFile_clicked(); break;
-        case 75: _t->closeEvent((*reinterpret_cast< QCloseEvent*(*)>(_a[1]))); break;
-        case 76: _t->sltResendPlayInfo((*reinterpret_cast< const PlayArea(*)>(_a[1])),(*reinterpret_cast< const int(*)>(_a[2])),(*reinterpret_cast< const int(*)>(_a[3]))); break;
-        case 77: _t->flushHisUI(); break;
-        case 78: _t->givingHistoryAddressToPlay(); break;
-        case 79: _t->givingHistoryAddressToDelete((*reinterpret_cast< QString(*)>(_a[1]))); break;
-        case 80: _t->sltDelHistoricalContent((*reinterpret_cast< const int(*)>(_a[1]))); break;
+        case 54: _t->musicWidgetChange(); break;
+        case 55: _t->changeBackGround((*reinterpret_cast< QString(*)>(_a[1]))); break;
+        case 56: _t->changePicBackGround((*reinterpret_cast< QString(*)>(_a[1]))); break;
+        case 57: _t->lastFunction(); break;
+        case 58: _t->playFunction(); break;
+        case 59: _t->nextFunction(); break;
+        case 60: _t->stopFunction(); break;
+        case 61: _t->changeVolume((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 62: _t->returnPosition(); break;
+        case 63: _t->changePlayMode((*reinterpret_cast< PlayOrder(*)>(_a[1]))); break;
+        case 64: _t->shotMyScreen(); break;
+        case 65: _t->recordMyScreen(); break;
+        case 66: _t->changeShotFormat((*reinterpret_cast< QString(*)>(_a[1]))); break;
+        case 67: _t->changeRecordSize((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 68: _t->changeSplitStatus(); break;
+        case 69: _t->userEndRecord(); break;
+        case 70: _t->changeLumin((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 71: _t->quickMoveMediaPlus(); break;
+        case 72: _t->quickMoveMediaMinus(); break;
+        case 73: _t->changeMediaSpeed((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 74: _t->changeMediaStyle((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 75: _t->on_openFile_clicked(); break;
+        case 76: _t->closeEvent((*reinterpret_cast< QCloseEvent*(*)>(_a[1]))); break;
+        case 77: _t->sltResendPlayInfo((*reinterpret_cast< const PlayArea(*)>(_a[1])),(*reinterpret_cast< const int(*)>(_a[2])),(*reinterpret_cast< const int(*)>(_a[3]))); break;
+        case 78: _t->flushHisUI(); break;
+        case 79: _t->givingHistoryAddressToPlay(); break;
+        case 80: _t->givingHistoryAddressToDelete((*reinterpret_cast< QString(*)>(_a[1]))); break;
+        case 81: _t->sltDelHistoricalContent((*reinterpret_cast< const int(*)>(_a[1]))); break;
         default: ;
         }
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
@@ -587,13 +592,13 @@ int TMZPlayer::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 81)
+        if (_id < 82)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 81;
+        _id -= 82;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 81)
+        if (_id < 82)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 81;
+        _id -= 82;
     }
     return _id;
 }

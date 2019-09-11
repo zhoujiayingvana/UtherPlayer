@@ -11,14 +11,11 @@
 
 #include <QtCore/QVariant>
 #include <QtWidgets/QApplication>
-#include <QtWidgets/QHeaderView>
-#include <QtWidgets/QLabel>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QScrollArea>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
-#include <playlist.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -28,7 +25,6 @@ public:
     QWidget *centralWidget;
     QPushButton *hideRightBarBtn;
     QPushButton *hideLeftBarBtn;
-    playList *displayList;
     QPushButton *showLeftBarBtn;
     QScrollArea *scrollArea;
     QWidget *leftsideBar;
@@ -37,7 +33,6 @@ public:
     QPushButton *showRightBarBtn;
     QScrollArea *historyList;
     QWidget *rightsideBar;
-    QLabel *listNameLabel;
 
     void setupUi(QMainWindow *TMZPlayer)
     {
@@ -54,9 +49,6 @@ public:
         hideLeftBarBtn->setObjectName(QString::fromUtf8("hideLeftBarBtn"));
         hideLeftBarBtn->setGeometry(QRect(290, 310, 21, 21));
         hideLeftBarBtn->setCursor(QCursor(Qt::PointingHandCursor));
-        displayList = new playList(centralWidget);
-        displayList->setObjectName(QString::fromUtf8("displayList"));
-        displayList->setGeometry(QRect(340, 80, 781, 511));
         showLeftBarBtn = new QPushButton(centralWidget);
         showLeftBarBtn->setObjectName(QString::fromUtf8("showLeftBarBtn"));
         showLeftBarBtn->setGeometry(QRect(0, 310, 21, 21));
@@ -90,9 +82,6 @@ public:
         rightsideBar->setObjectName(QString::fromUtf8("rightsideBar"));
         rightsideBar->setGeometry(QRect(0, 0, 219, 589));
         historyList->setWidget(rightsideBar);
-        listNameLabel = new QLabel(centralWidget);
-        listNameLabel->setObjectName(QString::fromUtf8("listNameLabel"));
-        listNameLabel->setGeometry(QRect(340, 10, 431, 51));
         TMZPlayer->setCentralWidget(centralWidget);
 
         retranslateUi(TMZPlayer);
@@ -107,7 +96,6 @@ public:
         hideLeftBarBtn->setText(QApplication::translate("TMZPlayer", "<-", nullptr));
         showLeftBarBtn->setText(QApplication::translate("TMZPlayer", "->", nullptr));
         showRightBarBtn->setText(QApplication::translate("TMZPlayer", "<-", nullptr));
-        listNameLabel->setText(QApplication::translate("TMZPlayer", "TextLabel", nullptr));
     } // retranslateUi
 
 };

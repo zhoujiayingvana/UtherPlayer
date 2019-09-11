@@ -92,17 +92,17 @@ public slots:
 
 private slots:
     void displaySearchResult(QString inputStr);
-
+    //实现media跳转到指定时间
     void currentPosChanged(int);
-
+    //切换全屏
     void fullScreenMode();
-
+    //隐藏左侧栏
     void on_hideLeftBarBtn_clicked();
-
+    //显示左侧栏
     void on_showLeftBarBtn_clicked();
-
+    //隐藏右侧栏
     void on_hideRightBarBtn_clicked();
-
+    //显示右侧栏
     void on_showRightBarBtn_clicked();
 
     void on_systemTrayModeBtn_clicked();
@@ -110,7 +110,7 @@ private slots:
     void on_activatedSysTrayIcon(QSystemTrayIcon::ActivationReason);
 
     void on_showMainAction();
-
+    //播放暂停切换
     void on_playOrPauseAction();
 
     void on_displayMode_maxAction();
@@ -118,21 +118,21 @@ private slots:
     void on_displayMode_miniAction();
 
     void on_displayMode_trayAction();
-
-    void on_playOrder_listOrderAction();//改为列表循环
-
-    void on_playOrder_shuffleAction();//改为随机播放
-
-    void on_playOrder_repeatAction();//改为单曲循环
-
-    void on_playOrder_orderAction();//改为顺序播放
+    //改为列表循环
+    void on_playOrder_listOrderAction();
+    //改为随机播放
+    void on_playOrder_shuffleAction();
+    //改为单曲循环
+    void on_playOrder_repeatAction();
+    //改为顺序播放
+    void on_playOrder_orderAction();
 
     void on_exitAction();
-
-    void on_lastSongAction();//上一个
-
-    void on_nextSongAction();//下一个
-
+    //上一个
+    void on_lastSongAction();
+    //下一个
+    void on_nextSongAction();
+    //转到mini模式
     void on_miniMode_clicked();
 
     void miniToMaxSlot();

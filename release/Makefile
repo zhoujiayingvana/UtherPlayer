@@ -208,6 +208,7 @@ Makefile: ../UtherPlayer.pro ../../QTAnZhuangBao/5.12.2/mingw73_64/mkspecs/featu
 		../../QTAnZhuangBao/5.12.2/mingw73_64/mkspecs/features/qt_config.prf \
 		../../QTAnZhuangBao/5.12.2/mingw73_64/mkspecs/win32-g++/qmake.conf \
 		../../QTAnZhuangBao/5.12.2/mingw73_64/mkspecs/features/spec_post.prf \
+		.qmake.stash \
 		../../QTAnZhuangBao/5.12.2/mingw73_64/mkspecs/features/exclusive_builds.prf \
 		../../QTAnZhuangBao/5.12.2/mingw73_64/mkspecs/features/toolchain.prf \
 		../../QTAnZhuangBao/5.12.2/mingw73_64/mkspecs/features/default_pre.prf \
@@ -385,6 +386,7 @@ Makefile: ../UtherPlayer.pro ../../QTAnZhuangBao/5.12.2/mingw73_64/mkspecs/featu
 ../../QTAnZhuangBao/5.12.2/mingw73_64/mkspecs/features/qt_config.prf:
 ../../QTAnZhuangBao/5.12.2/mingw73_64/mkspecs/win32-g++/qmake.conf:
 ../../QTAnZhuangBao/5.12.2/mingw73_64/mkspecs/features/spec_post.prf:
+.qmake.stash:
 ../../QTAnZhuangBao/5.12.2/mingw73_64/mkspecs/features/exclusive_builds.prf:
 ../../QTAnZhuangBao/5.12.2/mingw73_64/mkspecs/features/toolchain.prf:
 ../../QTAnZhuangBao/5.12.2/mingw73_64/mkspecs/features/default_pre.prf:

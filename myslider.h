@@ -13,9 +13,9 @@ signals:
     void timerStop();
     void timerStart();
 protected:
-    void mousePressEvent(QMouseEvent *event);
-    void mouseReleaseEvent(QMouseEvent *event);
-    void wheelEvent(QWheelEvent *event);
+    void mousePressEvent(QMouseEvent *event);//点击时重设value至点击位置并使计时器停止
+    void mouseReleaseEvent(QMouseEvent *event);//松开后计时器启动
+    void wheelEvent(QWheelEvent *event);//滚轮改变value
 
 };
 

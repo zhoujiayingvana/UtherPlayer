@@ -291,7 +291,7 @@ BottomBar::BottomBar(QWidget *parent) : QWidget(parent)
 
 }
 
-void BottomBar::on_playSlider_valueChanged(int value)
+void BottomBar::on_playSlider_valueChanged(int value)//拖拽播放条时改变当前时间
 {
     int val =value/1000;
     if(val/60>=10&&val%60>=10)
@@ -315,40 +315,40 @@ void BottomBar::on_playSlider_valueChanged(int value)
     emit currentPosChanged(value);
 }
 
-void BottomBar::on_lastButton_clicked()
+void BottomBar::on_lastButton_clicked()//上一个
 {
     emit lastButton_clicked();
 }
 
-void BottomBar::on_pauseButton_clicked()
+void BottomBar::on_pauseButton_clicked()//播放暂停
 {
     emit pauseButton_clicked();
 
 }
 
-void BottomBar::timePassingBy()
+void BottomBar::timePassingBy()//发射获取当前时间的信号
 {
     emit needPosition();
 }
 
-void BottomBar::setPlaySliderValue(int val)
+void BottomBar::setPlaySliderValue(int val)//使进度条随时间走
 {
     playSlider->setValue(val);
 }
 
-void BottomBar::on_nextButton_clicked()
+void BottomBar::on_nextButton_clicked()//下一个
 {
     emit nextButton_clicked();
 
 }
 
-void BottomBar::on_stopButton_clicked()
+void BottomBar::on_stopButton_clicked()//停止
 {
     emit stopButton_clicked();
 
 }
 
-void BottomBar::on_playModeButton_clicked()
+void BottomBar::on_playModeButton_clicked()//改变播放模式
 {
     switch(playModeNum)
     {
@@ -387,13 +387,13 @@ void BottomBar::on_playModeButton_clicked()
 
 }
 
-void BottomBar::changePlayMode(int pmn)
+void BottomBar::changePlayMode(int pmn)//接收信号改变播放模式
 {
     playModeNum = pmn;
     emit playModeButton->click();
 }
 
-void BottomBar::changePauseButton(bool isPlaying)
+void BottomBar::changePauseButton(bool isPlaying)//改变播放暂停键图标
 {
     if(isPlaying)
     {
@@ -600,22 +600,22 @@ void BottomBar::rcvSwitchModeButton(MediaType& _mediaType)//点击切换音乐/�
     }
 }
 
-void BottomBar::volumeWidgetDetection()
+void BottomBar::volumeWidgetDetection()//检测鼠标是否移至音量悬浮窗
 {
     isatWidget(volumeWidget);
 }
 
-void BottomBar::definitionWidgetDetection()
+void BottomBar::definitionWidgetDetection()//检测鼠标是否移至滤镜悬浮窗
 {
     isatWidget(definitionWidget);
 }
 
-void BottomBar::settingsWidgetDetection()
+void BottomBar::settingsWidgetDetection()//检测鼠标是否移至设置悬浮窗
 {
     isatWidget(settingsWidget);
 }
 
-void BottomBar::on_full_screenButton_clicked()
+void BottomBar::on_full_screenButton_clicked()//全屏发射信号
 {
     emit full_screenButton_clicked();
     volumeWidget->hide();
@@ -734,12 +734,12 @@ void BottomBar::hideVolumeWidget()
     volumeWidget->hide();
 }
 
-void BottomBar::volumeSliderValueAdd()
+void BottomBar::volumeSliderValueAdd()//音量加
 {
     volumeSlider->setValue(volumeSlider->value()+5);
 }
 
-void BottomBar::volumeSliderValueSub()
+void BottomBar::volumeSliderValueSub()//音量减
 {
     volumeSlider->setValue(volumeSlider->value()-5);
 }

@@ -83,7 +83,7 @@ public:
     void retranslateUi(QWidget *Mini)
     {
         Mini->setWindowTitle(QApplication::translate("Mini", "Form", nullptr));
-        songLabel->setText(QApplication::translate("Mini", "\346\232\202\346\227\240\346\255\214\346\233\262\346\222\255\346\224\276", nullptr));
+        songLabel->setText(QApplication::translate("Mini", "Uther Player", nullptr));
         singerLabel->setText(QApplication::translate("Mini", "~", nullptr));
         volumeBtn->setText(QString());
         closeBtn->setText(QString());
