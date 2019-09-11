@@ -260,8 +260,8 @@ TMZPlayer::TMZPlayer(QWidget *parent,Media* m) :
     connect(sysTrayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)), this, SLOT(on_activatedSysTrayIcon(QSystemTrayIcon::ActivationReason)));
     connect(mini, SIGNAL(volumeChanged(int)), pBottomBar, SLOT(changeVolume(int)));
     connect(downloadListBtn, SIGNAL(clicked()), this, SLOT(showDownloadList()));
-//    connect(ui->displayList, SIGNAL(downloadFilesChangesSignal(int, QList<QString>)),
-//            this, SLOT(downloadFilesChangesSlot(int, QList<QString>)));
+    connect(ui->displayList, SIGNAL(downloadFilesChangesSignal(int, QList<QString>)),
+            this, SLOT(downloadFilesChangesSlot(int, QList<QString>)));
     
     //9.9
 
@@ -342,7 +342,7 @@ TMZPlayer::TMZPlayer(QWidget *parent,Media* m) :
     QString qss;
     qss = qssfile.readAll();
     this->setStyleSheet(qss);
-//    qDebug()<<this;
+    qDebug()<<this;
     
     
 
@@ -471,34 +471,31 @@ bool TMZPlayer::whetherInitializeListButton()
  */
 void TMZPlayer::addListSlot()
 {
-    mergedPlaylist* tempMPL = new mergedPlaylist();
-    playlistsContainer.append(tempMPL);
+    playlistsContainer.append(new mergedPlaylist);
 
     QString temp = playlistsContainer.last()->getListName();
     emit sendNewFolderName(temp);
 
-
-    listBoxLayout->addWidget(tempMPL);
-//    playlistsContainer.last()->show();
-//    connect(playlistsContainer.at(playlistsContainer.length() - 1),
-//            SIGNAL(givingTempSNAndFiles(int, QList<QString>)),
-//            ui->displayList,
-//            SLOT(recevingSNAndFiles(int, QList<QString>)));
+    listBoxLayout->addWidget(playlistsContainer.at(playlistsContainer.length() - 1));
+    connect(playlistsContainer.at(playlistsContainer.length() - 1),
+            SIGNAL(givingTempSNAndFiles(int, QList<QString>)),
+            ui->displayList,
+            SLOT(recevingSNAndFiles(int, QList<QString>)));
     
-//    connect(ui->displayList,
-//            SIGNAL(changeFilesInListSignal(int, QList<QString>)),
-//            playlistsContainer.at(playlistsContainer.length() - 1),
-//            SLOT(changeFilesInListSlot(int, QList<QString>)));
+    connect(ui->displayList,
+            SIGNAL(changeFilesInListSignal(int, QList<QString>)),
+            playlistsContainer.at(playlistsContainer.length() - 1),
+            SLOT(changeFilesInListSlot(int, QList<QString>)));
     
-//    connect(playlistsContainer.at(playlistsContainer.length() - 1),
-//            SIGNAL(showChangedListSignal(int, QList<QString>)),
-//            ui->displayList,
-//            SLOT(showChangedListSlot(int, QList<QString>)));
+    connect(playlistsContainer.at(playlistsContainer.length() - 1),
+            SIGNAL(showChangedListSignal(int, QList<QString>)),
+            ui->displayList,
+            SLOT(showChangedListSlot(int, QList<QString>)));
     
-//    connect(playlistsContainer.at(playlistsContainer.length() - 1),
-//            SIGNAL(givingListName(QString)),
-//            this,
-//            SLOT(receivingListName(QString)));
+    connect(playlistsContainer.at(playlistsContainer.length() - 1),
+            SIGNAL(givingListName(QString)),
+            this,
+            SLOT(receivingListName(QString)));
     
     connect(playlistsContainer.at(playlistsContainer.length() - 1),
             SIGNAL(hideContentsExceptThisSignal(int)),
@@ -543,19 +540,19 @@ void TMZPlayer::addListSlot()
  */
 void TMZPlayer::showDownloadList()
 {
-//    qDebug() << ui->listNameLabel->text();
+    qDebug() << ui->listNameLabel->text();
     
-//    ui->listNameLabel->setText(QStringLiteral("我的下载"));
+    ui->listNameLabel->setText(QStringLiteral("我的下载"));
     //我的下载SN为0
-//    ui->displayList->recevingSNAndFiles(0, downloadSongs);
+    ui->displayList->recevingSNAndFiles(0, downloadSongs);
     
     
     //不允许右键点击事件
-//    ui->displayList->setEditTriggers(QAbstractItemView::NoEditTriggers);
-//    ui->displayList->setContextMenuPolicy(Qt::NoContextMenu);
+    ui->displayList->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    ui->displayList->setContextMenuPolicy(Qt::NoContextMenu);
     
     //不允许拖拽文件进入
-//    ui->displayList->setAcceptDrops(false);
+    ui->displayList->setAcceptDrops(false);
 }
 
 /* Author: zyt
@@ -576,7 +573,9 @@ void TMZPlayer::downloadFilesChangesSlot(int sn, QList<QString> files)
  */
 void TMZPlayer::receivingListName(QString listName)
 {
-//    ui->listNameLabel->setText(listName);
+    ui->listNameLabel->setText(listName);
+    
+    
 }
 
 /* Author: zyt
@@ -600,12 +599,12 @@ void TMZPlayer::hideContentsExceptThisSlot(int exceptSN)
  */
 void TMZPlayer::allowDragAndMenuSlot()
 {
-//    //允许右键点击事件
-//    ui->displayList->setEditTriggers(QAbstractItemView::NoEditTriggers);
-//    ui->displayList->setContextMenuPolicy(Qt::CustomContextMenu);
+    //允许右键点击事件
+    ui->displayList->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    ui->displayList->setContextMenuPolicy(Qt::CustomContextMenu);
     
-//    //允许拖拽文件进入
-//    ui->displayList->setAcceptDrops(true);
+    //允许拖拽文件进入
+    ui->displayList->setAcceptDrops(true);
 }
 
 /**
@@ -1113,13 +1112,10 @@ void TMZPlayer::changeBackGround(QString back)
 */
 void TMZPlayer::changePicBackGround(QString back)
 {
-    QFile qssfile(":/new/prefix1/myQss/back.qss");
-    qssfile.open(QFile::ReadOnly);
-    if(!qssfile.exists())
-        qDebug() <<"no file";
-    QString qss;
-    qss = qssfile.readAll();
-    this->setStyleSheet("QMainWindow{background-image:url("+back+");}"+qss);
+    this->setStyleSheet("QMainWindow{background-image:url("+back+");}"
+                        +"MediaWidget #space{background-color:rgba(255,255,255,200);}"
+                        +"QTableWidget{background-color:rgba(255,255,255,200);}"
+                        +"QScrollArea #scrollArea{background-color:rgba(255,255,255,200);}");
     
 }
 void TMZPlayer::lastFunction()//上一个
@@ -1532,10 +1528,10 @@ void TMZPlayer::zinit()
         historyLayout->addWidget(historyContainer.at(i));
     }
 
-//    connect(ui->displayList,
-//            SIGNAL(sendTempPlayInfo(const PlayArea&,const int&, const int&)),
-//            this->media,
-//            SLOT(play(const PlayArea&, const int&, const int&)));
+    connect(ui->displayList,
+            SIGNAL(sendTempPlayInfo(const PlayArea&,const int&, const int&)),
+            this->media,
+            SLOT(play(const PlayArea&, const int&, const int&)));
 
 
     QStringList oldFolders = this->media->getFolders().getFolderNames();
@@ -1550,25 +1546,25 @@ void TMZPlayer::zinit()
 
         listBoxLayout->addWidget(playlistsContainer.at(playlistsContainer.length() - 1));
 
-//        connect(playlistsContainer.at(playlistsContainer.length() - 1),
-//                SIGNAL(givingTempSNAndFiles(int, QList<QString>)),
-//                ui->displayList,
-//                SLOT(recevingSNAndFiles(int, QList<QString>)));
+        connect(playlistsContainer.at(playlistsContainer.length() - 1),
+                SIGNAL(givingTempSNAndFiles(int, QList<QString>)),
+                ui->displayList,
+                SLOT(recevingSNAndFiles(int, QList<QString>)));
 
-//        connect(ui->displayList,
-//                SIGNAL(changeFilesInListSignal(int, QList<QString>)),
-//                playlistsContainer.at(playlistsContainer.length() - 1),
-//                SLOT(changeFilesInListSlot(int, QList<QString>)));
+        connect(ui->displayList,
+                SIGNAL(changeFilesInListSignal(int, QList<QString>)),
+                playlistsContainer.at(playlistsContainer.length() - 1),
+                SLOT(changeFilesInListSlot(int, QList<QString>)));
 
-//        connect(playlistsContainer.at(playlistsContainer.length() - 1),
-//                SIGNAL(showChangedListSignal(int, QList<QString>)),
-//                ui->displayList,
-//                SLOT(showChangedListSlot(int, QList<QString>)));
+        connect(playlistsContainer.at(playlistsContainer.length() - 1),
+                SIGNAL(showChangedListSignal(int, QList<QString>)),
+                ui->displayList,
+                SLOT(showChangedListSlot(int, QList<QString>)));
 
-//        connect(playlistsContainer.at(playlistsContainer.length() - 1),
-//                SIGNAL(givingListName(QString)),
-//                this,
-//                SLOT(receivingListName(QString)));
+        connect(playlistsContainer.at(playlistsContainer.length() - 1),
+                SIGNAL(givingListName(QString)),
+                this,
+                SLOT(receivingListName(QString)));
 
         connect(playlistsContainer.at(playlistsContainer.length() - 1),
                 SIGNAL(hideContentsExceptThisSignal(int)),

@@ -51,11 +51,18 @@ void MediaWidget::mediaLuminSub()
     setBrightness(brightness()-5);
 }
 
+void MediaWidget::mousePressEvent(QMouseEvent *event)
+{
+    Q_UNUSED(event);
+    emit mousePress();
+}
+
 void MediaWidget::mouseDoubleClickEvent(QMouseEvent *event)
 {
 
     Q_UNUSED(event);
     emit full_screenButton_clicked();
+    emit mousePress();
 }
 
 void MediaWidget::mouseMoveEvent(QMouseEvent *event)

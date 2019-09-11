@@ -73,7 +73,7 @@ Mini::Mini(QWidget *parent,Media* m) :
     ui->playOrPauseBtn->setText("");
     ui->nextSongBtn->setText("");
 
-    ui->playOrPauseBtn->setToolTip(QStringLiteral("暂停"));
+    ui->playOrPauseBtn->setToolTip(QStringLiteral("播放"));
 
 
     ui->lastSongBtn->setToolTip(QStringLiteral("上一曲"));

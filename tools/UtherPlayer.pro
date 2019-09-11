@@ -110,10 +110,8 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 DISTFILES += \
     user/Retina.db \
-    vid/t3.avi \
-    uther.rc
+    vid/t3.avi
 
 RESOURCES += \
     background.qrc \
     iconimage.qrc
-RC_FILE += uther.rc
