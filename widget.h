@@ -4,6 +4,11 @@
 #include <QWidget>
 #include <QDebug>
 
+/*
+ *Author:LY
+ *Function:实现悬浮窗
+ */
+
 class Widget : public QWidget
 {
     Q_OBJECT
@@ -12,7 +17,7 @@ public:
     ~Widget();
 
 protected:
-    virtual void leaveEvent(QEvent *event);
+    virtual void leaveEvent(QEvent *event);//鼠标离开时悬浮窗隐藏
 
 
 
