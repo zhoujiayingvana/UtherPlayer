@@ -11,7 +11,7 @@ MySlider::~MySlider()
 
 }
 
-void MySlider::mousePressEvent(QMouseEvent *event)
+void MySlider::mousePressEvent(QMouseEvent *event)//点击时重设value至点击位置并使计时器停止
 {
 
     //使Slider能正常响应其他鼠标事件
@@ -31,7 +31,7 @@ void MySlider::mousePressEvent(QMouseEvent *event)
 
 }
 
-void MySlider::mouseReleaseEvent(QMouseEvent *event)
+void MySlider::mouseReleaseEvent(QMouseEvent *event)//松开后计时器启动
 {
     //使Slider能正常响应其他鼠标事件
     QSlider::mouseReleaseEvent(event);
@@ -39,7 +39,7 @@ void MySlider::mouseReleaseEvent(QMouseEvent *event)
     emit timerStart();
 }
 
-void MySlider::wheelEvent(QWheelEvent *event)
+void MySlider::wheelEvent(QWheelEvent *event)//滚轮改变value
 {
     //获取最大最小值
     int max = maximum();
