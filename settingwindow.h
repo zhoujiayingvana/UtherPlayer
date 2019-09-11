@@ -92,7 +92,7 @@ signals:
     //关闭/最小化托盘,连接titleBar
     void sigCloseChange(int);
 
-    //修改清晰度，连接bottomBar
+    //修改播放画面滤镜
     void sigDefinitionChange(int);
 
     //修改媒体库目录

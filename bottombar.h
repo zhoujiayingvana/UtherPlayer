@@ -28,6 +28,12 @@ public:
     //连接设置界面
     void connectSettingAndBottom(SettingWindow *);
 
+    int getQuickMoveTime() const;//得到快进快退秒数
+
+    int getMultiplyingPower() const;//得到播放倍速
+
+    MySlider *getPlaySpeedSlider() const;//得到播放倍速条
+
 signals:
     void full_screenButton_clicked();
     void volumeChanged(int);
@@ -38,18 +44,21 @@ signals:
     void nextButton_clicked();
     void stopButton_clicked();
     void needPosition();
+    void changePlayMode(PlayOrder);
+    void videoPlaying();
+    void audioPlaying();
+    void sigChangeMediaStyle(int);
 
 public slots:
 
-    void startPlaying(int);
+
     //拖拽播放条时改变当前时间
     void on_playSlider_valueChanged(int);
-
     //上一个
     void on_lastButton_clicked();
     //播放暂停
     void on_pauseButton_clicked();
-    //使进度条随时间走
+    //发射获取当前时间的信号
     void timePassingBy();
     //使进度条随时间走
     void setPlaySliderValue(int);
@@ -57,6 +66,10 @@ public slots:
     void on_nextButton_clicked();
     //停止
     void on_stopButton_clicked();
+    //改变播放模式
+    void on_playModeButton_clicked();
+    //接收信号改变播放模式
+    void changePlayMode(int);
     //改变播放暂停键图标
     void changePauseButton(bool);
 
@@ -71,7 +84,7 @@ public slots:
     void rcvSwitchModeButton(MediaType& _mediaType);
     //检测鼠标是否移至音量悬浮窗
     void volumeWidgetDetection ();
-    //检测鼠标是否移至清晰度悬浮窗
+    //检测鼠标是否移至滤镜悬浮窗
     void definitionWidgetDetection ();
     //检测鼠标是否移至设置悬浮窗
     void settingsWidgetDetection ();
@@ -103,7 +116,7 @@ public slots:
     //改变播放倍速
     void changeMultiplyingPower(int);
 
-    //改变清晰度
+    //改变滤镜
     void changeDefinition(int);
 
     //音量加
@@ -117,7 +130,15 @@ public slots:
     void quickMovePlaySliderMinus();
     //改变totalTime
     void setTotalTime(qint64);
+    //停止时清空playSlider
+    void clearPlaySlider();
 
+    //默认滤镜
+    void on_p360DefinitionButton_clicked();
+    //明亮滤镜
+    void on_p480DefinitionButton_clicked();
+    //柔和滤镜
+    void on_p720DefinitionButton_clicked();
 
 private:
     void isatWidget(QWidget *);
@@ -131,11 +152,12 @@ private:
     BottomButton *  volumeButton;//静音/恢复音量按钮
     MySlider * volumeSlider;//音量条
     QPushButton *  playModeButton;//播放模式按钮
+    int playModeNum;//播放模式编号
 
     QLabel * space ;//底部空白
     QLabel * slashLabel;//视频模式“/”
     QLabel * anotherSpace;//底部另一片空白
-    BottomButton * definitionButton;//清晰度按钮
+    BottomButton * definitionButton;//滤镜按钮
     BottomButton * settingsButton;//视频设置按钮
 
     QPushButton * full_screenButton;//全屏/恢复按钮
@@ -146,10 +168,9 @@ private:
     Widget * volumeWidget;//视频模式音量窗口
     QVBoxLayout * volumeLayout;//视频模式音量窗口的布局
 
-    Widget * definitionWidget;//视频模式清晰度窗口
-    QVBoxLayout * definitionLayout;//视频模式清晰度窗口的布局
-    //视频模式清晰度窗口下各清晰度按钮
-    QPushButton * autoDefinitionButton;
+    Widget * definitionWidget;//视频模式滤镜窗口
+    QVBoxLayout * definitionLayout;//视频模式滤镜窗口的布局
+    //视频播放滤镜风格
     QPushButton * p360DefinitionButton;
     QPushButton * p480DefinitionButton;
     QPushButton * p720DefinitionButton;
@@ -160,13 +181,10 @@ private:
     Widget * settingsWidget;//视频模式设置窗口
     QVBoxLayout * settingsLayout;//视频模式设置窗口的布局
     //视频模式设置窗口内容
-    QLabel * playModeLabel;
-    QPushButton * playModeButton_1;
-    QPushButton * playModeButton_2;
-    QPushButton * playModeButton_3;
+
     QLabel * playSpeedLabel;
     QLabel * multiplyingPowerLabel;
-    MySlider * playSpeedSlider;
+    MySlider * playSpeedSlider;//倍速播放
     QLabel * videoRatioLabel;
     QPushButton * autoRatioButton;
     QPushButton * ratio4_3Button;

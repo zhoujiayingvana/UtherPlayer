@@ -78,6 +78,9 @@ signals:
     void whetherPlaying(bool);
     void sendFolderNames(QStringList);
     void getPosition(int);
+    void pauseBtnCilcked();
+    void changingPlayMode(int);
+    void stopPlaying();
 
     // 我加了这些
     // 双击历史记录，删除历史记录会传你操作的历史记录的地址出来
@@ -116,7 +119,19 @@ private slots:
 
     void on_displayMode_trayAction();
 
+    void on_playOrder_listOrderAction();//改为列表循环
+
+    void on_playOrder_shuffleAction();//改为随机播放
+
+    void on_playOrder_repeatAction();//改为单曲循环
+
+    void on_playOrder_orderAction();//改为顺序播放
+
     void on_exitAction();
+
+    void on_lastSongAction();//上一个
+
+    void on_nextSongAction();//下一个
 
     void on_miniMode_clicked();
 
@@ -180,7 +195,8 @@ private slots:
     void changeVolume(int);
     //返回现在时间
     void returnPosition();
-
+    //改变播放顺序
+    void changePlayMode(PlayOrder);
 
     //截屏
     void shotMyScreen();
@@ -198,6 +214,17 @@ private slots:
 
     //修改主界面亮度
     void changeLumin(int);
+
+    //视频快进
+    void quickMoveMediaPlus();
+    //视频快退
+    void quickMoveMediaMinus();
+
+    //修改视频播放倍速
+    void changeMediaSpeed(int);
+
+    //更换滤镜风格
+    void changeMediaStyle(int);
 
     void on_openFile_clicked();
 
@@ -222,6 +249,7 @@ private:
     TitleBar * pTitleBar;
     BottomBar * pBottomBar;
     MediaWidget * space;
+    QWidget *musicWidget;
     QHBoxLayout *middleBarLayout;
     QWidget *leftWidget;
     QHBoxLayout *leftLayout;
@@ -229,8 +257,6 @@ private:
     QHBoxLayout *rightLayout;
     QWidget *middleWidget;
     QVBoxLayout *middleLayout;
-    QWidget *fileWidget;
-    QVBoxLayout * fileLayout;
 
     QVBoxLayout *pLayout;
 
@@ -239,13 +265,10 @@ private:
 
     //托盘的功能
     QAction* exitAction;
-    QAction* settingAction;
     QAction* lastSongAction;
     QAction* nextSongAction;
     QAction* showStatusAction;
     QAction* playOrPauseAction;
-    QAction* whetherShowLyricAction;
-    QAction* whetherLockLyricAction;
 
     QMenu* playOrderMenu;
     QAction* playOrder_orderAction; //顺序播放
@@ -258,7 +281,6 @@ private:
     QAction* displayMode_miniAction;
     QAction* displayMode_trayAction;
 
-    bool isPlaying;
 
     Mini* mini;
 
