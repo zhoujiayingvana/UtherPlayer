@@ -29,7 +29,7 @@ protected:
     virtual void mouseDoubleClickEvent(QMouseEvent *event);//双击全屏
     virtual void mouseMoveEvent(QMouseEvent *event);//鼠标移动显示底部、侧边栏、箭头
     virtual void enterEvent(QEvent *event);//鼠标进入计时器启动
-    virtual void leaveEvent(QEvent *event);//鼠标进入计时器停止
+    virtual void leaveEvent(QEvent *event);//鼠标离开计时器停止
     virtual void wheelEvent(QWheelEvent *event);//滚轮调节音量
 
 private:
