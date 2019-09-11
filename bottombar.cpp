@@ -31,7 +31,7 @@ BottomBar::BottomBar(QWidget *parent) : QWidget(parent)
     slashLabel = new QLabel ();//视频模式“/”
     slashLabel->setText("/");
     anotherSpace = new QLabel ();//另一片空白
-    definitionButton = new BottomButton();//清晰度按钮
+    definitionButton = new BottomButton();//滤镜按钮
     settingsButton = new BottomButton();//视频设置按钮
     full_screenButton = new QPushButton();//全屏/恢复按钮
 
@@ -118,7 +118,7 @@ BottomBar::BottomBar(QWidget *parent) : QWidget(parent)
     totalTime->setText(QStringLiteral("4:00"));
     volumeButton->setStyleSheet("QPushButton{ border-image: url(:/image/image/bottomBar/volume.png); }");
     playModeButton->setStyleSheet("QPushButton{ border-image: url(:/image/image/bottomBar/order.png); }");
-    definitionButton->setText(QStringLiteral("清晰度"));
+    definitionButton->setText(QStringLiteral("滤镜"));
     settingsButton->setStyleSheet("QPushButton{ border-image: url(:/image/image/bottomBar/settings.png); }");
     full_screenButton->setStyleSheet("QPushButton{ border-image: url(:/image/image/bottomBar/fullScreen.png); }");
 
@@ -132,7 +132,7 @@ BottomBar::BottomBar(QWidget *parent) : QWidget(parent)
     volumeButton->setToolTip(QStringLiteral("静音"));
     volumeSlider->setToolTip(QStringLiteral("音量调节(Up/Down)"));
     playModeButton->setToolTip(QStringLiteral("播放模式"));
-    definitionButton->setToolTip(QStringLiteral("清晰度"));
+    definitionButton->setToolTip(QStringLiteral("滤镜"));
     settingsButton->setToolTip(QStringLiteral("设置"));
     full_screenButton->setToolTip(QStringLiteral("全屏"));
 
@@ -180,42 +180,35 @@ BottomBar::BottomBar(QWidget *parent) : QWidget(parent)
     volumeLayout->setContentsMargins(5, 5, 5, 5);
 
 
-    definitionWidget = new Widget(parent);//视频模式清晰度窗口
+    definitionWidget = new Widget(parent);//视频模式滤镜窗口
     definitionWidget->setObjectName(QString::fromUtf8("definitionWidget"));
     definitionWidget->setAutoFillBackground(true);//test
     definitionWidget->setPalette(QPalette(Qt::black));//test
     definitionWidget->setGeometry(200, 200, 40, 90);//test
     definitionWidget->hide();
-    //视频模式清晰度窗口下各清晰度按钮
-    autoDefinitionButton = new QPushButton(definitionWidget);
+    //视频模式滤镜窗口下各滤镜按钮
     p360DefinitionButton = new QPushButton(definitionWidget);
     p480DefinitionButton = new QPushButton(definitionWidget);
     p720DefinitionButton = new QPushButton(definitionWidget);
-    autoDefinitionButton->setFocusPolicy(Qt::NoFocus);
     p360DefinitionButton->setFocusPolicy(Qt::NoFocus);
     p480DefinitionButton->setFocusPolicy(Qt::NoFocus);
     p720DefinitionButton->setFocusPolicy(Qt::NoFocus);
-    autoDefinitionButton->setObjectName("autoDefinitionButton");
     p360DefinitionButton->setObjectName("p360DefinitionButton");
     p480DefinitionButton->setObjectName("p480DefinitionButton");
     p720DefinitionButton->setObjectName("p720DefinitionButton");
-    autoDefinitionButton->setFixedSize(30,20);
     p360DefinitionButton->setFixedSize(30,20);
     p480DefinitionButton->setFixedSize(30,20);
     p720DefinitionButton->setFixedSize(30,20);
-    autoDefinitionButton->setFlat(true);
     p360DefinitionButton->setFlat(true);
     p480DefinitionButton->setFlat(true);
     p720DefinitionButton->setFlat(true);
-    autoDefinitionButton->setText(QStringLiteral("自动"));//TEST
-    p360DefinitionButton->setText(QStringLiteral("普通"));//TEST
-    p480DefinitionButton->setText(QStringLiteral("清晰"));//TEST
-    p720DefinitionButton->setText(QStringLiteral("高清"));//TEST
-    definitionLayout =new QVBoxLayout(definitionWidget);//视频模式清晰度窗口的布局
+    p360DefinitionButton->setText(QStringLiteral("默认"));//TEST
+    p480DefinitionButton->setText(QStringLiteral("明亮"));//TEST
+    p720DefinitionButton->setText(QStringLiteral("柔和"));//TEST
+    definitionLayout =new QVBoxLayout(definitionWidget);//视频模式滤镜窗口的布局
     definitionLayout->addWidget(p720DefinitionButton);
     definitionLayout->addWidget(p480DefinitionButton);
     definitionLayout->addWidget(p360DefinitionButton);
-    definitionLayout->addWidget(autoDefinitionButton);
     definitionLayout->setContentsMargins(5, 5, 5, 5);
     definitionLayout->setSpacing(0);
 
@@ -342,6 +335,9 @@ BottomBar::BottomBar(QWidget *parent) : QWidget(parent)
     connect(pauseButton,SIGNAL(clicked()),this,SLOT(on_pauseButton_clicked()));
     connect(nextButton,SIGNAL(clicked()),this,SLOT(on_nextButton_clicked()));
     connect(stopButton,SIGNAL(clicked()),this,SLOT(on_stopButton_clicked()));
+    connect(p360DefinitionButton,SIGNAL(clicked()),this,SLOT(on_p360DefinitionButton_clicked()));
+    connect(p480DefinitionButton,SIGNAL(clicked()),this,SLOT(on_p480DefinitionButton_clicked()));
+    connect(p720DefinitionButton,SIGNAL(clicked()),this,SLOT(on_p720DefinitionButton_clicked()));
     connect(playSlider,SIGNAL(valueChanged(int)),this,SLOT(on_playSlider_valueChanged(int)));
     connect(volumeButton,SIGNAL(clicked(bool)),this,SLOT(on_volumeButton_clicked()));
     connect(volumeSlider,SIGNAL(valueChanged(int)),this,SLOT(on_volumeSlider_valueChanged(int)));
@@ -814,6 +810,45 @@ void BottomBar::setTotalTime(qint64 value)
 }
 
 /**
+* @method        BottomBar::on_p360DefinitionButton_clicked
+* @brief         播放滤镜默认
+* @param         VOID
+* @return        VOID
+* @author        涂晴昊
+* @date          2019-09-04
+*/
+void BottomBar::on_p360DefinitionButton_clicked()
+{
+    emit sigChangeMediaStyle(1);
+}
+
+/**
+* @method        BottomBar::on_p360DefinitionButton_clicked
+* @brief         播放明亮默认
+* @param         VOID
+* @return        VOID
+* @author        涂晴昊
+* @date          2019-09-04
+*/
+void BottomBar::on_p480DefinitionButton_clicked()
+{
+    emit sigChangeMediaStyle(2);
+}
+
+/**
+* @method        BottomBar::on_p360DefinitionButton_clicked
+* @brief         播放柔和默认
+* @param         VOID
+* @return        VOID
+* @author        涂晴昊
+* @date          2019-09-04
+*/
+void BottomBar::on_p720DefinitionButton_clicked()
+{
+    emit sigChangeMediaStyle(3);
+}
+
+/**
 * @method        BottomBar::connectSettingAndBottom
 * @brief         连接设置界面
 * @author        涂晴昊
@@ -835,16 +870,14 @@ void BottomBar::connectSettingAndBottom(SettingWindow *settingWindow)
 
     connect(settingWindow,SIGNAL(sigSpeedChange(int)),//设置界面修改主界面倍速
             this,SLOT(changeMultiplyingPower(int)));
-    connect(settingWindow,SIGNAL(sigDefinitionChange(int)),//设置界面修改主界面清晰度
+    connect(settingWindow,SIGNAL(sigDefinitionChange(int)),//设置界面修改主界面滤镜
             this,SLOT(changeDefinition(int)));
-    connect(p360DefinitionButton,SIGNAL(clicked()),//主界面->设置界面普通清晰度
+    connect(p360DefinitionButton,SIGNAL(clicked()),//主界面->设置界面默认滤镜
             settingWindow,SLOT(lv1DefinitionChange()));
-    connect(p480DefinitionButton,SIGNAL(clicked()),//主界面->设置界面清晰清晰度
+    connect(p480DefinitionButton,SIGNAL(clicked()),//主界面->设置界面明亮滤镜
             settingWindow,SLOT(lv2DefinitionChange()));
-    connect(p720DefinitionButton,SIGNAL(clicked()),//主界面->设置界面高清清晰度
+    connect(p720DefinitionButton,SIGNAL(clicked()),//主界面->设置界面柔和滤镜
             settingWindow,SLOT(lv3DefinitionChange()));
-    connect(autoDefinitionButton,SIGNAL(clicked()),//主界面->设置界面自动清晰度
-            settingWindow,SLOT(lv1DefinitionChange()));
     connect(this->playSpeedSlider,SIGNAL(valueChanged(int)),//主界面修改设置界面倍速
             settingWindow,SLOT(speedChange(int)));
     connect(settingWindow,SIGNAL(sigQuickMoveTimeChange(int)),//快进快退秒数修改
@@ -957,7 +990,7 @@ void BottomBar::changeMultiplyingPower(int mul)
 
 /**
 * @method        BottomBar::changeDefinition
-* @brief         改变主界面清晰度
+* @brief         改变主界面滤镜
 * @param         INT
 * @return        VOID
 * @author        涂晴昊
@@ -971,6 +1004,7 @@ void BottomBar::changeDefinition(int d)
         p480DefinitionButton->click();
     else
         p720DefinitionButton->click();
+    emit sigChangeMediaStyle(d);
 
 }
 

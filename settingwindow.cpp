@@ -752,7 +752,7 @@ void SettingWindow::speedChange(int s)
 
 /**
 * @method        SettingWindow::on_lv1Button_2_clicked
-* @brief         普通播放
+* @brief         默认播放
 * @param         VOID
 * @return        VOID
 * @author        涂晴昊
@@ -765,7 +765,7 @@ void SettingWindow::on_lv1Button_2_clicked()
 
 /**
 * @method        SettingWindow::on_lv2Button_2_clicked
-* @brief         清晰播放
+* @brief         明亮播放
 * @param         VOID
 * @return        VOID
 * @author        涂晴昊
@@ -778,7 +778,7 @@ void SettingWindow::on_lv2Button_2_clicked()
 
 /**
 * @method        SettingWindow::on_lv3Button_2_clicked
-* @brief         高清播放
+* @brief         柔和播放
 * @param         VOID
 * @return        VOID
 * @author        涂晴昊
@@ -791,7 +791,7 @@ void SettingWindow::on_lv3Button_2_clicked()
 
 /**
 * @method        SettingWindow::lv1DefinitionChange
-* @brief         主界面->设置界面普通清晰播放
+* @brief         主界面->设置界面默认风格播放
 * @param         VOID
 * @return        VOID
 * @author        涂晴昊
@@ -804,7 +804,7 @@ void SettingWindow::lv1DefinitionChange()
 
 /**
 * @method        SettingWindow::lv2DefinitionChange
-* @brief         主界面->设置界面清晰清晰播放
+* @brief         主界面->设置界面明亮风格播放
 * @param         VOID
 * @return        VOID
 * @author        涂晴昊
@@ -817,7 +817,7 @@ void SettingWindow::lv2DefinitionChange()
 
 /**
 * @method        SettingWindow::lv3DefinitionChange
-* @brief         主界面->设置界面高清清晰播放
+* @brief         主界面->设置界面柔和风格播放
 * @param         VOID
 * @return        VOID
 * @author        涂晴昊

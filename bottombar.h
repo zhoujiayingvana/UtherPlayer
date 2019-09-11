@@ -44,6 +44,7 @@ signals:
     void nextButton_clicked();
     void stopButton_clicked();
     void needPosition();
+    void sigChangeMediaStyle(int);
 
 public slots:
 
@@ -77,7 +78,7 @@ public slots:
     void rcvSwitchModeButton(MediaType& _mediaType);
     //检测鼠标是否移至音量悬浮窗
     void volumeWidgetDetection ();
-    //检测鼠标是否移至清晰度悬浮窗
+    //检测鼠标是否移至滤镜悬浮窗
     void definitionWidgetDetection ();
     //检测鼠标是否移至设置悬浮窗
     void settingsWidgetDetection ();
@@ -109,7 +110,7 @@ public slots:
     //改变播放倍速
     void changeMultiplyingPower(int);
 
-    //改变清晰度
+    //改变滤镜
     void changeDefinition(int);
 
     //音量加
@@ -124,6 +125,12 @@ public slots:
     //改变totalTime
     void setTotalTime(qint64);
 
+    //默认滤镜
+    void on_p360DefinitionButton_clicked();
+    //明亮滤镜
+    void on_p480DefinitionButton_clicked();
+    //柔和滤镜
+    void on_p720DefinitionButton_clicked();
 
 private:
     void isatWidget(QWidget *);
@@ -141,7 +148,7 @@ private:
     QLabel * space ;//底部空白
     QLabel * slashLabel;//视频模式“/”
     QLabel * anotherSpace;//底部另一片空白
-    BottomButton * definitionButton;//清晰度按钮
+    BottomButton * definitionButton;//滤镜按钮
     BottomButton * settingsButton;//视频设置按钮
 
     QPushButton * full_screenButton;//全屏/恢复按钮
@@ -152,10 +159,9 @@ private:
     Widget * volumeWidget;//视频模式音量窗口
     QVBoxLayout * volumeLayout;//视频模式音量窗口的布局
 
-    Widget * definitionWidget;//视频模式清晰度窗口
-    QVBoxLayout * definitionLayout;//视频模式清晰度窗口的布局
-    //视频模式清晰度窗口下各清晰度按钮
-    QPushButton * autoDefinitionButton;
+    Widget * definitionWidget;//视频模式滤镜窗口
+    QVBoxLayout * definitionLayout;//视频模式滤镜窗口的布局
+    //视频播放滤镜风格
     QPushButton * p360DefinitionButton;
     QPushButton * p480DefinitionButton;
     QPushButton * p720DefinitionButton;

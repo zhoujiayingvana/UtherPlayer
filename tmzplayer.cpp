@@ -302,6 +302,8 @@ TMZPlayer::TMZPlayer(QWidget *parent,Media* m) :
             this,SLOT(changeMediaSpeed(int)));
     connect(pBottomBar->getPlaySpeedSlider(),SIGNAL(valueChanged(int)),//主界面修改播放倍速
             this,SLOT(changeMediaSpeed(int)));
+    connect(pBottomBar,SIGNAL(sigChangeMediaStyle(int)),//设置视频滤镜风格
+            this,SLOT(changeMediaStyle(int)));
 
     // 连接自动切换模式
     connect(this, SIGNAL(sendMediaType(MediaType&)),
@@ -1092,6 +1094,7 @@ void TMZPlayer::changeBackGround(QString back)
 void TMZPlayer::changePicBackGround(QString back)
 {
     this->setStyleSheet("QMainWindow{background-image:url("+back+");}"
+                        +"MediaWidget #space{background-color:rgba(255,255,255,200);}"
                         +"QTableWidget{background-color:rgba(255,255,255,200);}"
                         +"QScrollArea #scrollArea{background-color:rgba(255,255,255,200);}");
     
@@ -1324,6 +1327,34 @@ void TMZPlayer::changeMediaSpeed(int i)
         media->getController()->setPlaybackRate(1.5);
     else if(i==3)
         media->getController()->setPlaybackRate(2);
+}
+
+/**
+* @method        TMZPlayer::changeMediaStyle
+* @brief         更换滤镜风格
+* @param         INT
+* @return        VOID
+* @author        涂晴昊
+* @date          2019-09-10
+*/
+void TMZPlayer::changeMediaStyle(int d)
+{
+    if(d==1){//默认
+        space->setBrightness(0);
+        space->setSaturation(0);
+        space->setContrast(0);
+    }
+    else if(d==2){//明亮
+        space->setBrightness(10);
+        space->setSaturation(5);
+        space->setContrast(2);
+
+    }else{//柔和
+        space->setBrightness(-18);
+        space->setSaturation(-25);
+        space->setContrast(-5);
+    }
+
 }
 
 

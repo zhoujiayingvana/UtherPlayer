@@ -65,7 +65,7 @@
     </rect>
    </property>
    <property name="currentIndex">
-    <number>1</number>
+    <number>2</number>
    </property>
    <widget class="QWidget" name="page_1">
     <widget class="QScrollArea" name="scrollArea_3">
@@ -449,7 +449,7 @@
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>70</y>
+         <y>80</y>
          <width>461</width>
          <height>151</height>
         </rect>
@@ -556,7 +556,7 @@
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>250</y>
+         <y>260</y>
          <width>461</width>
          <height>241</height>
         </rect>
@@ -729,7 +729,7 @@
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>520</y>
+         <y>530</y>
          <width>461</width>
          <height>631</height>
         </rect>
@@ -1105,7 +1105,7 @@
          <x>10</x>
          <y>10</y>
          <width>461</width>
-         <height>51</height>
+         <height>71</height>
         </rect>
        </property>
        <widget class="QLabel" name="label_6">
@@ -1125,7 +1125,7 @@
         <property name="geometry">
          <rect>
           <x>20</x>
-          <y>20</y>
+          <y>30</y>
           <width>71</width>
           <height>21</height>
          </rect>
@@ -1138,7 +1138,7 @@
         <property name="geometry">
          <rect>
           <x>120</x>
-          <y>20</y>
+          <y>30</y>
           <width>71</width>
           <height>21</height>
          </rect>
@@ -1154,7 +1154,7 @@
         <property name="geometry">
          <rect>
           <x>230</x>
-          <y>20</y>
+          <y>30</y>
           <width>71</width>
           <height>21</height>
          </rect>
@@ -1167,7 +1167,7 @@
         <property name="geometry">
          <rect>
           <x>330</x>
-          <y>20</y>
+          <y>30</y>
           <width>81</width>
           <height>21</height>
          </rect>
@@ -1230,7 +1230,7 @@
          </rect>
         </property>
         <property name="text">
-         <string>画质选择：</string>
+         <string>画面调节：</string>
         </property>
        </widget>
        <widget class="QWidget" name="pixelWidget_2" native="true">
@@ -1246,7 +1246,7 @@
          <item>
           <widget class="QRadioButton" name="lv1Button_2">
            <property name="text">
-            <string>普通</string>
+            <string>默认</string>
            </property>
            <property name="checked">
             <bool>true</bool>
@@ -1256,14 +1256,14 @@
          <item>
           <widget class="QRadioButton" name="lv2Button_2">
            <property name="text">
-            <string>清晰</string>
+            <string>明亮</string>
            </property>
           </widget>
          </item>
          <item>
           <widget class="QRadioButton" name="lv3Button_2">
            <property name="text">
-            <string>高清</string>
+            <string>柔和</string>
            </property>
           </widget>
          </item>
@@ -1326,7 +1326,7 @@
          <rect>
           <x>150</x>
           <y>30</y>
-          <width>181</width>
+          <width>221</width>
           <height>31</height>
          </rect>
         </property>

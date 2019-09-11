@@ -192,6 +192,9 @@ private slots:
     //修改视频播放倍速
     void changeMediaSpeed(int);
 
+    //更换滤镜风格
+    void changeMediaStyle(int);
+
     void on_openFile_clicked();
 
     void closeEvent(QCloseEvent *event);
