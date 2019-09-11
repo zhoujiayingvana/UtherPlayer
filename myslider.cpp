@@ -29,8 +29,6 @@ void MySlider::mousePressEvent(QMouseEvent *event)
     //发射信号使计时器停止
     emit timerStop();
 
-
-
 }
 
 void MySlider::mouseReleaseEvent(QMouseEvent *event)
@@ -39,9 +37,6 @@ void MySlider::mouseReleaseEvent(QMouseEvent *event)
     QSlider::mouseReleaseEvent(event);
     //发射信号使计时器重启
     emit timerStart();
-
-
-
 }
 
 void MySlider::wheelEvent(QWheelEvent *event)
