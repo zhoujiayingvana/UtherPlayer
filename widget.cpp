@@ -1,5 +1,10 @@
 ﻿#include "widget.h"
 
+/*
+ *Author:LY
+ *Function:实现悬浮窗
+ */
+
 Widget::Widget(QWidget *parent) : QWidget(parent)
 {
     pParent=parent;
@@ -13,7 +18,7 @@ Widget::~Widget()
 
 
 
-void Widget::leaveEvent(QEvent *event)
+void Widget::leaveEvent(QEvent *event)//鼠标离开时悬浮窗隐藏
 {
     Q_UNUSED(event);
     hide();
@@ -23,7 +28,7 @@ void Widget::leaveEvent(QEvent *event)
 
 
 
-void Widget::display(int x,int y)
+void Widget::display(int x,int y)//接收信号时悬浮窗出现在合适位置
 {
     if(this->window()->isFullScreen())
     {
