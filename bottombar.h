@@ -38,18 +38,20 @@ signals:
     void nextButton_clicked();
     void stopButton_clicked();
     void needPosition();
+    void changePlayMode(PlayOrder);
+    void videoPlaying();
+    void audioPlaying();
 
 public slots:
 
-    void startPlaying(int);
+
     //拖拽播放条时改变当前时间
     void on_playSlider_valueChanged(int);
-
     //上一个
     void on_lastButton_clicked();
     //播放暂停
     void on_pauseButton_clicked();
-    //使进度条随时间走
+    //发射获取当前时间的信号
     void timePassingBy();
     //使进度条随时间走
     void setPlaySliderValue(int);
@@ -57,6 +59,10 @@ public slots:
     void on_nextButton_clicked();
     //停止
     void on_stopButton_clicked();
+    //改变播放模式
+    void on_playModeButton_clicked();
+    //接收信号改变播放模式
+    void changePlayMode(int);
     //改变播放暂停键图标
     void changePauseButton(bool);
 
@@ -117,6 +123,8 @@ public slots:
     void quickMovePlaySliderMinus();
     //改变totalTime
     void setTotalTime(qint64);
+    //停止时清空playSlider
+    void clearPlaySlider();
 
 
 private:
@@ -131,6 +139,7 @@ private:
     BottomButton *  volumeButton;//静音/恢复音量按钮
     MySlider * volumeSlider;//音量条
     QPushButton *  playModeButton;//播放模式按钮
+    int playModeNum;//播放模式编号
 
     QLabel * space ;//底部空白
     QLabel * slashLabel;//视频模式“/”
@@ -160,19 +169,10 @@ private:
     Widget * settingsWidget;//视频模式设置窗口
     QVBoxLayout * settingsLayout;//视频模式设置窗口的布局
     //视频模式设置窗口内容
-    QLabel * playModeLabel;
-    QPushButton * playModeButton_1;
-    QPushButton * playModeButton_2;
-    QPushButton * playModeButton_3;
+
     QLabel * playSpeedLabel;
     QLabel * multiplyingPowerLabel;
     MySlider * playSpeedSlider;
-    QLabel * videoRatioLabel;
-    QPushButton * autoRatioButton;
-    QPushButton * ratio4_3Button;
-    QPushButton * ratio16_9Button;
-    QLabel * othersLabel;
-    QPushButton * someFunctionButton;//test
 
     int multiplyingPower;//倍速播放
 
