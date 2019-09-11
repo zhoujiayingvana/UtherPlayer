@@ -302,7 +302,7 @@ void playList::deleteFileFromDisk()
       else if(!file.exists())
         {
           QMessageBox noticeBox(QMessageBox::NoIcon, "提示", "      文件位置已被移动");
-          QPixmap hintBoxPixmap(":/image/image/test.png");
+          QPixmap hintBoxPixmap(":/image/image/hint.pngv");
           noticeBox.setIconPixmap(hintBoxPixmap.scaled(80,80));
           noticeBox.exec();
           this->removeRow(row);
@@ -515,7 +515,7 @@ void playList::dropEvent(QDropEvent *event)
   else if (toBeAddedFiles.empty())
     {
       QMessageBox hintBox(QMessageBox::NoIcon, "提示", "      请拖入有效文件");
-      QPixmap hintBoxPixmap(":/image/image/test.png");
+      QPixmap hintBoxPixmap(":/image/image/hint.png");
       hintBox.setIconPixmap(hintBoxPixmap.scaled(80,80));
       hintBox.exec();
     }

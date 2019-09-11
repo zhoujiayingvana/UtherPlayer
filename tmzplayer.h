@@ -11,6 +11,7 @@
 #include "settingwindow.h"
 #include "util/media.h"
 #include "QVideoWidget"
+#include "searchresult.h"
 
 #include <QIcon>
 #include <QMenu>
@@ -62,7 +63,14 @@ public:
     void zinit();
     void moveZHisText2First(const int& fromIndex);
 
+    QStringList getFilenames() const;
+    void setFilenames(const QStringList& value);
+
+    QStringList getFilepaths() const;
+    void setFilepaths(const QStringList& value);
+
 signals:
+    void sendInputStr(QString);
     void maximizeButton_clicked();
     void durationSignal(int);
     void sendMediaType(MediaType&);
@@ -76,7 +84,12 @@ signals:
     void playFileAddress(QString);
     void deleteFileAddress(QString);
 
+public slots:
+    void playWebSong(int);
+
 private slots:
+    void displaySearchResult(QString inputStr);
+
     void currentPosChanged(int);
 
     void fullScreenMode();
@@ -297,6 +310,10 @@ private:
     // 最后一个历史记录的地址
     int lastPos;
 
+    searchResult* searchResultWidget;
+
+    QStringList filenames;
+    QStringList filepaths;
 
 };
 

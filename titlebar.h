@@ -6,6 +6,7 @@
 #include <QPushButton>
 #include"myskinmenubutton.h"
 #include"settingwindow.h"
+#include "QLineEdit"
 
 
 /*
@@ -25,7 +26,11 @@ signals:
     void miniMode();
     void openFile_clicked();
 
+    //发送给searchResultWidget
+    void sendInputStr(QString);
+
 public slots:
+    void tempSendInputStr();
     void on_miniButton_clicked();//mini
     void on_fileButton_clicked();//发射信号打开文件
     void on_minimizeButton_clicked();//最小化
@@ -60,6 +65,8 @@ private:
     QPushButton *closeButton; //关闭按钮
     QWidget *p;
     int closeStatus;//关闭/最小化界面
+    QLineEdit *searchLineEdit;
+
 
     void connectSettingAndTitle();
 public:

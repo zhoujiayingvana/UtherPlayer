@@ -1278,6 +1278,8 @@ void TMZPlayer::on_openFile_clicked()
         MediaType currentMediaType = this->media->getCurrentMediaType();
         emit sendMediaType(currentMediaType);
         emit whetherPlaying(true);
+
+        this->flushHisUI();
     }
 }
 
@@ -1328,6 +1330,26 @@ void TMZPlayer::sltDelHistoricalContent(const int& _index)
 {
     this->media->getHistories().removeContent(_index);
     this->flushHisUI();
+}
+
+QStringList TMZPlayer::getFilepaths() const
+{
+    return filepaths;
+}
+
+void TMZPlayer::setFilepaths(const QStringList& value)
+{
+    filepaths = value;
+}
+
+QStringList TMZPlayer::getFilenames() const
+{
+    return filenames;
+}
+
+void TMZPlayer::setFilenames(const QStringList& value)
+{
+    filenames = value;
 }
 
 /* Author: zyt
@@ -1450,6 +1472,10 @@ void TMZPlayer::zinit()
 
 
       this->flushHisUI();
+
+      searchResultWidget = new searchResult(filenames,filepaths,this);
+      connect(this->searchResultWidget, SIGNAL(clickIndexSignal(int)),
+              this, SLOT(playWebSong(int)));
 }
 
 void TMZPlayer::moveZHisText2First(const int& fromIndex)
@@ -1460,5 +1486,37 @@ void TMZPlayer::moveZHisText2First(const int& fromIndex)
     this->historyContainer[0] = tHistory;
 }
 
+void TMZPlayer::playWebSong(int which)
+{
+    qDebug() << "i am here for web";
+    bool isLocal = false;
+    QString filePath = this->filepaths[which];
+
+    this->media->play(isLocal, filePath);
+    qint64 what = media->getController()->getDuration();
+    emit durationSignal(static_cast<int>(what));
+
+    MediaType currentMediaType = this->media->getCurrentMediaType();
+    emit sendMediaType(currentMediaType);
+    emit whetherPlaying(true);
+
+    this->flushHisUI();
+}
+
+//按回车之后回到这里，参数是用户输入的值
+void TMZPlayer::displaySearchResult(QString inputStr)
+{
+    QList<QMap<QString, QString> > temp = this->media->songWebSearch(inputStr);
+    this->filenames.clear();
+    this->filepaths.clear();
+    for (QMap<QString, QString> tMap: temp)
+    {
+        this->filenames.append(tMap.keys()[0]);
+        this->filepaths.append(tMap.values()[0]);
+    }
+    this->searchResultWidget->initOutput(this->filenames, this->filepaths);
+    this->searchResultWidget->show();
+
+}
 
 
