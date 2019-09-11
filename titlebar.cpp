@@ -1,4 +1,5 @@
-﻿#include "titlebar.h"
+﻿
+#include "titlebar.h"
 
 #include <QLabel>
 #include <QPushButton>
