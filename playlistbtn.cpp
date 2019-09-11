@@ -1,4 +1,4 @@
-#include "playlistbtn.h"
+﻿#include "playlistbtn.h"
 #include "newLineEdit.h"
 
 #include <QMenu>
@@ -40,6 +40,7 @@ playlistBtn::playlistBtn(int sn,QWidget *parent) : QPushButton(parent)
 
   listName = new newLineEdit(this);
   QString name = QString("收藏夹%1").arg(sn + 1);
+  listName->setFixedWidth(100);
   listName->setText(name);
   listName->setFixedHeight(17);
   listName->move(17,0);
@@ -49,7 +50,7 @@ playlistBtn::playlistBtn(int sn,QWidget *parent) : QPushButton(parent)
                           "border-style:outset; };");
 
   connect(listName,SIGNAL(listNameClickedSignal()),this,SLOT(showListSlot()));
-  connect(listName,SIGNAL(listNameDoubleClickedSignal()),this,SLOT(displayListSlot()));
+//  connect(listName,SIGNAL(listNameDoubleClickedSignal()),this,SLOT(displayListSlot()));
   connect(listName,SIGNAL(customContextMenuRequested(QPoint)),this,SLOT(listNameCallMenuSlot(QPoint)));
   connect(listName,SIGNAL(editingFinished()),this,SLOT(editingFinishedSlot()));
 }
@@ -193,8 +194,8 @@ void playlistBtn::hideContentSlot()
  */
 void playlistBtn::displayListSlot()
 {
-  emit givingSN(getSN());
-  emit wantingName(listName->text());
+//  emit givingSN(getSN());
+//  emit wantingName(listName->text());
 }
 
 /* Author: zyt

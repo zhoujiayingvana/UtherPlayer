@@ -580,13 +580,14 @@ void Media::closeSelf()
 void Media::startCreateGif(WId wid, QString fileName, QString filePath)
 {
     //检查图片路径是否合法
+    this->media_WId=wid;
     if(!Debug::isFileDirExits(filePath)){
         qDebug()<<"Media StartCreateGif() "<<Debug::getDebugErrorType(Debug::MyErrors::FILE_PATH_ERROR);
         return;
     }
     this->media_GifFullPath=filePath+"/"+fileName+".gif";
     //开始gif录制线程
-    this->media_WId=wid;
+    qDebug()<<this->media_GifFullPath;
     this->start();
 }
 

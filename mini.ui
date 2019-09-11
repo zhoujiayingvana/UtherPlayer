@@ -60,7 +60,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>暂无歌曲播放</string>
+    <string>Uther Player</string>
    </property>
    <property name="alignment">
     <set>Qt::AlignCenter</set>

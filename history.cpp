@@ -1,4 +1,4 @@
-#include "history.h"
+﻿#include "history.h"
 
 history::history(QWidget *parent, const int& _firstRank)
     : QWidget(parent), firstRank(_firstRank)
@@ -28,7 +28,7 @@ history::history(QWidget *parent, const int& _firstRank)
 
     deleteBtn = new QPushButton(this);
     deleteBtn->setObjectName(QString::fromUtf8("deleteBtn"));
-    deleteBtn->setGeometry(QRect(150, 8, 20, 20));
+    deleteBtn->setGeometry(QRect(200, 16, 20, 20));
     QIcon icon;
     icon.addFile(QString::fromUtf8(":/image/image/btn_delete_n.png"), QSize(), QIcon::Normal, QIcon::Off);
     deleteBtn->setIcon(icon);

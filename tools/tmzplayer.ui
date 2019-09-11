@@ -46,6 +46,16 @@
      <string>&lt;-</string>
     </property>
    </widget>
+   <widget class="playList" name="displayList">
+    <property name="geometry">
+     <rect>
+      <x>340</x>
+      <y>80</y>
+      <width>781</width>
+      <height>511</height>
+     </rect>
+    </property>
+   </widget>
    <widget class="QPushButton" name="showLeftBarBtn">
     <property name="geometry">
      <rect>
@@ -138,9 +148,29 @@
      </property>
     </widget>
    </widget>
+   <widget class="QLabel" name="listNameLabel">
+    <property name="geometry">
+     <rect>
+      <x>340</x>
+      <y>10</y>
+      <width>431</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>TextLabel</string>
+    </property>
+   </widget>
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>playList</class>
+   <extends>QTableWidget</extends>
+   <header location="global">playlist.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>
