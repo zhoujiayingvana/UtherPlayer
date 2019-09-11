@@ -423,7 +423,7 @@ bool TMZPlayer::nativeEvent(const QByteArray &eventType, void *message, long *re
     
 }
 
-void TMZPlayer::fullScreenMode()
+void TMZPlayer::fullScreenMode()//切换全屏
 {
     if(isFullScreen())
     {
@@ -749,7 +749,7 @@ void TMZPlayer::changeRecordDir(QString str)
     qDebug()<<gifPath;
 }
 
-void TMZPlayer::musicWidgetChange()
+void TMZPlayer::musicWidgetChange()//每过10s改变musicwidget图片
 {
     switch (imageNum)
     {
@@ -931,7 +931,7 @@ void TMZPlayer::creatMenu()
     sysTrayIcon->setContextMenu(sysTrayMenu);
 }
 
-void TMZPlayer::currentPosChanged(int time)
+void TMZPlayer::currentPosChanged(int time)//实现media跳转到指定时间
 {
     if((media->getController()->getPosition()-time)>=500)
     {
@@ -1028,7 +1028,7 @@ void TMZPlayer::on_displayMode_maxAction()
  * Name: on_displayMode_miniAction
  * Function: 槽，以mini模式显示
  */
-void TMZPlayer::on_displayMode_miniAction()
+void TMZPlayer::on_displayMode_miniAction()//转到mini模式
 {
     this->hide();
     changeBackGround(":/new/prefix1/myQss/style4.qss");
@@ -1071,12 +1071,12 @@ void TMZPlayer::on_exitAction()
 }
 
 
-void TMZPlayer::on_lastSongAction()
+void TMZPlayer::on_lastSongAction()//上一个
 {
     lastFunction();
 }
 
-void TMZPlayer::on_nextSongAction()
+void TMZPlayer::on_nextSongAction()//下一个
 {
     nextFunction();
 }
