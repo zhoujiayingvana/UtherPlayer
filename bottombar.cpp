@@ -87,9 +87,9 @@ BottomBar::BottomBar(QWidget *parent) : QWidget(parent)
     pauseButton->setFixedSize(40, 40);
     nextButton->setFixedSize(40, 40);
     stopButton->setFixedSize(40, 40);
-    currentPos->setFixedSize(36, 30);
+    currentPos->setFixedSize(52, 30);
     playSlider->setFixedHeight(20);
-    totalTime->setFixedSize(42, 30);
+    totalTime->setFixedSize(52, 30);
     volumeButton->setFixedSize(40, 40);
     volumeSlider->setFixedSize(60, 20);
     playModeButton->setFixedSize(40, 40);
@@ -249,7 +249,7 @@ BottomBar::BottomBar(QWidget *parent) : QWidget(parent)
 
 
     playSpeedLabel->setText(QStringLiteral("播放速度"));
-    multiplyingPowerLabel->setText(QStringLiteral("0.5      1.0      1.5     2.0"));
+    multiplyingPowerLabel->setText(QStringLiteral("0.5   1.0  1.5   2.0"));
 
     settingsLayout =new QVBoxLayout(settingsWidget);//视频模式设置窗口的布局
     settingsLayout->addWidget(playSpeedLabel);

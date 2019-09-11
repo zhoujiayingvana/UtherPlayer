@@ -109,6 +109,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 DISTFILES += \
+    image/backgroundPicture/uther2.png \
     user/Retina.db \
     vid/t3.avi \
     uther.rc

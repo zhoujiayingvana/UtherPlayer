@@ -1,4 +1,4 @@
-#include "playlistbtn.h"
+﻿#include "playlistbtn.h"
 #include "newLineEdit.h"
 
 #include <QMenu>
@@ -40,6 +40,7 @@ playlistBtn::playlistBtn(int sn,QWidget *parent) : QPushButton(parent)
 
   listName = new newLineEdit(this);
   QString name = QString("收藏夹%1").arg(sn + 1);
+  listName->setFixedWidth(100);
   listName->setText(name);
   listName->setFixedHeight(17);
   listName->move(17,0);

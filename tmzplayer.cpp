@@ -15,7 +15,7 @@ TMZPlayer::TMZPlayer(QWidget *parent,Media* m) :
     lastPos(0)
 {
     ui->setupUi(this);
-    resize(1280,768);
+    resize(1373,768);
     this->setWindowFlags(Qt::FramelessWindowHint|Qt::WindowMinimizeButtonHint);
     
     widget = new QWidget();
@@ -33,37 +33,41 @@ TMZPlayer::TMZPlayer(QWidget *parent,Media* m) :
     //录屏计时器
     picTime=new QDateTime();
     recordTimer=new QTimer(this);
-    //recordTimer->setSingleShot(true);
+    recordTimer->setSingleShot(true);
     timeLimit=5000;
     connect(recordTimer,SIGNAL(timeout()),this,SLOT(recordMyScreen()));
     userEnd=0;
 
 
-    
+
     pTitleBar = new TitleBar(this);
     //    pTitleBar->setAutoFillBackground(true);//test
     //    pTitleBar->setPalette(QPalette(Qt::black));//test
     pBottomBar = new BottomBar(this);
     //    pBottomBar->setAutoFillBackground(true);//test
     //    pBottomBar->setPalette(QPalette(Qt::black));//test
-    space = new MediaWidget(this);//test
+    space = new MediaWidget;//test
     //    space->setAutoFillBackground(true);//test
     //    space->setPalette(QPalette(Qt::gray));//test
     musicWidget = new QWidget(this);
     //设置播放窗口匹配
     media->getPlayWindow()->setVideoOutput(space);
-    QPalette palette(this->palette());
-    palette.setColor(QPalette::Background, Qt::black);
-    space->setPalette(palette);
+    //设置播放窗口背景色
     space->setAutoFillBackground(true);
+    QPalette palette;
+    palette.setColor(QPalette::Background, Qt::black);
+    //设置播放窗口背景图像
+    palette.setBrush(QPalette::Background,QBrush(QPixmap("../image/backgroundPicture/uther1.png")));
+    space->setPalette(palette);
+    qDebug()<<space->pos();
 
     ui->showLeftBarBtn->setVisible(false);
     ui->showRightBarBtn->setVisible(false);
-    
-    
+
+
     mini = new Mini(this);
     sysTrayIcon = new QSystemTrayIcon(this);
-    
+
 
 
     downloadListBtn = new QPushButton(this);
@@ -77,8 +81,8 @@ TMZPlayer::TMZPlayer(QWidget *parent,Media* m) :
     QIcon downloadIcon(":/image/image/musiclist.png");
     downloadListBtn->setIcon(downloadIcon);
     downloadListBtn->setIconSize(QSize(20,20));
-    
-    
+
+
     listBox = new QGroupBox(this);
     listBox->setTitle(QStringLiteral("列表"));
     listBox->setStyleSheet("QGroupBox { border: none; font-size: 15px; }");
@@ -88,38 +92,37 @@ TMZPlayer::TMZPlayer(QWidget *parent,Media* m) :
     addListBtnFont.setPointSize(11);
     addListBtn->setFont(addListBtnFont);
     addListBtn->setFlat(true);
-    
+
     ui->leftsideBarLayout->setAlignment(Qt::AlignTop);
     ui->leftsideBar->setLayout(ui->leftsideBarLayout);
     ui->leftsideBarLayout->addWidget(downloadListBtn);
     ui->leftsideBarLayout->addWidget(listBox);
-    
+
     ui->showLeftBarBtn->setFixedSize(21,21);
     ui->showRightBarBtn->setFixedSize(21,21);
     ui->hideLeftBarBtn->setFixedSize(21,21);
     ui->hideRightBarBtn->setFixedSize(21,21);
-    
-    
+
+
     listBoxLayout = new QVBoxLayout();
     listBoxLayout->setAlignment(Qt::AlignTop);
     listBoxLayout->setContentsMargins(0,20,0,0);
     listBox->setLayout(listBoxLayout);
     listBoxLayout->addWidget(addListBtn);
-    
-    
+
+
     QIcon icon = QIcon(":/image/image/test.png");
     sysTrayIcon->setIcon(icon);
     sysTrayIcon->setToolTip("TMZPlayer");
 
-    
+
     creatActions();
     creatMenu();
 
     sysTrayIcon->show();
-    
 
-    
-    
+
+
     middleBarLayout = new QHBoxLayout();
     leftWidget = new QWidget(this);
     leftLayout = new QHBoxLayout(leftWidget);
@@ -143,31 +146,31 @@ TMZPlayer::TMZPlayer(QWidget *parent,Media* m) :
     space->hide();
 
 
-    
-    
-    
+
+
+
     leftLayout->setContentsMargins(0, 0, 0, 0);
     rightLayout->setContentsMargins(0, 0, 0, 0);
     middleLayout->setContentsMargins(0, 0, 0, 0);
     leftLayout->setSpacing(0);
     rightLayout->setSpacing(0);
     middleLayout->setSpacing(0);
-    leftWidget->setFixedWidth(261);
-    rightWidget->setFixedWidth(221);
+    leftWidget->setFixedWidth(285);
+    rightWidget->setFixedWidth(290);
     middleBarLayout->addWidget(leftWidget);
     middleBarLayout->addWidget(middleWidget);
     middleBarLayout->addWidget(rightWidget);
-    
-    
+
+
     pLayout = new QVBoxLayout();
     pLayout->addWidget(pTitleBar);
     pLayout->addLayout(middleBarLayout);
     pLayout->addWidget(pBottomBar);
-    
-    
+
+
     pLayout->setSpacing(0);
     pLayout->setContentsMargins(5, 5, 5, 5);
-    
+
     widget->setLayout(pLayout);
 
     //音量增减快捷键
@@ -179,7 +182,7 @@ TMZPlayer::TMZPlayer(QWidget *parent,Media* m) :
     volumeSub->setAutoRepeat(true);
     connect(volumeAdd, SIGNAL(activated()), pBottomBar, SLOT(volumeSliderValueAdd()));
     connect(volumeSub, SIGNAL(activated()), pBottomBar, SLOT(volumeSliderValueSub()));
-    
+
     //快进快退快捷键
     quickMovePlus=new QShortcut(this);
     quickMovePlus->setKey(tr("right"));
@@ -212,7 +215,13 @@ TMZPlayer::TMZPlayer(QWidget *parent,Media* m) :
     luminSub->setAutoRepeat(true);;
     connect(luminAdd, SIGNAL(activated()), space, SLOT(mediaLuminAdd()));
     connect(luminSub, SIGNAL(activated()), space, SLOT(mediaLuminSub()));
-    
+
+    //每过10s改变musicwidget图片
+    changeImage = new QTimer(this);
+    changeImage->start(10000);
+    imageNum = 1;
+    connect(changeImage,SIGNAL(timeout()),this,SLOT(musicWidgetChange()));
+
     connect(mini,SIGNAL(miniToMaxSignal()),this,SLOT(miniToMaxSlot()));
     connect(mini,SIGNAL(miniToTraySignal()),this,SLOT(miniToTraySlot()));
     connect(mini,SIGNAL(closeSignal()),pTitleBar,SLOT(on_closeButton_clicked()));
@@ -260,9 +269,10 @@ TMZPlayer::TMZPlayer(QWidget *parent,Media* m) :
     connect(sysTrayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)), this, SLOT(on_activatedSysTrayIcon(QSystemTrayIcon::ActivationReason)));
     connect(mini, SIGNAL(volumeChanged(int)), pBottomBar, SLOT(changeVolume(int)));
     connect(downloadListBtn, SIGNAL(clicked()), this, SLOT(showDownloadList()));
+
 //    connect(ui->displayList, SIGNAL(downloadFilesChangesSignal(int, QList<QString>)),
 //            this, SLOT(downloadFilesChangesSlot(int, QList<QString>)));
-    
+
     //9.9
 
     connect(pTitleBar->settingWindow,SIGNAL(sigLouderShortcut(QString)),//换音量增快捷键
@@ -331,8 +341,8 @@ TMZPlayer::TMZPlayer(QWidget *parent,Media* m) :
 
     //连接设置与BottomBar
     pBottomBar->connectSettingAndBottom(pTitleBar->settingWindow);
-    
-    
+
+
     currentQss=":/new/prefix1/myQss/style2.qss";
     //蓝色风格
     QFile qssfile(currentQss);
@@ -342,12 +352,13 @@ TMZPlayer::TMZPlayer(QWidget *parent,Media* m) :
     QString qss;
     qss = qssfile.readAll();
     this->setStyleSheet(qss);
+    qDebug()<<this;
 //    qDebug()<<this;
     
     
 
 
-    
+
     // 建立
     this->zinit();
 }
@@ -360,12 +371,8 @@ TMZPlayer::~TMZPlayer()
 bool TMZPlayer::nativeEvent(const QByteArray &eventType, void *message, long *result)//实现窗口缩放
 {
     Q_UNUSED(eventType);
-    
     const int HIT_BORDER = 5;
     const MSG *msg=static_cast<MSG*>(message);
-
-
-
     if(msg->message == WM_NCHITTEST)
     {
         int xPos = GET_X_LPARAM(msg->lParam) - this->geometry().x();
@@ -742,6 +749,32 @@ void TMZPlayer::changeRecordDir(QString str)
     qDebug()<<gifPath;
 }
 
+void TMZPlayer::musicWidgetChange()
+{
+    switch (imageNum)
+    {
+    case 1:
+        musicWidget->setStyleSheet("border-image: url(:/image/image/uther1.png); ");
+        break;
+    case 2:
+        musicWidget->setStyleSheet("border-image: url(:/image/image/uther2.png); ");
+        break;
+    case 3:
+        musicWidget->setStyleSheet("border-image: url(:/image/image/uther3.png); ");
+        break;
+    case 4:
+        musicWidget->setStyleSheet("border-image: url(:/image/image/uther4.png); ");
+        break;
+    default:
+        break;
+
+    }
+    imageNum++;
+    if(imageNum==5)
+        imageNum=1;
+
+}
+
 /* Author: zyt
  * Name: on_hideLeftBarBtn_clicked
  * Function: 隐藏左侧边栏
@@ -765,7 +798,7 @@ void TMZPlayer::on_showLeftBarBtn_clicked()
     ui->scrollArea->setVisible(true);
     ui->showLeftBarBtn->setVisible(false);
     ui->hideLeftBarBtn->setVisible(true);
-    leftWidget->setFixedWidth(261);
+    leftWidget->setFixedWidth(285);
     
 }
 
@@ -791,7 +824,7 @@ void TMZPlayer::on_showRightBarBtn_clicked()
     ui->historyList->setVisible(true);
     ui->showRightBarBtn->setVisible(false);
     ui->hideRightBarBtn->setVisible(true);
-    rightWidget->setFixedWidth(221);
+    rightWidget->setFixedWidth(290);
     
 }
 
@@ -811,7 +844,7 @@ void TMZPlayer::creatActions()
     else
         playOrPauseAction->setIcon(QIcon(":/image/image/pause.jpg"));
 
-    showStatusAction = new QAction(QStringLiteral("暂无播放歌曲"));
+    showStatusAction = new QAction(QStringLiteral("Uther player"));
     lastSongAction = new QAction(QStringLiteral("上一首"));
     nextSongAction = new QAction(QStringLiteral("下一首"));
 
@@ -1067,7 +1100,6 @@ void TMZPlayer::miniToMaxSlot()
 {
     mini->hide();
     this->show();
-    space->show();
     changeBackGround(currentQss);
 }
 
@@ -1129,6 +1161,7 @@ void TMZPlayer::lastFunction()//上一个
     {
         MediaType currentMediaType = this->media->getCurrentMediaType();
         emit sendMediaType(currentMediaType);
+        emit whetherPlaying(true);
     }
     else
         return;
@@ -1397,9 +1430,9 @@ void TMZPlayer::on_openFile_clicked()
 {
     QFileDialog* selectDialog = new QFileDialog(this);
     selectDialog->setFileMode(QFileDialog::ExistingFile);
-    selectDialog->setNameFilter("所有(*.mp3 *.flac *.wav *.wma *.m4a *.avi *.mov *.rmvb *.mp4);;"
+    selectDialog->setNameFilter("所有(*.mp3 *.flac *.wav *.wma *.m4a *.avi *.mov *.rmvb *.mp4 *.flv *mkv);;"
                                 "音乐文件(*.mp3 *.flac *.wav *.wma *.m4a);;"
-                                "视频文件(*.avi *.mov *.rmvb *.mp4);;");
+                                "视频文件(*.avi *.mov *.rmvb *.mp4 *flv *mkv);;");
     selectDialog->setViewMode(QFileDialog::Detail);
     
     QStringList filePaths;
@@ -1434,6 +1467,7 @@ void TMZPlayer::sltResendPlayInfo(const PlayArea& playArea,
     qint64 what = media->getController()->getDuration();
     MediaType currentMediaType = this->media->getCurrentMediaType();
     emit sendMediaType(currentMediaType);
+    emit whetherPlaying(true);
     this->flushHisUI();
 }
 

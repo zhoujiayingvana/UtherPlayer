@@ -194,14 +194,14 @@ void playList::on_playlist_customContextMenuRequested(QPoint pos)
  */
 void playList::addFiles()
 {
-    QFileDialog* selectDialog = new QFileDialog(this);
-    selectDialog->setFileMode(QFileDialog::ExistingFiles);
-    selectDialog->setNameFilter("所有(*.mp3 *.flac *.wav *.wma *.m4a *.avi *.mov *.rmvb *.mp4 *.flv);;"
-                                "音乐文件(*.mp3 *.flac *.wav *.wma *.m4a);;"
-                                "视频文件(*.avi *.mov *.rmvb *.mp4 *.flv);;");
-    selectDialog->setViewMode(QFileDialog::Detail);
+  QFileDialog* selectDialog = new QFileDialog(this);
+  selectDialog->setFileMode(QFileDialog::ExistingFiles);
+  selectDialog->setNameFilter("所有(*.mp3 *.flac *.wav *.wma *.m4a *.avi *.mov *.rmvb *.mp4 *.flv *mkv);;"
+                              "音乐文件(*.mp3 *.flac *.wav *.wma *.m4a);;"
+                              "视频文件(*.flv,*.avi *.mov *.rmvb *.mp4 *mkv);;");
+  selectDialog->setViewMode(QFileDialog::Detail);
 
-    QStringList fileNames;
+  QStringList fileNames;
     if ( selectDialog->exec() == QDialog::Accepted )
     {
         fileNames = selectDialog->selectedFiles();
@@ -427,6 +427,11 @@ void playList::showChangedListSlot(int sn, QList<QString> files)
  */
 void playList::dragEnterEvent(QDragEnterEvent *event)
 {
+  QStringList acceptedTypes;
+  acceptedTypes << "mp3" << "flac" << "wav" << "wma" << "m4a"
+                << "avi" << "mov" << "rmvb" << "mp4" << "flv"
+                << "mkv";
+  if (event->mimeData()->hasUrls())
     QStringList acceptedTypes;
     acceptedTypes << "mp3" << "flac" << "wav" << "wma" << "m4a"
                   << "avi" << "mov" << "rmvb" << "mp4" << "flv";

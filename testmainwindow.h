@@ -6,6 +6,8 @@
 #include <QKeySequence>
 #include <QMainWindow>
 #include <QVideoWidget>
+#include <QPainter>
+#include <QLabel>
 #include "util/media.h"
 #include "util/histories.h"
 namespace Ui {
@@ -19,11 +21,11 @@ class TestMainWindow : public QMainWindow
 public:
     explicit TestMainWindow(QWidget *parent = nullptr);
     ~TestMainWindow();
-    
 private:
     Ui::TestMainWindow *ui;
     Media* media;
     QVideoWidget *myVideoWidget;
+    QLabel * label;
 private slots:
     
     

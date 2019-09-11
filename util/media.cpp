@@ -1,5 +1,13 @@
 ﻿#include "util/media.h"
 
+/**
+* @method        Media::Media
+* @brief         构造函数
+* @param         VOID
+* @return        NULL
+* @author        周嘉莹
+* @date          2019.09.11 
+*/
 Media::Media()
     : media_Histories(nullptr, "Retina", 12),
       media_Folders(nullptr, "Retina"),
@@ -65,26 +73,71 @@ Media::Media()
             this, SLOT(back2Last()));
 }
 
+/**
+* @method        Media::~Media
+* @brief         析构函数
+* @param         VOID
+* @return        VOID
+* @author        周嘉莹
+* @date          2019.09.11 
+*/
 Media::~Media()
 {
-
+    if(this->media_Player){
+        delete this->media_Player;
+    }
+    if(this->media_Controller){
+        delete this->media_Controller;
+    }
 }
 
-QMediaPlayer *Media::getPlayWindow()
+/**
+* @method        Media::getPlayWindow
+* @brief         获取media_player的窗口，加入UI界面窗口上
+* @param         VOID
+* @return        QMediaPlayer*
+* @author        周嘉莹
+* @date          2019.09.11 
+*/
+QMediaPlayer* Media::getPlayWindow()
 {
     return this->media_Player->getPlayWindow();
 }
 
-Controller *Media::getController()
+/**
+* @method        Media::getController
+* @brief         获取Media的控制模块
+* @param         VOID
+* @return        Controller*
+* @author        周嘉莹
+* @date          2019.09.11 
+*/
+Controller* Media::getController()
 {
     return this->media_Controller;
 }
 
+/**
+* @method        Media::getHistories
+* @brief         获取历史记录模块
+* @param         VOID
+* @return        Histories&
+* @author        周嘉莹
+* @date          2019.09.11 
+*/
 Histories& Media::getHistories()
 {
     return media_Histories;
 }
 
+/**
+* @method        Media::getFolders
+* @brief         获取收藏夹模块
+* @param         VOID
+* @return        Folders&
+* @author        周嘉莹
+* @date          2019.09.11 
+*/
 Folders& Media::getFolders()
 {
     return media_Folders;
@@ -212,11 +265,27 @@ void Media::play(const PlayArea& _playArea, const int& _firstRank, const int& _s
     this->hasAVPlaying = true;
 }
 
+/**
+* @method        Media::getMedia_Order
+* @brief         获取视频播放顺序模块
+* @param         VOID
+* @return        PlayOrder
+* @author        周嘉莹
+* @date          2019.09.11 
+*/
 PlayOrder Media::getMedia_Order() const
 {
     return media_Order;
 }
 
+/**
+* @method        Media::setMedia_Order
+* @brief         设置播放顺序模块
+* @param         const PlayOrder&
+* @return        VOID
+* @author        周嘉莹
+* @date          2019.09.11 
+*/
 void Media::setMedia_Order(const PlayOrder& value)
 {
     media_Order = value;
@@ -258,6 +327,7 @@ bool Media::playNextByHand()
         if (-1 == nextSecondRank)
         {
             qDebug() << "在收藏夹中已经没有下一个媒体了";
+            this->media_Controller->terminateVideo();
             return false;
         }
     }
@@ -302,11 +372,27 @@ bool Media::playNextByAuto(QMediaPlayer::State state)
         return false;
 }
 
+/**
+* @method        Media::needSetOrder
+* @brief         设置播放顺序
+* @param         PlayOrder
+* @return        VOID
+* @author        周嘉莹
+* @date          2019.09.11 
+*/
 void Media::needSetOrder(PlayOrder order)
 {
     this->media_Order=order;
 }
 
+/**
+* @method        Media::needGetOrder
+* @brief         获取播放顺序
+* @param         VOID
+* @return        VOID
+* @author        周嘉莹
+* @date          2019.09.11 
+*/
 void Media::needGetOrder()
 {
     emit returnOrder(this->media_Order);
@@ -483,19 +569,36 @@ void Media::closeSelf()
     this->makeContainerEmpty();
 }
 
+/**
+* @method        Media::startCreateGif
+* @brief         开始录制Gif
+* @param         WID, QSTRING, QSTRING
+* @return        VOID
+* @author        周嘉莹
+* @date          2019.09.11 
+*/
 void Media::startCreateGif(WId wid, QString fileName, QString filePath)
 {
     //检查图片路径是否合法
+    this->media_WId=wid;
     if(!Debug::isFileDirExits(filePath)){
         qDebug()<<"Media StartCreateGif() "<<Debug::getDebugErrorType(Debug::MyErrors::FILE_PATH_ERROR);
         return;
     }
     this->media_GifFullPath=filePath+"/"+fileName+".gif";
     //开始gif录制线程
-    this->media_WId=wid;
+    qDebug()<<this->media_GifFullPath;
     this->start();
 }
 
+/**
+* @method        Media::endCreateGif
+* @brief         结束录制Gif
+* @param         VOID
+* @return        VOID
+* @author        周嘉莹
+* @date          2019.09.11 
+*/
 void Media::endCreateGif()
 {
     //结束gif录制线程
@@ -616,6 +719,14 @@ void Media::terminateAndSaveCurrentAV()
     this->hasAVPlaying = false;
 }
 
+/**
+* @method        Media::run
+* @brief         录制Gif，录制完成后制作Gif
+* @param         VOID
+* @return        VOID
+* @author        周嘉莹
+* @date          2019.09.11 
+*/
 void Media::run()
 {
     int i=0;
@@ -702,12 +813,6 @@ void MediaStateInfo::setSecondRank(int value)
     secondRank = value;
 }
 
-void MediaStateInfo::testPrint() const
-{
-    qDebug() << playArea2String(this->where) << endl
-             << this->firstRank << endl
-             << this->secondRank << endl;
-}
 
 PlayArea MediaStateInfo::getWhere() const
 {
