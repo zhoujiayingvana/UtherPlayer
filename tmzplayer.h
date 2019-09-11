@@ -163,6 +163,8 @@ private slots:
     void changeShotDir(QString);
     //修改录屏路径
     void changeRecordDir(QString);
+    //每过10s改变musicwidget图片
+    void musicWidgetChange();
 
     //修改主界面背景
     void changeBackGround(QString);
@@ -319,6 +321,8 @@ private:
     // 最后一个历史记录的地址
     int lastPos;
 
+    QTimer *changeImage;
+    int imageNum;
 
 };
 
