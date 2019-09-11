@@ -327,6 +327,7 @@ bool Media::playNextByHand()
         if (-1 == nextSecondRank)
         {
             qDebug() << "在收藏夹中已经没有下一个媒体了";
+            this->media_Controller->terminateVideo();
             return false;
         }
     }

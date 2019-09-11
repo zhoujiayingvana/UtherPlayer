@@ -1261,9 +1261,9 @@ void TMZPlayer::on_openFile_clicked()
 {
     QFileDialog* selectDialog = new QFileDialog(this);
     selectDialog->setFileMode(QFileDialog::ExistingFile);
-    selectDialog->setNameFilter("所有(*.mp3 *.flac *.wav *.wma *.m4a *.avi *.mov *.rmvb *.mp4);;"
+    selectDialog->setNameFilter("所有(*.mp3 *.flac *.wav *.wma *.m4a *.avi *.mov *.rmvb *.mp4 *.flv *mkv);;"
                                 "音乐文件(*.mp3 *.flac *.wav *.wma *.m4a);;"
-                                "视频文件(*.avi *.mov *.rmvb *.mp4);;");
+                                "视频文件(*.avi *.mov *.rmvb *.mp4 *flv *mkv);;");
     selectDialog->setViewMode(QFileDialog::Detail);
     
     QStringList filePaths;
