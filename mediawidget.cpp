@@ -51,13 +51,13 @@ void MediaWidget::mediaLuminSub()
     setBrightness(brightness()-5);
 }
 
-void MediaWidget::mousePressEvent(QMouseEvent *event)
+void MediaWidget::mousePressEvent(QMouseEvent *event)//单击发射信号暂停或播放
 {
     Q_UNUSED(event);
     emit mousePress();
 }
 
-void MediaWidget::mouseDoubleClickEvent(QMouseEvent *event)
+void MediaWidget::mouseDoubleClickEvent(QMouseEvent *event)//双击全屏
 {
 
     Q_UNUSED(event);
@@ -65,7 +65,7 @@ void MediaWidget::mouseDoubleClickEvent(QMouseEvent *event)
     emit mousePress();
 }
 
-void MediaWidget::mouseMoveEvent(QMouseEvent *event)
+void MediaWidget::mouseMoveEvent(QMouseEvent *event)//鼠标移动显示底部、侧边栏、箭头
 {
     Q_UNUSED(event);
     setCursor(Qt::PointingHandCursor);
@@ -85,19 +85,19 @@ void MediaWidget::mouseMoveEvent(QMouseEvent *event)
 
 }
 
-void MediaWidget::enterEvent(QEvent *event)
+void MediaWidget::enterEvent(QEvent *event)//鼠标进入计时器启动
 {
     Q_UNUSED(event);
     timer->start(1000);
 }
 
-void MediaWidget::leaveEvent(QEvent *event)
+void MediaWidget::leaveEvent(QEvent *event)//鼠标离开计时器停止
 {
     Q_UNUSED(event);
     timer->stop();
 }
 
-void MediaWidget::wheelEvent(QWheelEvent *event)
+void MediaWidget::wheelEvent(QWheelEvent *event)//滚轮调节音量
 {
     emit wheelMoved(event);
     if(this->window()->isFullScreen())
