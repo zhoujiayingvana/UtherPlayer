@@ -6,13 +6,12 @@
 class MySlider : public QSlider
 {
     Q_OBJECT
-signals:
-    void timerStop();
-    void timerStart();
-
 public:
     MySlider(QWidget *parent = nullptr);
     ~MySlider();
+signals:
+    void timerStop();
+    void timerStart();
 protected:
     void mousePressEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);

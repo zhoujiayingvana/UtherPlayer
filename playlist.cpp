@@ -20,57 +20,58 @@
  */
 playList::playList(QWidget *parent) : QTableWidget(parent)
 {
-  currentSN = -1;
-  previousRow = -1;
-  previousRowColor = QColor(0x00,0xff,0x00,0x00);
-  int temp = this->rowCount();
-  QString tempStr = QString::number(temp);
+    this->setAttribute(Qt::WA_StyledBackground);
+    currentSN = -1;
+    previousRow = -1;
+    previousRowColor = QColor(0x00,0xff,0x00,0x00);
+    int temp = this->rowCount();
+    QString tempStr = QString::number(temp);
 
-  //允许右键点击事件
-  this->setEditTriggers(QAbstractItemView::NoEditTriggers);
-  this->setContextMenuPolicy(Qt::CustomContextMenu);
+    //允许右键点击事件
+    this->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    this->setContextMenuPolicy(Qt::CustomContextMenu);
 
-  //允许拖拽文件进入
-  this->setAcceptDrops(true);
-  setAcceptDrops(true);
+    //允许拖拽文件进入
+    this->setAcceptDrops(true);
+    setAcceptDrops(true);
 
-  //设置可捕获鼠标移动事件
-  this->setMouseTracking(true);
+    //设置可捕获鼠标移动事件
+    this->setMouseTracking(true);
 
-  /* NOTICE:
+    /* NOTICE:
    * 存放歌曲/视频的tableWidget
    * 第0列是序号
    * 第1列是文件名字
    * 第2列是文件地址
    */
-  QStringList headers;
-  headers << "" << "名字" << "地址";
-  this->setColumnCount(3);
-  this->verticalHeader()->hide();
-  this->horizontalHeader()->setSectionResizeMode(QHeaderView::Interactive);
-  this->horizontalHeader()->setStretchLastSection(true);
-  this->setHorizontalHeaderLabels(headers);
-  this->setColumnWidth(0,35);
-  this->setColumnWidth(1,350);
-  this->setColumnWidth(2,100);
-  this->setSelectionBehavior(QAbstractItemView::SelectRows);
-  this->setSelectionMode(QAbstractItemView::SingleSelection);
-  this->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    QStringList headers;
+    headers << "" << "名字" << "地址";
+    this->setColumnCount(3);
+    this->verticalHeader()->hide();
+    this->horizontalHeader()->setSectionResizeMode(QHeaderView::Interactive);
+    this->horizontalHeader()->setStretchLastSection(true);
+    this->setHorizontalHeaderLabels(headers);
+    this->setColumnWidth(0,35);
+    this->setColumnWidth(1,350);
+    this->setColumnWidth(2,100);
+    this->setSelectionBehavior(QAbstractItemView::SelectRows);
+    this->setSelectionMode(QAbstractItemView::SingleSelection);
+    this->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
-  //不显示竖直方向的分割线
-  this->setShowGrid(false);
+    //不显示竖直方向的分割线
+    this->setShowGrid(false);
 
-  this->setSelectionBehavior(QAbstractItemView::SelectRows);
-  this->setSelectionMode(QAbstractItemView::SingleSelection);
+    this->setSelectionBehavior(QAbstractItemView::SelectRows);
+    this->setSelectionMode(QAbstractItemView::SingleSelection);
 
-  connect(this, SIGNAL(customContextMenuRequested(QPoint)),
-          this, SLOT(on_playlist_customContextMenuRequested(QPoint)));
-  connect(this,SIGNAL(cellEntered(int,int)),this,SLOT(cellEntered(int,int)));
-  connect(this,SIGNAL(cellDoubleClicked(int,int)),this,SLOT(getFileAddress(int,int)));
+    connect(this, SIGNAL(customContextMenuRequested(QPoint)),
+            this, SLOT(on_playlist_customContextMenuRequested(QPoint)));
+    connect(this,SIGNAL(cellEntered(int,int)),this,SLOT(cellEntered(int,int)));
+    connect(this,SIGNAL(cellDoubleClicked(int,int)),this,SLOT(getFileAddress(int,int)));
 
-  this->setFocusPolicy(Qt::NoFocus);
+    this->setFocusPolicy(Qt::NoFocus);
 
-  this->setStyleSheet("QTableWidget::item:selected { background-color: rgb(198, 241, 255) }");
+    this->setStyleSheet("QTableWidget::item:selected { background-color: rgb(198, 241, 255) }");
 }
 
 /* Author: zyt
@@ -79,14 +80,14 @@ playList::playList(QWidget *parent) : QTableWidget(parent)
  */
 void playList::leaveEvent(QEvent *event)
 {
-  Q_UNUSED(event);
-  QTableWidgetItem *item = nullptr;
+    Q_UNUSED(event);
+    QTableWidgetItem *item = nullptr;
 
-  //还原上一行的颜色
-  item = this->item(previousRow, 0);
-  if (item != nullptr)
+    //还原上一行的颜色
+    item = this->item(previousRow, 0);
+    if (item != nullptr)
     {
-      this->setRowColor(previousRow, previousRowColor);
+        this->setRowColor(previousRow, previousRowColor);
     }
 }
 
@@ -96,23 +97,23 @@ void playList::leaveEvent(QEvent *event)
  */
 void playList::cellEntered(int row, int column)
 {
-  QTableWidgetItem *item = nullptr;
+    QTableWidgetItem *item = nullptr;
 
-  //还原上一行的颜色
-  item = this->item(previousRow, 0);
-  if (item != nullptr)
+    //还原上一行的颜色
+    item = this->item(previousRow, 0);
+    if (item != nullptr)
     {
-      this->setRowColor(previousRow, previousRowColor);
+        this->setRowColor(previousRow, previousRowColor);
     }
 
-  //设置当前行的颜色
-  item = this->item(row, column);
-  if (item != nullptr && !item->isSelected())
+    //设置当前行的颜色
+    item = this->item(row, column);
+    if (item != nullptr && !item->isSelected())
     {
-      this->setRowColor(row, QColor(221,246,255));
+        this->setRowColor(row, QColor(221,246,255));
     }
 
-  previousRow = row;
+    previousRow = row;
 }
 
 /* Author: zyt
@@ -121,10 +122,10 @@ void playList::cellEntered(int row, int column)
  */
 void playList::setRowColor(int row, QColor color)
 {
-  for (int col = 0; col < this->columnCount(); col++)
+    for (int col = 0; col < this->columnCount(); col++)
     {
-      QTableWidgetItem *item = this->item(row, col);
-      item->setBackgroundColor(color);
+        QTableWidgetItem *item = this->item(row, col);
+        item->setBackgroundColor(color);
     }
 }
 
@@ -134,15 +135,15 @@ void playList::setRowColor(int row, QColor color)
  */
 void playList::getFileAddress(int row, int column)
 {
-  Q_UNUSED(column);
-  QTableWidgetItem * fileAddressItem = new QTableWidgetItem;
-  fileAddressItem = this->item(row,2);
-  QString fileAddress = fileAddressItem->text();
+    Q_UNUSED(column);
+    QTableWidgetItem * fileAddressItem = new QTableWidgetItem;
+    fileAddressItem = this->item(row,2);
+    QString fileAddress = fileAddressItem->text();
 
 
 
-  //播放文件了
-  emit sendTempPlayInfo(PlayArea::FOLDERS,currentSN,row);
+    //播放文件了
+    emit sendTempPlayInfo(PlayArea::FOLDERS,currentSN,row);
 }
 
 /* Author: zyt
@@ -152,8 +153,8 @@ void playList::getFileAddress(int row, int column)
  */
 QString playList::getFileName(QString filePath)
 {
-  QFileInfo fileInfo(filePath);
-  return fileInfo.fileName();
+    QFileInfo fileInfo(filePath);
+    return fileInfo.fileName();
 }
 
 /* Author: zyt
@@ -163,7 +164,7 @@ QString playList::getFileName(QString filePath)
  */
 void playList::setCurrentSN(int sn)
 {
-  currentSN = sn;
+    currentSN = sn;
 }
 
 /* Author: zyt
@@ -173,18 +174,18 @@ void playList::setCurrentSN(int sn)
  */
 void playList::on_playlist_customContextMenuRequested(QPoint pos)
 {
-  Q_UNUSED(pos);
-  QMenu *pPopMenu = new QMenu(this);
-  pPopMenu->addAction("添加文件",this,SLOT(addFiles()));
+    Q_UNUSED(pos);
+    QMenu *pPopMenu = new QMenu(this);
+    pPopMenu->addAction("添加文件",this,SLOT(addFiles()));
 
-  //判断右键位置有没有文件
-  if (this->currentRow() > -1)
+    //判断右键位置有没有文件
+    if (this->currentRow() > -1)
     {
-      pPopMenu->addAction("从列表中删除",this,SLOT(deleteFileFromList()));
-      pPopMenu->addAction("从电脑中删除",this,SLOT(deleteFileFromDisk()));
-      pPopMenu->addAction("修改文件位置",this,SLOT(changeFileAddress()));
+        pPopMenu->addAction("从列表中删除",this,SLOT(deleteFileFromList()));
+        pPopMenu->addAction("从电脑中删除",this,SLOT(deleteFileFromDisk()));
+        pPopMenu->addAction("修改文件位置",this,SLOT(changeFileAddress()));
     }
-  pPopMenu->exec(QCursor::pos());
+    pPopMenu->exec(QCursor::pos());
 }
 
 /* Author: zyt
@@ -193,52 +194,52 @@ void playList::on_playlist_customContextMenuRequested(QPoint pos)
  */
 void playList::addFiles()
 {
-  QFileDialog* selectDialog = new QFileDialog(this);
-  selectDialog->setFileMode(QFileDialog::ExistingFiles);
-  selectDialog->setNameFilter("所有(*.mp3 *.flac *.wav *.wma *.m4a *.avi *.mov *.rmvb *.mp4 *.flv);;"
-                              "音乐文件(*.mp3 *.flac *.wav *.wma *.m4a);;"
-                              "视频文件(*.avi *.mov *.rmvb *.mp4 *.flv);;");
-  selectDialog->setViewMode(QFileDialog::Detail);
+    QFileDialog* selectDialog = new QFileDialog(this);
+    selectDialog->setFileMode(QFileDialog::ExistingFiles);
+    selectDialog->setNameFilter("所有(*.mp3 *.flac *.wav *.wma *.m4a *.avi *.mov *.rmvb *.mp4 *.flv);;"
+                                "音乐文件(*.mp3 *.flac *.wav *.wma *.m4a);;"
+                                "视频文件(*.avi *.mov *.rmvb *.mp4 *.flv);;");
+    selectDialog->setViewMode(QFileDialog::Detail);
 
-  QStringList fileNames;
-  if ( selectDialog->exec() == QDialog::Accepted )
+    QStringList fileNames;
+    if ( selectDialog->exec() == QDialog::Accepted )
     {
-      fileNames = selectDialog->selectedFiles();
+        fileNames = selectDialog->selectedFiles();
     }
-  if(fileNames.length() > 0)
+    if(fileNames.length() > 0)
     {
-      for (int i = 0;i < fileNames.length(); i++)
+        for (int i = 0;i < fileNames.length(); i++)
         {
-          int row = this->rowCount();
-          this->insertRow(row);
+            int row = this->rowCount();
+            this->insertRow(row);
 
-          //以private：QList<QString>存储该列表的文件地址
-          temp_filesInList.append(fileNames.at(i));
+            //以private：QList<QString>存储该列表的文件地址
+            temp_filesInList.append(fileNames.at(i));
 
-          //第2列存放地址QString
-          QTableWidgetItem *item = new QTableWidgetItem(fileNames.at(i));
-          this->setItem(row, 2, item);
-          this->item(row, 2)->setFont(QFont("宋体",-1,-1,true));
-          this->item(row, 2)->setForeground(QBrush(QColor(105, 105, 105)));
+            //第2列存放地址QString
+            QTableWidgetItem *item = new QTableWidgetItem(fileNames.at(i));
+            this->setItem(row, 2, item);
+            this->item(row, 2)->setFont(QFont("宋体",-1,-1,true));
+            this->item(row, 2)->setForeground(QBrush(QColor(105, 105, 105)));
 
-          //第0列存放行数
-          int temp = this->rowCount();
-          QString tempStr = QString::number(temp);
-          item = new QTableWidgetItem(tempStr);//第几行
-          this->setItem(row, 0, item);
+            //第0列存放行数
+            int temp = this->rowCount();
+            QString tempStr = QString::number(temp);
+            item = new QTableWidgetItem(tempStr);//第几行
+            this->setItem(row, 0, item);
 
-          //第1列存放名字
-          item = new QTableWidgetItem(getFileName(fileNames.at(i)));
-          this->setItem(row, 1, item);
+            //第1列存放名字
+            item = new QTableWidgetItem(getFileName(fileNames.at(i)));
+            this->setItem(row, 1, item);
 
-          emit temp_addFileToFolderSignal(currentSN,
-                                          getFileName(fileNames.at(i)),
-                                          fileNames.at(i),
-                                          true);
+            emit temp_addFileToFolderSignal(currentSN,
+                                            getFileName(fileNames.at(i)),
+                                            fileNames.at(i),
+                                            true);
         }
     }
 
-  emit changeFilesInListSignal(currentSN,fileNames);
+    emit changeFilesInListSignal(currentSN,fileNames);
 
 
 }
@@ -249,28 +250,28 @@ void playList::addFiles()
  */
 void playList::deleteFileFromList()
 {  
-  int row = this->currentRow();
-  QTableWidgetItem *itemToBeDeleted = this->item(row,2);
-//  temp_filesInList.removeOne(itemToBeDeleted->text());
-  temp_filesInList.removeAt(row);
-  this->removeRow(row);
+    int row = this->currentRow();
+    QTableWidgetItem *itemToBeDeleted = this->item(row,2);
+    //  temp_filesInList.removeOne(itemToBeDeleted->text());
+    temp_filesInList.removeAt(row);
+    this->removeRow(row);
 
-  //对序号重新排序
-  for(int i = 0; i < this->rowCount(); i++)
+    //对序号重新排序
+    for(int i = 0; i < this->rowCount(); i++)
     {
-      int temp = i + 1;
-      QString tempStr = QString::number(temp);
-      QTableWidgetItem* item = new QTableWidgetItem(tempStr);//第几行
-      this->setItem(i, 0, item);
+        int temp = i + 1;
+        QString tempStr = QString::number(temp);
+        QTableWidgetItem* item = new QTableWidgetItem(tempStr);//第几行
+        this->setItem(i, 0, item);
     }
 
-  emit deleteFilesInListSignal(currentSN,temp_filesInList);
-  emit leftBarListFilesChangeSignal(currentSN,temp_filesInList);
-  emit downloadFilesChangesSignal(currentSN,temp_filesInList);
+    emit deleteFilesInListSignal(currentSN,temp_filesInList);
+    emit leftBarListFilesChangeSignal(currentSN,temp_filesInList);
+    emit downloadFilesChangesSignal(currentSN,temp_filesInList);
 
-  //9.10
+    //9.10
 
-  emit temp_removeContentSignal(currentSN,row);
+    emit temp_removeContentSignal(currentSN,row);
 }
 
 /* Author: zyt
@@ -279,48 +280,48 @@ void playList::deleteFileFromList()
  */
 void playList::deleteFileFromDisk()
 {
-  // get path
-  int row = this->currentRow();
-  QTableWidgetItem *itemToBeDeleted = this->item(row, 2);
+    // get path
+    int row = this->currentRow();
+    QTableWidgetItem *itemToBeDeleted = this->item(row, 2);
 
-  QFile file(itemToBeDeleted->text());
-  QMessageBox doubleCheckBox;
-  doubleCheckBox.setText("本地文件将被永久删除");
-  doubleCheckBox.setInformativeText("确定?");
-  doubleCheckBox.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
-  doubleCheckBox.setDefaultButton(QMessageBox::Cancel);
+    QFile file(itemToBeDeleted->text());
+    QMessageBox doubleCheckBox;
+    doubleCheckBox.setText("本地文件将被永久删除");
+    doubleCheckBox.setInformativeText("确定?");
+    doubleCheckBox.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
+    doubleCheckBox.setDefaultButton(QMessageBox::Cancel);
 
-  if (doubleCheckBox.exec() == QMessageBox::Ok)
+    if (doubleCheckBox.exec() == QMessageBox::Ok)
     {
-      if(file.exists())
+        if(file.exists())
         {
-          if (file.remove())
+            if (file.remove())
             {
-              this->removeRow(row);
+                this->removeRow(row);
             }
         }
-      else if(!file.exists())
+        else if(!file.exists())
         {
-          QMessageBox noticeBox(QMessageBox::NoIcon, "提示", "      文件位置已被移动");
-          QPixmap hintBoxPixmap(":/image/image/hint.pngv");
-          noticeBox.setIconPixmap(hintBoxPixmap.scaled(80,80));
-          noticeBox.exec();
-          this->removeRow(row);
+            QMessageBox noticeBox(QMessageBox::NoIcon, "提示", "      文件位置已被移动");
+            QPixmap hintBoxPixmap(":/image/image/test.png");
+            noticeBox.setIconPixmap(hintBoxPixmap.scaled(80,80));
+            noticeBox.exec();
+            this->removeRow(row);
         }
-      temp_filesInList.removeOne(itemToBeDeleted->text());
+        temp_filesInList.removeOne(itemToBeDeleted->text());
     }
 
-  //对序号重新排序
-  for(int i = 0; i < this->rowCount(); i++)
+    //对序号重新排序
+    for(int i = 0; i < this->rowCount(); i++)
     {
-      int temp = i + 1;
-      QString tempStr = QString::number(temp);
-      QTableWidgetItem* item = new QTableWidgetItem(tempStr);//第几行
-      this->setItem(i, 0, item);
+        int temp = i + 1;
+        QString tempStr = QString::number(temp);
+        QTableWidgetItem* item = new QTableWidgetItem(tempStr);//第几行
+        this->setItem(i, 0, item);
     }
 
-  emit deleteFilesInListSignal(currentSN,temp_filesInList);
-  emit leftBarListFilesChangeSignal(currentSN,temp_filesInList);
+    emit deleteFilesInListSignal(currentSN,temp_filesInList);
+    emit leftBarListFilesChangeSignal(currentSN,temp_filesInList);
 }
 
 /* Author: zyt
@@ -329,7 +330,7 @@ void playList::deleteFileFromDisk()
  */
 void playList::changeFileAddress()
 {
-  QString newAddress = QFileDialog::getExistingDirectory(this,"选取新地址","/");
+    QString newAddress = QFileDialog::getExistingDirectory(this,"选取新地址","/");
 
 }
 
@@ -340,39 +341,39 @@ void playList::changeFileAddress()
  */
 void playList::recevingSNAndFiles(int sn,QList<QString> files)
 {
-  //清空列表显示内容
-  int row = this->rowCount();
-  for(int i = 0; i < row; i++)
+    //清空列表显示内容
+    int row = this->rowCount();
+    for(int i = 0; i < row; i++)
     {
-      this->removeRow(0);
+        this->removeRow(0);
     }
-  temp_filesInList.clear();
+    temp_filesInList.clear();
 
-  currentSN = sn;
+    currentSN = sn;
 
-  for (int i = 0;i < files.length(); i++)
+    for (int i = 0;i < files.length(); i++)
     {
-      int row = this->rowCount();
-      this->insertRow(row);
+        int row = this->rowCount();
+        this->insertRow(row);
 
-      //以private：QList<QString>存储该列表的文件地址
-      temp_filesInList.append(files.at(i));
+        //以private：QList<QString>存储该列表的文件地址
+        temp_filesInList.append(files.at(i));
 
-      //第2列存放地址QString
-      QTableWidgetItem *item = new QTableWidgetItem(files.at(i));
-      this->setItem(row, 2, item);
-      this->item(row, 2)->setFont(QFont("宋体",-1,-1,true));
-      this->item(row, 2)->setForeground(QBrush(QColor(105, 105, 105)));
+        //第2列存放地址QString
+        QTableWidgetItem *item = new QTableWidgetItem(files.at(i));
+        this->setItem(row, 2, item);
+        this->item(row, 2)->setFont(QFont("宋体",-1,-1,true));
+        this->item(row, 2)->setForeground(QBrush(QColor(105, 105, 105)));
 
-      //第0列存放行数
-      int temp = this->rowCount();
-      QString tempStr = QString::number(temp);
-      item = new QTableWidgetItem(tempStr);//第几行
-      this->setItem(row, 0, item);
+        //第0列存放行数
+        int temp = this->rowCount();
+        QString tempStr = QString::number(temp);
+        item = new QTableWidgetItem(tempStr);//第几行
+        this->setItem(row, 0, item);
 
-      //第1列存放名字
-      item = new QTableWidgetItem(getFileName(files.at(i)));
-      this->setItem(row, 1, item);
+        //第1列存放名字
+        item = new QTableWidgetItem(getFileName(files.at(i)));
+        this->setItem(row, 1, item);
     }
 }
 
@@ -383,39 +384,39 @@ void playList::recevingSNAndFiles(int sn,QList<QString> files)
  */
 void playList::showChangedListSlot(int sn, QList<QString> files)
 {
-  if(currentSN == sn)
+    if(currentSN == sn)
     {
-      //清空列表显示内容
-      int row = this->rowCount();
-      for(int i = 0; i < row; i++)
+        //清空列表显示内容
+        int row = this->rowCount();
+        for(int i = 0; i < row; i++)
         {
-          this->removeRow(0);
+            this->removeRow(0);
         }
-      temp_filesInList.clear();
+        temp_filesInList.clear();
 
-      for (int i = 0;i < files.length(); i++)
+        for (int i = 0;i < files.length(); i++)
         {
-          int row = this->rowCount();
-          this->insertRow(row);
+            int row = this->rowCount();
+            this->insertRow(row);
 
-          //以private：QList<QString>存储该列表的文件地址
-          temp_filesInList.append(files.at(i));
+            //以private：QList<QString>存储该列表的文件地址
+            temp_filesInList.append(files.at(i));
 
-          //第2列存放地址QString
-          QTableWidgetItem *item = new QTableWidgetItem(files.at(i));
-          this->setItem(row, 2, item);
-          this->item(row, 2)->setFont(QFont("宋体",-1,-1,true));
-          this->item(row, 2)->setForeground(QBrush(QColor(105, 105, 105)));
+            //第2列存放地址QString
+            QTableWidgetItem *item = new QTableWidgetItem(files.at(i));
+            this->setItem(row, 2, item);
+            this->item(row, 2)->setFont(QFont("宋体",-1,-1,true));
+            this->item(row, 2)->setForeground(QBrush(QColor(105, 105, 105)));
 
-          //第0列存放行数
-          int temp = this->rowCount();
-          QString tempStr = QString::number(temp);
-          item = new QTableWidgetItem(tempStr);//第几行
-          this->setItem(row, 0, item);
+            //第0列存放行数
+            int temp = this->rowCount();
+            QString tempStr = QString::number(temp);
+            item = new QTableWidgetItem(tempStr);//第几行
+            this->setItem(row, 0, item);
 
-          //第1列存放名字
-          item = new QTableWidgetItem(getFileName(files.at(i)));
-          this->setItem(row, 1, item);
+            //第1列存放名字
+            item = new QTableWidgetItem(getFileName(files.at(i)));
+            this->setItem(row, 1, item);
         }
     }
 }
@@ -426,25 +427,25 @@ void playList::showChangedListSlot(int sn, QList<QString> files)
  */
 void playList::dragEnterEvent(QDragEnterEvent *event)
 {
-  QStringList acceptedTypes;
-  acceptedTypes << "mp3" << "flac" << "wav" << "wma" << "m4a"
-                << "avi" << "mov" << "rmvb" << "mp4" << "flv";
-  if (event->mimeData()->hasUrls())
+    QStringList acceptedTypes;
+    acceptedTypes << "mp3" << "flac" << "wav" << "wma" << "m4a"
+                  << "avi" << "mov" << "rmvb" << "mp4" << "flv";
+    if (event->mimeData()->hasUrls())
     {
-      QList<QUrl> fileUrls = event->mimeData()->urls();
+        QList<QUrl> fileUrls = event->mimeData()->urls();
 
-      for (int i = 0; i < fileUrls.length(); i++)
+        for (int i = 0; i < fileUrls.length(); i++)
         {
-          QFileInfo file(event->mimeData()->urls().at(i).toLocalFile());
-          if(acceptedTypes.contains(file.suffix().toLower()))
+            QFileInfo file(event->mimeData()->urls().at(i).toLocalFile());
+            if(acceptedTypes.contains(file.suffix().toLower()))
             {
-              if(!temp_filesInList.contains(fileUrls.at(i).toLocalFile())) // 判断是否有相同地址的文件
+                if(!temp_filesInList.contains(fileUrls.at(i).toLocalFile())) // 判断是否有相同地址的文件
                 {
-                  toBeAddedFiles.append(fileUrls.at(i).toLocalFile());
+                    toBeAddedFiles.append(fileUrls.at(i).toLocalFile());
                 }
             }
         }
-      event->acceptProposedAction();
+        event->acceptProposedAction();
     }
 }
 
@@ -454,8 +455,8 @@ void playList::dragEnterEvent(QDragEnterEvent *event)
  */
 void playList::dragMoveEvent(QDragMoveEvent *event)
 {
-  Q_UNUSED(event);
-  //do nothing
+    Q_UNUSED(event);
+    //do nothing
 }
 
 /* Author: zyt
@@ -464,66 +465,66 @@ void playList::dragMoveEvent(QDragMoveEvent *event)
  */
 void playList::dropEvent(QDropEvent *event)
 {
-  Q_UNUSED(event);
+    Q_UNUSED(event);
 
-  if (!toBeAddedFiles.empty())
+    if (!toBeAddedFiles.empty())
     {
-      if(toBeAddedFiles.length() > 0)
+        if(toBeAddedFiles.length() > 0)
         {
-          for (int i = 0;i < toBeAddedFiles.length();i++)
+            for (int i = 0;i < toBeAddedFiles.length();i++)
             {
-              int row = this->rowCount();
-              this->insertRow(row);
+                int row = this->rowCount();
+                this->insertRow(row);
 
-              //以private：QList<QString>存储该列表的文件地址
-              temp_filesInList.append(toBeAddedFiles.at(i));
+                //以private：QList<QString>存储该列表的文件地址
+                temp_filesInList.append(toBeAddedFiles.at(i));
 
-              //第2列存放地址QString
-              QTableWidgetItem *item = new QTableWidgetItem(toBeAddedFiles.at(i));
-              this->setItem(row, 2, item);
-              this->item(row, 2)->setFont(QFont("宋体",-1,-1,true));
-              this->item(row, 2)->setForeground(QBrush(QColor(105, 105, 105)));
+                //第2列存放地址QString
+                QTableWidgetItem *item = new QTableWidgetItem(toBeAddedFiles.at(i));
+                this->setItem(row, 2, item);
+                this->item(row, 2)->setFont(QFont("宋体",-1,-1,true));
+                this->item(row, 2)->setForeground(QBrush(QColor(105, 105, 105)));
 
-              //第0列存放行数
-              int temp = this->rowCount();
-              QString tempStr = QString::number(temp);
-              item = new QTableWidgetItem(tempStr);//第几行
-              this->setItem(row, 0, item);
+                //第0列存放行数
+                int temp = this->rowCount();
+                QString tempStr = QString::number(temp);
+                item = new QTableWidgetItem(tempStr);//第几行
+                this->setItem(row, 0, item);
 
-              //第1列存放名字
-              item = new QTableWidgetItem(getFileName(toBeAddedFiles.at(i)));
-              this->setItem(row, 1, item);
+                //第1列存放名字
+                item = new QTableWidgetItem(getFileName(toBeAddedFiles.at(i)));
+                this->setItem(row, 1, item);
 
-              emit temp_addFileToFolderSignal(currentSN,
-                                              getFileName(toBeAddedFiles.at(i)),
-                                              toBeAddedFiles.at(i),
-                                              true);
+                emit temp_addFileToFolderSignal(currentSN,
+                                                getFileName(toBeAddedFiles.at(i)),
+                                                toBeAddedFiles.at(i),
+                                                true);
 
             }
         }
-      //      else if (toBeAddedFiles.length() == 1)
-      //        {
-      //          emit temp_addFileToFolderSignal(currentSN,
-      //                                          getFileName(toBeAddedFiles.at(0)),
-      //                                          toBeAddedFiles.at(0),
-      //                                          true);
+        //      else if (toBeAddedFiles.length() == 1)
+        //        {
+        //          emit temp_addFileToFolderSignal(currentSN,
+        //                                          getFileName(toBeAddedFiles.at(0)),
+        //                                          toBeAddedFiles.at(0),
+        //                                          true);
 
 
-      //        }
+        //        }
 
     }
-  else if (toBeAddedFiles.empty())
+    else if (toBeAddedFiles.empty())
     {
-      QMessageBox hintBox(QMessageBox::NoIcon, "提示", "      请拖入有效文件");
-      QPixmap hintBoxPixmap(":/image/image/hint.png");
-      hintBox.setIconPixmap(hintBoxPixmap.scaled(80,80));
-      hintBox.exec();
+        QMessageBox hintBox(QMessageBox::NoIcon, "提示", "      请拖入有效文件");
+        QPixmap hintBoxPixmap(":/image/image/test.png");
+        hintBox.setIconPixmap(hintBoxPixmap.scaled(80,80));
+        hintBox.exec();
     }
 
-  toBeAddedFiles.clear();
+    toBeAddedFiles.clear();
 
-  emit changeFilesInListSignal(currentSN,temp_filesInList);
-  emit leftBarListFilesChangeSignal(currentSN,temp_filesInList);
+    emit changeFilesInListSignal(currentSN,temp_filesInList);
+    emit leftBarListFilesChangeSignal(currentSN,temp_filesInList);
 }
 
 

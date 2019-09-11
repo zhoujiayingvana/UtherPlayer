@@ -49,7 +49,7 @@ playlistBtn::playlistBtn(int sn,QWidget *parent) : QPushButton(parent)
                           "border-style:outset; };");
 
   connect(listName,SIGNAL(listNameClickedSignal()),this,SLOT(showListSlot()));
-  connect(listName,SIGNAL(listNameDoubleClickedSignal()),this,SLOT(displayListSlot()));
+//  connect(listName,SIGNAL(listNameDoubleClickedSignal()),this,SLOT(displayListSlot()));
   connect(listName,SIGNAL(customContextMenuRequested(QPoint)),this,SLOT(listNameCallMenuSlot(QPoint)));
   connect(listName,SIGNAL(editingFinished()),this,SLOT(editingFinishedSlot()));
 }
@@ -193,8 +193,8 @@ void playlistBtn::hideContentSlot()
  */
 void playlistBtn::displayListSlot()
 {
-  emit givingSN(getSN());
-  emit wantingName(listName->text());
+//  emit givingSN(getSN());
+//  emit wantingName(listName->text());
 }
 
 /* Author: zyt
