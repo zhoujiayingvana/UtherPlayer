@@ -25,7 +25,7 @@ signals:
 
 
 public slots:
-    void display(int, int);
+    void display(int, int);//接收信号时悬浮窗出现在合适位置
 private:
     QWidget *pParent;
 
