@@ -375,12 +375,12 @@ void SettingWindow::on_shotDirButton_clicked()
 */
 void SettingWindow::on_recordDirButton_clicked()
 {
-    QLabel * shotDir = ui->shotDirLabel;
+    QLabel * shotDir = ui->recordDirLabel;
     QString dirName =QFileDialog::getExistingDirectory(this,"选择目录","C:/CloudMusic/record");
     if(dirName!="")
     {
         shotDir->setText(dirName);
-        ui->shotDirLabel->setText(shotDir->text());
+        ui->recordDirLabel->setText(shotDir->text());
         emit sigRecordDirChange(dirName);
     }
 }

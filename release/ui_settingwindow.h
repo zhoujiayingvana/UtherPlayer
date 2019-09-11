@@ -10,6 +10,7 @@
 #define UI_SETTINGWINDOW_H
 
 #include <QtCore/QVariant>
+#include <QtGui/QIcon>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QCheckBox>
 #include <QtWidgets/QDialog>
@@ -155,6 +156,9 @@ public:
         if (SettingWindow->objectName().isEmpty())
             SettingWindow->setObjectName(QString::fromUtf8("SettingWindow"));
         SettingWindow->resize(673, 640);
+        QIcon icon;
+        icon.addFile(QString::fromUtf8(":/new/prefix1/myQss/uther.ico"), QSize(), QIcon::Normal, QIcon::Off);
+        SettingWindow->setWindowIcon(icon);
         SettingWindow->setStyleSheet(QString::fromUtf8(""));
         buttonBox = new QDialogButtonBox(SettingWindow);
         buttonBox->setObjectName(QString::fromUtf8("buttonBox"));
@@ -278,7 +282,7 @@ public:
         scrollArea_2->setWidgetResizable(true);
         page2ScrollAreaWidgetContents = new QWidget();
         page2ScrollAreaWidgetContents->setObjectName(QString::fromUtf8("page2ScrollAreaWidgetContents"));
-        page2ScrollAreaWidgetContents->setGeometry(QRect(0, 0, 479, 1170));
+        page2ScrollAreaWidgetContents->setGeometry(QRect(0, 0, 98, 1170));
         page2ScrollAreaWidgetContents->setMinimumSize(QSize(0, 1170));
         groupBox = new QGroupBox(page2ScrollAreaWidgetContents);
         groupBox->setObjectName(QString::fromUtf8("groupBox"));
