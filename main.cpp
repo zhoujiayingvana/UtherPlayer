@@ -15,9 +15,5 @@ int main(int argc, char *argv[])
     } catch (MyErrors e) {
         qDebug() << getErrorType(e);
     }
-    qDebug() << "i am ml" << endl;
-//    Media media;
-//    qDebug() << media.songWebSearch("小幸运");
-//    qDebug() << "****************************************" << endl;
     return a.exec();
 }
