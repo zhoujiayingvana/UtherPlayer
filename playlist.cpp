@@ -54,6 +54,8 @@ playList::playList(QWidget *parent) : QTableWidget(parent)
     this->setColumnWidth(0,35);
     this->setColumnWidth(1,350);
     this->setColumnWidth(2,100);
+
+    //设置按行选择、单项选择
     this->setSelectionBehavior(QAbstractItemView::SelectRows);
     this->setSelectionMode(QAbstractItemView::SingleSelection);
     this->setEditTriggers(QAbstractItemView::NoEditTriggers);
@@ -61,15 +63,15 @@ playList::playList(QWidget *parent) : QTableWidget(parent)
     //不显示竖直方向的分割线
     this->setShowGrid(false);
 
-    this->setSelectionBehavior(QAbstractItemView::SelectRows);
-    this->setSelectionMode(QAbstractItemView::SingleSelection);
+    //设置焦点
+    this->setFocusPolicy(Qt::NoFocus);
 
     connect(this, SIGNAL(customContextMenuRequested(QPoint)),
             this, SLOT(on_playlist_customContextMenuRequested(QPoint)));
     connect(this,SIGNAL(cellEntered(int,int)),this,SLOT(cellEntered(int,int)));
     connect(this,SIGNAL(cellDoubleClicked(int,int)),this,SLOT(getFileAddress(int,int)));
 
-    this->setFocusPolicy(Qt::NoFocus);
+
 
     this->setStyleSheet("QTableWidget::item:selected { background-color: rgb(198, 241, 255) }");
 }
@@ -140,9 +142,11 @@ void playList::getFileAddress(int row, int column)
     fileAddressItem = this->item(row,2);
     QString fileAddress = fileAddressItem->text();
 
-
-
-    //播放文件了
+    /* 发送双击文件信号，参数为
+     * PlayArea::FOLDERS -> 代表双击区域是收藏夹
+     * currentSN -> 索引1：是哪个收藏夹，sn代表收藏夹序列号
+     * row -> 索引2：选择的行号是多少，让数据库调用同行号的文件
+     */
     emit sendTempPlayInfo(PlayArea::FOLDERS,currentSN,row);
 }
 
@@ -183,7 +187,6 @@ void playList::on_playlist_customContextMenuRequested(QPoint pos)
     {
         pPopMenu->addAction("从列表中删除",this,SLOT(deleteFileFromList()));
         pPopMenu->addAction("从电脑中删除",this,SLOT(deleteFileFromDisk()));
-        pPopMenu->addAction("修改文件位置",this,SLOT(changeFileAddress()));
     }
     pPopMenu->exec(QCursor::pos());
 }
@@ -251,8 +254,6 @@ void playList::addFiles()
 void playList::deleteFileFromList()
 {  
     int row = this->currentRow();
-    QTableWidgetItem *itemToBeDeleted = this->item(row,2);
-    //  temp_filesInList.removeOne(itemToBeDeleted->text());
     temp_filesInList.removeAt(row);
     this->removeRow(row);
 
@@ -269,8 +270,6 @@ void playList::deleteFileFromList()
     emit leftBarListFilesChangeSignal(currentSN,temp_filesInList);
     emit downloadFilesChangesSignal(currentSN,temp_filesInList);
 
-    //9.10
-
     emit temp_removeContentSignal(currentSN,row);
 }
 
@@ -280,7 +279,12 @@ void playList::deleteFileFromList()
  */
 void playList::deleteFileFromDisk()
 {
-    // get path
+
+//  int row = this->currentRow();
+//  temp_filesInList.removeAt(row);
+//  this->removeRow(row);
+
+
     int row = this->currentRow();
     QTableWidgetItem *itemToBeDeleted = this->item(row, 2);
 
@@ -308,7 +312,7 @@ void playList::deleteFileFromDisk()
             noticeBox.exec();
             this->removeRow(row);
         }
-        temp_filesInList.removeOne(itemToBeDeleted->text());
+        temp_filesInList.removeAt(row);
     }
 
     //对序号重新排序
@@ -322,16 +326,8 @@ void playList::deleteFileFromDisk()
 
     emit deleteFilesInListSignal(currentSN,temp_filesInList);
     emit leftBarListFilesChangeSignal(currentSN,temp_filesInList);
-}
 
-/* Author: zyt
- * Name: changeFileAddress
- * Function: 改变文件本地位置
- */
-void playList::changeFileAddress()
-{
-    QString newAddress = QFileDialog::getExistingDirectory(this,"选取新地址","/");
-
+    emit temp_removeContentSignal(currentSN,row);
 }
 
 /* Author: zyt
@@ -504,19 +500,8 @@ void playList::dropEvent(QDropEvent *event)
                                                 getFileName(toBeAddedFiles.at(i)),
                                                 toBeAddedFiles.at(i),
                                                 true);
-
             }
         }
-        //      else if (toBeAddedFiles.length() == 1)
-        //        {
-        //          emit temp_addFileToFolderSignal(currentSN,
-        //                                          getFileName(toBeAddedFiles.at(0)),
-        //                                          toBeAddedFiles.at(0),
-        //                                          true);
-
-
-        //        }
-
     }
     else if (toBeAddedFiles.empty())
     {
@@ -531,7 +516,3 @@ void playList::dropEvent(QDropEvent *event)
     emit changeFilesInListSignal(currentSN,temp_filesInList);
     emit leftBarListFilesChangeSignal(currentSN,temp_filesInList);
 }
-
-
-
-

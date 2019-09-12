@@ -20,8 +20,6 @@ public:
   explicit Mini(QWidget *parent = nullptr,Media *m=nullptr);
   ~Mini();
 
-
-
 signals:
   void miniToMaxSignal();
   void closeSignal();
@@ -29,9 +27,6 @@ signals:
   void sendNextSignal();
   void volumeChanged(int);
   void sendPlayOrPauseSignal();
-
-
-
 
 protected:
   void mousePressEvent(QMouseEvent*);
@@ -58,6 +53,7 @@ public slots:
   void changePlayOrPauseBtn(bool);
 
 private slots:
+
   void on_lastSongBtn_clicked();
 
   void on_nextSongBtn_clicked();
@@ -68,7 +64,8 @@ private:
   MySlider *volumeSlider;
   QPoint mouseStartPos;
   QPoint windowStartPos;
-  //播放模块zjy&ml
+
+  //播放模块
   Media* media;
 };
 

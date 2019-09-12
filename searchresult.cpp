@@ -28,29 +28,23 @@ searchResult::searchResult(QStringList _filenames, QStringList _filepaths, QWidg
   ui->searchContent->setSelectionMode(QAbstractItemView::SingleSelection);
   ui->searchContent->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
-  QHeaderView* headerView = ui->searchContent->horizontalHeader(); // 这个例子是列方向上的表头
+  //表头文字左对齐
+  QHeaderView* headerView = ui->searchContent->horizontalHeader();
   headerView->setDefaultAlignment(Qt::AlignLeft);
 
   //不显示竖直方向的分割线
   ui->searchContent->setShowGrid(false);
-
   ui->searchContent->setStyleSheet("QTableWidget::item:selected { background-color: rgb(198, 241, 255); color: black; }");
 
   connect(ui->searchContent,SIGNAL(cellDoubleClicked(int,int)),this,SLOT(sltCellDoubleClicked(int,int)));
 
-//  QStringList name;
-//  name << "1" << "123" << "4";
-//  QStringList add;
-//  add << "asd" << "123" << "4asd";
-
-
-
   initOutput(fileNames,filePaths);
 }
 
-
-
-//显示给用户看
+/* Author: zyt
+ * Name: initOutput
+ * Function: 将获取到的文件名/文件地址存入tableWidget，给用户观看
+ */
 void searchResult::initOutput(QStringList nameList, QStringList pathList)
 {
   for(int i = 0; i < nameList.length(); i++)
@@ -73,23 +67,24 @@ searchResult::~searchResult()
   delete ui;
 }
 
+/* Author: zyt
+ * Name: sltCellDoubleClicked
+ * Function: 槽：双击搜索栏单元格之后返回该格所在的行、列
+ */
 void searchResult::sltCellDoubleClicked(int row, int col)
 {
   Q_UNUSED(col);
-//  QTableWidgetItem * fileAddressItem = new QTableWidgetItem;
-//  fileAddressItem = ui->searchContent->item(row,1);
-//  QString fileAddress = fileAddressItem->text();
-
-
 
   //双击返回改行索引 （0、1、2、3、4）
-
-    qDebug() << row;
+  //传索引给后端以播放文件/添加到历史纪录
   emit clickIndexSignal(row);
 
   this->hide();
 }
 
+////////////////////////
+//以下为set及get函数
+////////////////////////
 QStringList searchResult::getFilePaths() const
 {
     return filePaths;
