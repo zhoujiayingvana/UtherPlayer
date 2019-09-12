@@ -23,8 +23,12 @@ Mini::Mini(QWidget *parent,Media* m) :
 {
     ui->setupUi(this);
     drag = false;
-    //暂时将播放状态设为真
 
+    //设置mini模式无边框、在最前、允许拖拽
+    setWindowFlags(Qt::Window|Qt::FramelessWindowHint|Qt::WindowTitleHint|Qt::WindowStaysOnTopHint);
+    setMouseTracking(true);
+
+    // 音量条初始化
     volumeSlider = new MySlider;
     volumeSlider->setWindowFlags(Qt::Window|Qt::SubWindow|Qt::FramelessWindowHint|Qt::WindowTitleHint);
     volumeSlider->setMinimum(0);
@@ -32,10 +36,10 @@ Mini::Mini(QWidget *parent,Media* m) :
     volumeSlider->setValue(10);
     volumeSlider->setVisible(false);
     volumeSlider->setFixedSize(32,84);
-    setWindowFlags(Qt::Window|Qt::FramelessWindowHint|Qt::WindowTitleHint|Qt::WindowStaysOnTopHint); //无边框、在最前
-    setMouseTracking(true);
+
     ui->albumPic->setMouseTracking(true);
 
+    //设置鼠标样式
     ui->lastSongBtn->setCursor(QCursor(Qt::PointingHandCursor));
     ui->playOrPauseBtn->setCursor(QCursor(Qt::PointingHandCursor));
     ui->nextSongBtn->setCursor(QCursor(Qt::PointingHandCursor));
@@ -45,7 +49,7 @@ Mini::Mini(QWidget *parent,Media* m) :
     ui->albumPic->setCursor(QCursor(Qt::PointingHandCursor));
 
 
-
+    //设置NoFocus策略
     ui->lastSongBtn->setFocusPolicy(Qt::NoFocus);
     ui->playOrPauseBtn->setFocusPolicy(Qt::NoFocus);
     ui->nextSongBtn->setFocusPolicy(Qt::NoFocus);
@@ -54,17 +58,16 @@ Mini::Mini(QWidget *parent,Media* m) :
     ui->maxModeBtn->setFocusPolicy(Qt::NoFocus);
     ui->albumPic->setFocusPolicy(Qt::NoFocus);
 
+    //添加按钮图片
     ui->playOrPauseBtn->setStyleSheet("QPushButton{ border-image: url(:/image/image/icon_play.png); }");
-
     ui->lastSongBtn->setStyleSheet("QPushButton{ border-image: url(:/image/image/mini_last.jpg); }");
     ui->nextSongBtn->setStyleSheet("QPushButton{ border-image: url(:/image/image/mini_next.jpg); }");
     ui->volumeBtn->setStyleSheet("QPushButton{ border-image: url(:/image/image/horn.png); }");
     ui->closeBtn->setStyleSheet("QPushButton{ border-image: url(:/image/image/btn_close_n.png); }");
     ui->maxModeBtn->setStyleSheet("QPushButton{ border-image: url(:/image/image/btn_max_n.png); }");
-
-    //测试：添加专辑封面
     ui->albumPic->setStyleSheet("QPushButton{ border-image: url(:/image/image/test.png); }");
 
+    //鼠标不放上去时先让上一曲/播放/下一曲隐藏
     ui->lastSongBtn->setVisible(false);
     ui->playOrPauseBtn->setVisible(false);
     ui->nextSongBtn->setVisible(false);
@@ -74,8 +77,6 @@ Mini::Mini(QWidget *parent,Media* m) :
     ui->nextSongBtn->setText("");
 
     ui->playOrPauseBtn->setToolTip(QStringLiteral("播放"));
-
-
     ui->lastSongBtn->setToolTip(QStringLiteral("上一曲"));
     ui->nextSongBtn->setToolTip(QStringLiteral("下一曲"));
     ui->volumeBtn->setToolTip(QStringLiteral("调节音量"));
@@ -84,8 +85,6 @@ Mini::Mini(QWidget *parent,Media* m) :
     ui->albumPic->setToolTip(QStringLiteral("显示主界面"));
 
     connect(volumeSlider,SIGNAL(valueChanged(int)),this,SLOT(on_volumeSlider_valueChanged(int)));
-
-
 }
 
 Mini::~Mini()
@@ -151,8 +150,6 @@ void Mini::mouseReleaseEvent(QMouseEvent *event)
         this->setGeometry((QApplication::desktop()->width()-this->width()),this->frameGeometry().top(),this->width(),this->height());
     }
 
-
-
 }
 
 /* Author: zyt
@@ -169,6 +166,10 @@ void Mini::enterEvent(QEvent *event)
     ui->nextSongBtn->setVisible(true);
 }
 
+/* Author: zyt
+ * Name: leaveEvent
+ * Function: 检测鼠标进入mini界面，隐藏上一曲/暂停/下一曲按钮，显示原有界面
+ */
 void Mini::leaveEvent(QEvent *event)
 {
     Q_UNUSED(event);
@@ -244,16 +245,12 @@ void Mini::on_playOrPauseBtn_clicked()
 {
     volumeSlider->hide();
     emit sendPlayOrPauseSignal();
-
 }
-
-
-
 
 void Mini::changeVolume(int vol)//改变音量
 {
 
-    if(vol==volumeSlider->value())
+    if(vol == volumeSlider->value())
     {
 
     }

@@ -24,8 +24,6 @@ playlistBtn::playlistBtn(int sn,QWidget *parent) : QPushButton(parent)
   doubleClicked = false;
   singleClickedTimer = new QTimer(this);
   singleClickedTimer->setSingleShot(true);
-  connect(singleClickedTimer,SIGNAL(timeout()),this,SIGNAL(singleClickedSignal()));
-  connect(this,SIGNAL(doubleClickedSignal()),this,SLOT(doubleClickedSlot()));
 
   btn_SN = sn;
   isClicked = false;
@@ -50,9 +48,10 @@ playlistBtn::playlistBtn(int sn,QWidget *parent) : QPushButton(parent)
                           "border-style:outset; };");
 
   connect(listName,SIGNAL(listNameClickedSignal()),this,SLOT(showListSlot()));
-//  connect(listName,SIGNAL(listNameDoubleClickedSignal()),this,SLOT(displayListSlot()));
   connect(listName,SIGNAL(customContextMenuRequested(QPoint)),this,SLOT(listNameCallMenuSlot(QPoint)));
-  connect(listName,SIGNAL(editingFinished()),this,SLOT(editingFinishedSlot()));
+  connect(listName,SIGNAL(editingFinished()),this,SLOT(editingFinishedSlot())); 
+  connect(singleClickedTimer,SIGNAL(timeout()),this,SIGNAL(singleClickedSignal()));
+  connect(this,SIGNAL(doubleClickedSignal()),this,SLOT(doubleClickedSlot()));
 }
 
 /* Author: zyt
@@ -83,13 +82,18 @@ void playlistBtn::setIsClicked(bool status)
   isClicked = status;
 }
 
-//返回文件名
+/* Author: zyt
+ * Name: getFolderName
+ * Function: 返回文件名
+ */
 QString playlistBtn::getFolderName()
 {
   return listName->text();
 }
-
-//改变文件名
+/* Author: zyt
+ * Name: setFolderName
+ * Function: 改变文件名
+ */
 void playlistBtn::setFolderName(QString name)
 {
   listName->setText(name);
@@ -194,8 +198,7 @@ void playlistBtn::hideContentSlot()
  */
 void playlistBtn::displayListSlot()
 {
-//  emit givingSN(getSN());
-//  emit wantingName(listName->text());
+  // 由于布局，投影内容取消
 }
 
 /* Author: zyt
@@ -215,6 +218,7 @@ void playlistBtn::editingFinishedSlot()
 void playlistBtn::listNameCallMenuSlot(QPoint pos)
 {
   Q_UNUSED(pos);
+
   QMenu *menu = new QMenu;
   QAction *rename = menu->addAction("修改列表名称");
   QAction *deleteList = menu->addAction("删除列表");

@@ -64,8 +64,6 @@ public slots:
 
   void deleteFileFromDisk();
 
-  void changeFileAddress();
-
   void recevingSNAndFiles(int,QList<QString>);
 
   void showChangedListSlot(int,QList<QString>);
