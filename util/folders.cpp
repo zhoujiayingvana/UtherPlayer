@@ -206,8 +206,8 @@ void Folders::renameFolder(int _index, QString _newFolderName)
         throw MyErrors::NAME_ERROR;
     if (!this->rank2Folder->keys().contains(_index))
         throw MyErrors::FOLDER_INDEX_ERROR;
-    if (this->folderName2Rank->keys().contains(_newFolderName))
-        throw MyErrors::NAME_ERROR;
+//    if (this->folderName2Rank->keys().contains(_newFolderName))
+//        throw MyErrors::NAME_ERROR;
     QString oldFolderName = (*this->rank2Folder)[_index].getFolderName();
     this->folderName2Rank->remove(oldFolderName);
     this->folderName2Rank->insert(_newFolderName, _index);

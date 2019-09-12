@@ -343,8 +343,6 @@ TMZPlayer::TMZPlayer(QWidget *parent,Media* m) :
     QString qss;
     qss = qssfile.readAll();
     this->setStyleSheet(qss);
-    qDebug()<<this;
-//    qDebug()<<this;
     
     
 
